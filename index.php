@@ -212,7 +212,7 @@
                                     $_SESSION['nip'] = $nip;
                                     $_SESSION['admin'] = $admin;
 
-                                    header("Location: ./admin.php");
+                                    header("Location: ./admin.php"); //setelah login, redirect ke admin.php
                                     die();
                                 } else { //Jika jika user atau password tidak ditemukan
 
