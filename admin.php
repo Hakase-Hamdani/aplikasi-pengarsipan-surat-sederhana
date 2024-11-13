@@ -95,7 +95,18 @@ Website     : https://masrud.com
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <h4>Selamat Datang <?php echo $_SESSION['nama']; ?></h4>
+                        <h4>Selamat Datang <u> <?php echo $_SESSION['username']; ?> </u></h4>
+                        <!--Buat menampilkan profil user (jika ada)-->
+                        <?php
+                        if(isset($_SESSION['id_staff'])){
+                            echo "Nama  :" . $_SESSION['nama'];
+                            echo "<br>";
+                            //tambahkan join tabel berdasarkan id_instansi di tbl_staf, buat menampilkan instansi
+                            echo "NIP  :" . $_SESSION['NIP'];
+                        } else { //tampilkan ini jika user belum punya/membuat profil
+                            echo "<p>Anda belum membuat profil staf</p>";
+                        }
+                        ?>
                         <p class="description">Anda login sebagai
                         <?php
                             if($_SESSION['role'] == 1){
@@ -112,32 +123,19 @@ Website     : https://masrud.com
 
             <?php
                 //menghitung jumlah surat masuk
-                $count1 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_surat_masuk"));
-
-                //menghitung jumlah surat masuk
                 $count2 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_surat_keluar"));
-
-                //menghitung jumlah surat masuk
-                $count3 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_disposisi"));
 
                 //menghitung jumlah klasifikasi
                 $count4 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_klasifikasi"));
+
+                //menghitung jumlah klasifikasi
+                $count3 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_instansi"));
 
                 //menghitung jumlah pengguna
                 $count5 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_user"));
             ?>
 
             <!-- Info Statistic START -->
-            <a href="?page=tsm">
-                <div class="col s12 m4">
-                    <div class="card cyan">
-                        <div class="card-content">
-                            <span class="card-title white-text"><i class="material-icons md-36">mail</i> Jumlah Surat Masuk</span>
-                            <?php echo '<h5 class="white-text link">'.$count1.' Surat Masuk</h5>'; ?>
-                        </div>
-                    </div>
-                </div>
-            </a>
 
             <a href="?page=tsk">
                 <div class="col s12 m4">
@@ -153,8 +151,8 @@ Website     : https://masrud.com
             <div class="col s12 m4">
                 <div class="card yellow darken-3">
                     <div class="card-content">
-                        <span class="card-title white-text"><i class="material-icons md-36">description</i> Jumlah Disposisi</span>
-                        <?php echo '<h5 class="white-text link">'.$count3.' Disposisi</h5>'; ?>
+                        <span class="card-title white-text"><i class="material-icons md-36">description</i> Jumlah Instansi</span>
+                        <?php echo '<h5 class="white-text link">'.$count3.' Instansi</h5>'; ?>
                     </div>
                 </div>
             </div>

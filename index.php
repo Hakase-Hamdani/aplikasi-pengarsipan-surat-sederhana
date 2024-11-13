@@ -202,15 +202,28 @@
                                 //cek dari tbl_user, apakah username dan password di atas ada.
                                 //$query = mysqli_query(masukkan di $config, "PILIH id_user, username, role. DARI tbl_user DIMANA username tapi case-sensitive DAN cari password dekode dari MD5 sama dengan yang ada di database)
                                 //Ganti menggunakan password_verify() daripada pakai MD5, TAPI HANYA SETELAH FUNGSI REGISTER SUDAH DIBUAT
-                                $query = mysqli_query($config, "SELECT id_user, username, role FROM tbl_user WHERE username=BINARY'$username' AND password=MD5('$password')");
+                                $queryLogin = mysqli_query($config, "SELECT id_user, username, role FROM tbl_user WHERE username=BINARY'$username' AND password=MD5('$password')");
 
-                                if(mysqli_num_rows($query) > 0){ //operasikan kueri diatas
-                                    list($id_user, $username, $role) = mysqli_fetch_array($query);
+                                if(mysqli_num_rows($queryLogin) > 0){ //operasikan kueri diatas
+                                    list($id_user, $username, $role) = mysqli_fetch_array($queryLogin);
 
                                     //buat session
                                     $_SESSION['id_user'] = $id_user;
                                     $_SESSION['username'] = $username;
                                     $_SESSION['role'] = $role;
+
+                                    //baca data dari tbl_staf, berdasarkan id_user yang login
+                                    $queryStaf = mysqli_query($config, "SELECT id_staff, id_instansi, nama, NIP FROM tbl_staf WHERE id_user = '$id_user'");
+                                    if(mysqli_num_rows($queryStaf) > 0){
+                                        list($id_staff, $id_instansi, $nama, $NIP) = mysqli_fetch_array($queryStaf);
+                                        
+                                        //buat session menggunakan data staff dari user yang logibn
+                                        $_SESSION['id_staff']= $id_staff;
+                                        $_SESSION['id_instansi']= $id_instansi;
+                                        $_SESSION['nama']= $nama;
+                                        $_SESSION['NIP']= $NIP;
+
+                                    }
 
                                     header("Location: ./admin.php"); //setelah login, redirect ke admin.php
                                     die();
