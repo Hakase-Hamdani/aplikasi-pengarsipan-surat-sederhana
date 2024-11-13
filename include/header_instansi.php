@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(!empty($_SESSION['admin'])){
+    if(!empty($_SESSION['role'])){
         $query = mysqli_query($config, "SELECT * FROM tbl_instansi");
         while($data = mysqli_fetch_array($query)){
             echo '

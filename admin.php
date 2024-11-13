@@ -3,7 +3,7 @@
     //cek session
     session_start();
 
-    if(empty($_SESSION['admin'])){
+    if(empty($_SESSION['role'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -98,9 +98,9 @@ Website     : https://masrud.com
                         <h4>Selamat Datang <?php echo $_SESSION['nama']; ?></h4>
                         <p class="description">Anda login sebagai
                         <?php
-                            if($_SESSION['admin'] == 1){
+                            if($_SESSION['role'] == 1){
                                 echo "<strong>Super Admin</strong>. Anda memiliki akses penuh terhadap sistem.";
-                            } elseif($_SESSION['admin'] == 2){
+                            } elseif($_SESSION['role'] == 2){
                                 echo "<strong>Administrator</strong>. Berikut adalah statistik data yang tersimpan dalam sistem.";
                             } else {
                                 echo "<strong>Petugas Disposisi</strong>. Berikut adalah statistik data yang tersimpan dalam sistem.";
@@ -171,7 +171,7 @@ Website     : https://masrud.com
             </a>
 
         <?php
-            if($_SESSION['id_user'] == 1 || $_SESSION['admin'] == 2){?>
+            if($_SESSION['id_user'] == 1 || $_SESSION['role'] == 2){?>
                 <a href="?page=sett&sub=usr">
                     <div class="col s12 m4">
                         <div class="card blue accent-2">

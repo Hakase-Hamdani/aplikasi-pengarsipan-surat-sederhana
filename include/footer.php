@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(!empty($_SESSION['admin'])){
+    if(!empty($_SESSION['role'])){
 ?>
 
 <noscript>

@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(empty($_SESSION['admin'])){
+    if(empty($_SESSION['role'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -12,7 +12,7 @@
                 $kode = $_REQUEST['kode'];
                 $nama = $_REQUEST['nama'];
                 $uraian = $_REQUEST['uraian'];
-                $id_user = $_SESSION['admin'];
+                $id_user = $_SESSION['role'];
 
                 //validasi form kosong
                 if($_REQUEST['kode'] == "" || $_REQUEST['nama'] == "" || $_REQUEST['uraian'] == ""){
@@ -59,7 +59,7 @@
             if(mysqli_num_rows($query) > 0){
                 $no = 1;
                 while($row = mysqli_fetch_array($query))
-                if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 2){
+                if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
                     echo '<script language="javascript">
                             window.alert("ERROR! Anda tidak memiliki hak akses untuk mengedit data ini");
                             window.location.href="./admin.php?page=ref";

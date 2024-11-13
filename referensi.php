@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(empty($_SESSION['admin'])){
+    if(empty($_SESSION['role'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -47,7 +47,7 @@
                                     <div class="col m7">
                                         <ul class="left">
                                             <li class="waves-effect waves-light hide-on-small-only"><a href="?page=ref" class="judul"><i class="material-icons">class</i> Klasifikasi Surat</a></li>';
-                                            if($_SESSION['admin'] == 1 || $_SESSION['admin'] == 2){
+                                            if($_SESSION['role'] == 1 || $_SESSION['role'] == 2){
                                                 echo '<li class="waves-effect waves-light"><a href="?page=ref&act=add"><i class="material-icons md-24">add_circle</i> Tambah Data</a></li>
                                                 <li class="waves-effect waves-light"><a href="?page=ref&act=imp"><i class="material-icons md-24">file_upload</i> Import Data</a></li>';
                                             } else {
@@ -163,7 +163,7 @@
                                         <td>'.$row['uraian'].'</td>
                                         <td>';
 
-                                        if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 2){
+                                        if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
                                             echo '<a class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> NO ACTION</a>';
                                         } else {
                                           echo '<a class="btn small blue waves-effect waves-light" href="?page=ref&act=edit&id_klasifikasi='.$row['id_klasifikasi'].'">
@@ -250,7 +250,7 @@
                                                 <td>'.$row['uraian'].'</td>
                                                 <td>';
 
-                                                if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 2){
+                                                if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
                                                     echo '<a class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> NO ACTION</a>';
                                                 } else {
                                                   echo '<a class="btn small blue waves-effect waves-light" href="?page=ref&act=edit&id_klasifikasi='.$row['id_klasifikasi'].'">

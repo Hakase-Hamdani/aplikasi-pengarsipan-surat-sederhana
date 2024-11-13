@@ -1,12 +1,12 @@
 <?php
     //cek session
-    if(empty($_SESSION['admin'])){
+    if(empty($_SESSION['role'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
     } else {
 
-        if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 2){
+        if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
             echo '<script language="javascript">
                     window.alert("ERROR! Anda tidak memiliki hak akses untuk menambahkan data");
                     window.location.href="./admin.php?page=ref";
@@ -24,7 +24,7 @@
                     $kode = $_REQUEST['kode'];
                     $nama = $_REQUEST['nama'];
                     $uraian = $_REQUEST['uraian'];
-                    $id_user = $_SESSION['admin'];
+                    $id_user = $_SESSION['role'];
 
                     //validasi input data
                     if(!preg_match("/^[a-zA-Z0-9. ]*$/", $kode)){

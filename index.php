@@ -4,7 +4,7 @@
     session_start();
 
     //cek session. Jika session admin, lompat ke admin.php
-    if(isset($_SESSION['admin'])){
+    if(isset($_SESSION['role'])){
         header("Location: ./admin.php");
         die();
     }
@@ -200,17 +200,17 @@
                                 $password = trim(htmlspecialchars(mysqli_real_escape_string($config, $_REQUEST['password'])));
 
                                 //cek dari tbl_user, apakah username dan password di atas ada.
-                                $query = mysqli_query($config, "SELECT id_user, username, nama, nip, admin FROM tbl_user WHERE username=BINARY'$username' AND password=MD5('$password')");
+                                //$query = mysqli_query(masukkan di $config, "PILIH id_user, username, role. DARI tbl_user DIMANA username tapi case-sensitive DAN cari password dekode dari MD5 sama dengan yang ada di database)
+                                //Ganti menggunakan password_verify() daripada pakai MD5, TAPI HANYA SETELAH FUNGSI REGISTER SUDAH DIBUAT
+                                $query = mysqli_query($config, "SELECT id_user, username, role FROM tbl_user WHERE username=BINARY'$username' AND password=MD5('$password')");
 
-                                if(mysqli_num_rows($query) > 0){
-                                    list($id_user, $username, $nama, $nip, $admin) = mysqli_fetch_array($query);
+                                if(mysqli_num_rows($query) > 0){ //operasikan kueri diatas
+                                    list($id_user, $username, $role) = mysqli_fetch_array($query);
 
                                     //buat session
                                     $_SESSION['id_user'] = $id_user;
                                     $_SESSION['username'] = $username;
-                                    $_SESSION['nama'] = $nama;
-                                    $_SESSION['nip'] = $nip;
-                                    $_SESSION['admin'] = $admin;
+                                    $_SESSION['role'] = $role;
 
                                     header("Location: ./admin.php"); //setelah login, redirect ke admin.php
                                     die();
