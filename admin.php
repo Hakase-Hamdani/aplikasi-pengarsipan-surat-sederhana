@@ -49,22 +49,24 @@ Website     : https://masrud.com
 
     <?php
         if(isset($_REQUEST['page'])){
+            //Cek menu.php di ./include untuk fungsi di bawah
             $page = $_REQUEST['page'];
             switch ($page) {
+                //switch dilakukan berdasarkan 'href=?page=...' yang ada di menu.php
                 case 'tsm':
-                    include "transaksi_surat_masuk.php";
+                    include "transaksi_surat_masuk.php"; //href=?page=tsk
                     break;
                 case 'ctk':
                     include "cetak_disposisi.php";
                     break;
                 case 'tsk':
-                    include "transaksi_surat_keluar.php";
+                    include "transaksi_surat_keluar.php"; //href=?page=tsk
                     break;
                 case 'asm':
-                    include "agenda_surat_masuk.php";
+                    include "agenda_surat_masuk.php"; //href=?page=asm
                     break;
                 case 'ask':
-                    include "agenda_surat_keluar.php";
+                    include "agenda_surat_keluar.php"; //href=?page=ask
                     break;
                 case 'ref':
                     include "referensi.php";
@@ -76,10 +78,10 @@ Website     : https://masrud.com
                     include "profil.php";
                     break;
                 case 'gsm':
-                    include "galeri_sm.php";
+                    include "galeri_sm.php"; //href=?page=gsm
                     break;
                 case 'gsk':
-                    include "galeri_sk.php";
+                    include "galeri_sk.php"; //href=?page=gsk
                     break;
             }
         } else {
