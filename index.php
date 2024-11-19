@@ -213,13 +213,12 @@
                                     $_SESSION['role'] = $role;
 
                                     //baca data dari tbl_staf, berdasarkan id_user yang login
-                                    $queryStaf = mysqli_query($config, "SELECT id_staff, id_instansi, nama, NIP FROM tbl_staf WHERE id_user = '$id_user'");
+                                    $queryStaf = mysqli_query($config, "SELECT id_staff, nama, NIP FROM tbl_staf WHERE id_user = '$id_user'");
                                     if(mysqli_num_rows($queryStaf) > 0){
-                                        list($id_staff, $id_instansi, $nama, $NIP) = mysqli_fetch_array($queryStaf);
+                                        list($id_staff, $nama, $NIP) = mysqli_fetch_array($queryStaf);
                                         
                                         //buat session menggunakan data staff dari user yang logibn
                                         $_SESSION['id_staff']= $id_staff;
-                                        $_SESSION['id_instansi']= $id_instansi;
                                         $_SESSION['nama']= $nama;
                                         $_SESSION['NIP']= $NIP;
 
