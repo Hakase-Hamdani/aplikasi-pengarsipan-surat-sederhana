@@ -12,7 +12,6 @@
                 $kode = $_REQUEST['kode'];
                 $nama = $_REQUEST['nama'];
                 $uraian = $_REQUEST['uraian'];
-                $id_user = $_SESSION['role'];
 
                 //validasi form kosong
                 if($_REQUEST['kode'] == "" || $_REQUEST['nama'] == "" || $_REQUEST['uraian'] == ""){
@@ -38,7 +37,7 @@
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
 
-                            $query = mysqli_query($config, "UPDATE tbl_klasifikasi SET kode='$kode', nama='$nama', uraian='$uraian', id_user='$id_user' WHERE id_klasifikasi='$id_klasifikasi'");
+                            $query = mysqli_query($config, "UPDATE tbl_klasifikasi SET kode='$kode', nama='$nama', uraian='$uraian' WHERE id_klasifikasi='$id_klasifikasi'");
 
                             if($query != false){
                                 $_SESSION['succEdit'] = 'SUKSES! Data berhasil diupdate';
@@ -154,7 +153,7 @@
                                                 unset($_SESSION['uraian']);
                                             }
                                         ?>
-                                    <label for="uraian">Uraian</label>
+                                    <label for="uraian">Uraian (Isi dengan "<b>-</b>" jika kosong)</label>
                                 </div>
                             </div>
                             <!-- Row in form END -->

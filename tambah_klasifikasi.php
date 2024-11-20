@@ -24,7 +24,6 @@
                     $kode = $_REQUEST['kode'];
                     $nama = $_REQUEST['nama'];
                     $uraian = $_REQUEST['uraian'];
-                    $id_user = $_SESSION['role'];
 
                     //validasi input data
                     if(!preg_match("/^[a-zA-Z0-9. ]*$/", $kode)){
@@ -50,7 +49,7 @@
                                     echo '<script language="javascript">window.history.back();</script>';
                                 } else {
 
-                                    $query = mysqli_query($config, "INSERT INTO tbl_klasifikasi(kode,nama,uraian,id_user) VALUES('$kode','$nama','$uraian','$id_user')");
+                                    $query = mysqli_query($config, "INSERT INTO tbl_klasifikasi(kode,nama,uraian) VALUES('$kode','$nama','$uraian')");
 
                                     if($query != false){
                                         $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
@@ -158,7 +157,7 @@
                                             unset($_SESSION['uraian']);
                                         }
                                     ?>
-                                <label for="uraian">Uraian</label>
+                                <label for="uraian">Uraian (Isi dengan "<b>-</b>" jika kosong)</label>
                             </div>
                         </div>
                         <!-- Row in form END -->

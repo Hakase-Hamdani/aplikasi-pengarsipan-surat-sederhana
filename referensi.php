@@ -23,7 +23,7 @@
                     break;
             }
         } else {
-
+            //mengatur jumlah tampilan data
             $query = mysqli_query($config, "SELECT referensi FROM tbl_sett");
             list($referensi) = mysqli_fetch_array($query);
 
