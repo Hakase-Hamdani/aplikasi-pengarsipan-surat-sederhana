@@ -31,8 +31,7 @@
                 if(isset($_REQUEST['submit'])){
 
                     //validasi form kosong
-                    if ($_REQUEST['no_telp'] == "" || $_REQUEST['dinas'] == "" || $_REQUEST['alamat'] == "" || $_REQUEST['alamat'] == "" || $_REQUEST['email'] == "" || $_REQUEST['nip'] == ""
-                        /*|| $_REQUEST['website'] == ""*/ || $_REQUEST['email'] == ""){
+                    if ($_REQUEST['no_telp'] == "" || $_REQUEST['dinas'] == "" || $_REQUEST['alamat'] == ""){
                         $_SESSION['errEmpty'] = 'ERROR! Semua form wajib diisi';
                         header("Location: ././admin.php?page=sett");
                         die();
@@ -61,24 +60,6 @@
                                     $_SESSION['alamat'] = 'Form alamat hanya boleh mengandung karakter huruf, angka, spasi, titik(.), koma(,), titik dua(:), petik dua(""), garis miring(/) dan minus(-)';
                                     echo '<script language="javascript">window.history.back();</script>';
                                 } else {
-
-                                    if(!preg_match("/^[a-zA-Z., ]*$/", $email)){
-                                        $_SESSION['email'] = 'Form dinas Kepala Sekolah hanya boleh mengandung karakter huruf, spasi, titik(.) dan koma(,)<br/><br/>';
-                                        echo '<script language="javascript">window.history.back();</script>';
-                                    } else {
-                                                //validasi url website
-                                                if(!filter_var($website, FILTER_VALIDATE_URL)){
-                                                    $_SESSION['website'] = 'Format URL Website tidak valid';
-                                                    header("Location: ././admin.php?page=sett");
-                                                    die();
-                                                } else {
-                                                    //validasi email
-                                                    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                                                        $_SESSION['email'] = 'Format Email tidak valid';
-                                                        header("Location: ././admin.php?page=sett");
-                                                        die();
-                                                    } else {
-
                                                         $ekstensi = array('png','jpg', 'jpeg');
                                                         $logo = $_FILES['logo']['name'];
                                                         $x = explode('.', $logo);
@@ -137,13 +118,22 @@
                                                                 echo '<script language="javascript">window.history.back();</script>';
                                                             }
                                                         }
+
+                                                        if(empty($email) || empty($website)){
+                                                            $query = mysqli_query($config, "UPDATE tbl_instansi SET no_telp='$no_telp',dinas='$dinas',alamat='$alamat', logo='$nlogo' WHERE id_instansi='$id_instansi'");
+                                                            if($query == true){
+                                                                $_SESSION['succEdit'] = 'SUKSES! Data instansi berhasil diupdate';
+                                                                header("Location: ././admin.php?page=sett");
+                                                                die();
+                                                            } else {
+                                                                $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
+                                                                echo '<script language="javascript">window.history.back();</script>';
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                }
-                            }
                 } else {
 
                     $query = mysqli_query($config, "SELECT * FROM tbl_instansi");
@@ -162,6 +152,9 @@
                                         </ul>
                                     </div>
                                 </nav>
+                                <div class="input-field col s6">
+                                    <img class="logo" alt="LOGO TIDAK DITEMUKAN" src="upload/<?php echo $row['logo']; ?>">
+                                </div>
                             </div>
                             <!-- Secondary Nav END -->
                         </div>
@@ -255,7 +248,7 @@
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons prefix md-prefix">account_box</i>
-                                        <input id="email" type="text" class="validate" name="email" value="<?php echo $row['email']; ?>" required>
+                                        <input id="email" type="text" class="validate" name="email" value="<?php echo $row['email']; ?>">
                                             <?php
                                                 if(isset($_SESSION['email'])){
                                                     $email = $_SESSION['email'];
@@ -267,7 +260,7 @@
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons prefix md-prefix">language</i>
-                                        <input id="website" type="url" class="validate" name="website" value="<?php echo $row['website']; ?>" required>
+                                        <input id="website" type="text" class="validate" name="website" value="<?php echo $row['website']; ?>">
                                             <?php
                                                 if(isset($_SESSION['website'])){
                                                     $website = $_SESSION['website'];
@@ -300,9 +293,6 @@
                                                 ?>
                                             <small class="red-text">*Format file yang diperbolehkan hanya *.JPG, *.PNG dan ukuran maksimal file 2 MB. Disarankan gambar berbentuk kotak atau lingkaran!</small>
                                         </div>
-                                    </div>
-                                    <div class="input-field col s6">
-                                        <img class="logo" src="upload/<?php echo $row['logo']; ?>"/>
                                     </div>
                                 </div>
                                 <!-- Row in form END -->
