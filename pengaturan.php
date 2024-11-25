@@ -10,7 +10,7 @@
             echo '<script language="javascript">
                     window.alert("ERROR! Anda tidak memiliki hak akses untuk membuka halaman ini");
                     window.location.href="./logout.php";
-                  </script>';
+                </script>';
         } else {
 
             if(isset($_REQUEST['sub'])){
@@ -31,62 +31,47 @@
                 if(isset($_REQUEST['submit'])){
 
                     //validasi form kosong
-                    if ($_REQUEST['institusi'] == "" || $_REQUEST['nama'] == "" || $_REQUEST['status'] == "" || $_REQUEST['alamat'] == "" || $_REQUEST['kepsek'] == "" || $_REQUEST['nip'] == ""
-                        || $_REQUEST['website'] == "" || $_REQUEST['email'] == ""){
+                    if ($_REQUEST['no_telp'] == "" || $_REQUEST['dinas'] == "" || $_REQUEST['alamat'] == "" || $_REQUEST['alamat'] == "" || $_REQUEST['email'] == "" || $_REQUEST['nip'] == ""
+                        /*|| $_REQUEST['website'] == ""*/ || $_REQUEST['email'] == ""){
                         $_SESSION['errEmpty'] = 'ERROR! Semua form wajib diisi';
                         header("Location: ././admin.php?page=sett");
                         die();
                     } else {
 
                         $id_instansi = "1";
-                        $institusi = $_REQUEST['institusi'];
-                        $nama = $_REQUEST['nama'];
-                        $status = $_REQUEST['status'];
+                        $dinas = $_REQUEST['dinas'];
                         $alamat = $_REQUEST['alamat'];
-                        $kepsek = $_REQUEST['kepsek'];
-                        $nip = $_REQUEST['nip'];
-                        $website = $_REQUEST['website'];
+                        $no_telp = $_REQUEST['no_telp'];
                         $email = $_REQUEST['email'];
-                        $id_user = $_SESSION['id_user'];
+                        $website = $_REQUEST['website'];
+                        //$id_user = $_SESSION['id_user'];
 
                         //validasi input data
-                        if(!preg_match("/^[a-zA-Z0-9. -]*$/", $nama)){
-                            $_SESSION['namains'] = 'Form Nama Instansi hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan minus(-)';
+                        if(!preg_match("/^[a-zA-Z0-9. -]*$/", $dinas)){
+                            $_SESSION['dinas'] = 'Form dinas Instansi hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan minus(-)';
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
 
-                            if(!preg_match("/^[a-zA-Z0-9. -]*$/", $institusi)){
-                                $_SESSION['institusi'] = 'Form Nama Yayasan hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan minus(-)';
+                            if(!preg_match("/^[a-zA-Z0-9. -]*$/", $no_telp)){
+                                $_SESSION['no_telp'] = 'Form dinas Yayasan hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan minus(-)';
                                 echo '<script language="javascript">window.history.back();</script>';
                             } else {
 
-                                if(!preg_match("/^[a-zA-Z0-9.,:\/<> -\"]*$/", $status)){
-                                    $_SESSION['status'] = 'Form Status hanya boleh mengandung karakter huruf, angka, spasi, titik(.), koma(,), titik dua(:), petik dua(""), garis miring(/) dan minus(-)';
+                                if(!preg_match("/^[a-zA-Z0-9.,:\/<> -\"]*$/", $alamat)){
+                                    $_SESSION['alamat'] = 'Form alamat hanya boleh mengandung karakter huruf, angka, spasi, titik(.), koma(,), titik dua(:), petik dua(""), garis miring(/) dan minus(-)';
                                     echo '<script language="javascript">window.history.back();</script>';
                                 } else {
 
-                                    if(!preg_match("/^[a-zA-Z0-9.,()\/ -]*$/", $alamat)){
-                                        $_SESSION['alamat'] = 'Form Alamat hanya boleh mengandung karakter huruf, angka, spasi, titik(.), koma(,), minus(-), garis miring(/), dan kurung()';
+                                    if(!preg_match("/^[a-zA-Z., ]*$/", $email)){
+                                        $_SESSION['email'] = 'Form dinas Kepala Sekolah hanya boleh mengandung karakter huruf, spasi, titik(.) dan koma(,)<br/><br/>';
                                         echo '<script language="javascript">window.history.back();</script>';
                                     } else {
-
-                                        if(!preg_match("/^[a-zA-Z., ]*$/", $kepsek)){
-                                            $_SESSION['kepsek'] = 'Form Nama Kepala Sekolah hanya boleh mengandung karakter huruf, spasi, titik(.) dan koma(,)<br/><br/>';
-                                            echo '<script language="javascript">window.history.back();</script>';
-                                        } else {
-
-                                            if(!preg_match("/^[0-9 -]*$/", $nip)){
-                                                $_SESSION['nipkepsek'] = 'Form NIP Kepala Sekolah hanya boleh mengandung karakter angka, spasi, dan minus(-)<br/><br/>';
-                                                echo '<script language="javascript">window.history.back();</script>';
-                                            } else {
-
                                                 //validasi url website
                                                 if(!filter_var($website, FILTER_VALIDATE_URL)){
                                                     $_SESSION['website'] = 'Format URL Website tidak valid';
                                                     header("Location: ././admin.php?page=sett");
                                                     die();
                                                 } else {
-
                                                     //validasi email
                                                     if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
                                                         $_SESSION['email'] = 'Format Email tidak valid';
@@ -120,7 +105,7 @@
 
                                                                     move_uploaded_file($_FILES['logo']['tmp_name'], $target_dir.$nlogo);
 
-                                                                    $query = mysqli_query($config, "UPDATE tbl_instansi SET institusi='$institusi',nama='$nama',status='$status',alamat='$alamat',kepsek='$kepsek',nip='$nip',website='$website',email='$email',logo='$nlogo',id_user='$id_user' WHERE id_instansi='$id_instansi'");
+                                                                    $query = mysqli_query($config, "UPDATE tbl_instansi SET no_telp='$no_telp',dinas='$dinas',alamat='$alamat',email='$email',website='$website',logo='$nlogo' WHERE id_instansi='$id_instansi'");
 
                                                                     if($query == true){
                                                                         $_SESSION['succEdit'] = 'SUKSES! Data instansi berhasil diupdate';
@@ -141,7 +126,7 @@
                                                         } else {
 
                                                             //jika form logo kosong akan mengeksekusi script dibawah ini
-                                                            $query = mysqli_query($config, "UPDATE tbl_instansi SET institusi='$institusi',nama='$nama',status='$status',alamat='$alamat',kepsek='$kepsek',nip='$nip',website='$website',email='$email',id_user='$id_user' WHERE id_instansi='$id_instansi'");
+                                                            $query = mysqli_query($config, "UPDATE tbl_instansi SET no_telp='$no_telp',dinas='$dinas',alamat='$alamat',email='$email',website='$website',logo='$nlogo' WHERE id_instansi='$id_instansi'");
 
                                                             if($query == true){
                                                                 $_SESSION['succEdit'] = 'SUKSES! Data instansi berhasil diupdate';
@@ -159,8 +144,6 @@
                                     }
                                 }
                             }
-                        }
-                    }
                 } else {
 
                     $query = mysqli_query($config, "SELECT * FROM tbl_instansi");
@@ -236,55 +219,31 @@
                                 <div class="row">
                                     <div class="input-field col s6">
                                         <i class="material-icons prefix md-prefix">school</i>
-                                        <input id="nama" type="text" class="validate" name="nama" value="<?php echo $row['nama']; ?>" required>
+                                        <input id="dinas" type="text" class="validate" name="dinas" value="<?php echo $row['dinas']; ?>" required>
                                             <?php
-                                                if(isset($_SESSION['namains'])){
-                                                    $namains = $_SESSION['namains'];
-                                                    echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$namains.'</div>';
-                                                    unset($_SESSION['namains']);
+                                                if(isset($_SESSION['dinas'])){
+                                                    $dinas = $_SESSION['dinas'];
+                                                    echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$dinas.'</div>';
+                                                    unset($_SESSION['dinas']);
                                                 }
                                             ?>
-                                        <label for="nama">Nama Instansi</label>
+                                        <label for="dinas">Dinas</label>
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons prefix md-prefix">work</i>
-                                        <input id="institusi" type="text" class="validate" name="institusi" value="<?php echo $row['institusi']; ?>" required>
+                                        <input id="no_telp" type="text" class="validate" name="no_telp" value="<?php echo $row['no_telp']; ?>" required>
                                             <?php
-                                                if(isset($_SESSION['institusi'])){
-                                                    $institusi = $_SESSION['institusi'];
-                                                    echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$institusi.'</div>';
-                                                    unset($_SESSION['institusi']);
+                                                if(isset($_SESSION['no_telp'])){
+                                                    $no_telp = $_SESSION['no_telp'];
+                                                    echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$no_telp.'</div>';
+                                                    unset($_SESSION['no_telp']);
                                                 }
                                             ?>
-                                        <label for="institusi">Nama Yayasan</label>
+                                        <label for="no_telp">Nomor Telepon</label>
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons prefix md-prefix">assistant_photo</i>
-                                        <input id="status" type="text" class="validate" name="status" value='<?php echo $row['status']; ?>' required>
-                                            <?php
-                                                if(isset($_SESSION['status'])){
-                                                    $status = $_SESSION['status'];
-                                                    echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$status.'</div>';
-                                                    unset($_SESSION['status']);
-                                                }
-                                            ?>
-                                        <label for="status">Status</label>
-                                    </div>
-                                    <div class="input-field col s6">
-                                        <i class="material-icons prefix md-prefix">account_box</i>
-                                        <input id="kepsek" type="text" class="validate" name="kepsek" value="<?php echo $row['kepsek']; ?>" required>
-                                            <?php
-                                                if(isset($_SESSION['kepsek'])){
-                                                    $kepsek = $_SESSION['kepsek'];
-                                                    echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$kepsek.'</div>';
-                                                    unset($_SESSION['kepsek']);
-                                                }
-                                            ?>
-                                        <label for="kepsek">Nama Kepala Sekolah</label>
-                                    </div>
-                                    <div class="input-field col s6">
-                                        <i class="material-icons prefix md-prefix">place</i>
-                                        <input id="alamat" type="text" class="validate" name="alamat" value="<?php echo $row['alamat']; ?>" required>
+                                        <input id="alamat" type="text" class="validate" name="alamat" value='<?php echo $row['alamat']; ?>' required>
                                             <?php
                                                 if(isset($_SESSION['alamat'])){
                                                     $alamat = $_SESSION['alamat'];
@@ -292,19 +251,19 @@
                                                     unset($_SESSION['alamat']);
                                                 }
                                             ?>
-                                        <label for="alamat">Alamat</label>
+                                        <label for="alamat">alamat</label>
                                     </div>
                                     <div class="input-field col s6">
-                                        <i class="material-icons prefix md-prefix">looks_one</i>
-                                        <input id="nip" type="text" class="validate" name="nip" value="<?php echo $row['nip']; ?>" required>
+                                        <i class="material-icons prefix md-prefix">account_box</i>
+                                        <input id="email" type="text" class="validate" name="email" value="<?php echo $row['email']; ?>" required>
                                             <?php
-                                                if(isset($_SESSION['nipkepsek'])){
-                                                    $nipkepsek = $_SESSION['nipkepsek'];
-                                                    echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$nipkepsek.'</div>';
-                                                    unset($_SESSION['nipkepsek']);
+                                                if(isset($_SESSION['email'])){
+                                                    $email = $_SESSION['email'];
+                                                    echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$email.'</div>';
+                                                    unset($_SESSION['email']);
                                                 }
                                             ?>
-                                        <label for="nip">NIP Kepala Sekolah</label>
+                                        <label for="email">Email</label>
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons prefix md-prefix">language</i>
@@ -317,18 +276,6 @@
                                                 }
                                             ?>
                                         <label for="website">Website</label>
-                                    </div>
-                                    <div class="input-field col s6">
-                                        <i class="material-icons prefix md-prefix">mail</i>
-                                        <input id="email" type="email" class="validate" name="email" value="<?php echo $row['email']; ?>" required>
-                                            <?php
-                                                if(isset($_SESSION['email'])){
-                                                    $email = $_SESSION['email'];
-                                                    echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$email.'</div>';
-                                                    unset($_SESSION['email']);
-                                                }
-                                            ?>
-                                        <label for="email">Email Instansi</label>
                                     </div>
                                     <div class="input-field col s6 tooltipped" data-position="top" data-tooltip="Jika tidak ada logo, biarkan kosong">
                                         <div class="file-field input-field">
