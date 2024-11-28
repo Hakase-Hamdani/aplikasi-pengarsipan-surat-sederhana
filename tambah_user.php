@@ -8,7 +8,7 @@
         if(isset($_REQUEST['submit'])){
 
             //validasi form kosong
-            if($_REQUEST['username'] == "" || $_REQUEST['password'] == "" || $_REQUEST['nama'] == "" || $_REQUEST['nip'] == "" || $_REQUEST['admin'] == ""){
+            if($_REQUEST['username'] == "" || $_REQUEST['password'] == "" || $_REQUEST['nama'] == "" || $_REQUEST['NIP'] == "" || $_REQUEST['admin'] == ""){
                 $_SESSION['errEmpty'] = 'ERROR! Semua form wajib diisi!';
                 header("Location: ./admin.php?page=sett&sub=usr&act=add");
                 die();
@@ -17,7 +17,7 @@
                 $username = $_REQUEST['username'];
                 $password = $_REQUEST['password'];
                 $nama = $_REQUEST['nama'];
-                $nip = $_REQUEST['nip'];
+                $NIP = $_REQUEST['NIP'];
                 $admin = $_REQUEST['admin'];
 
                 //validasi input data
@@ -31,7 +31,7 @@
                         echo '<script language="javascript">window.history.back();</script>';
                     } else {
 
-                        if(!preg_match("/^[0-9. -]*$/", $nip)){
+                        if(!preg_match("/^[0-9. -]*$/", $NIP)){
                             $_SESSION['nipuser'] = 'Form NIP hanya boleh mengandung karakter angka, spasi dan minus(-)';
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
@@ -59,12 +59,22 @@
                                             echo '<script language="javascript">window.history.back();</script>';
                                         } else {
 
-                                            $query = mysqli_query($config, "INSERT INTO tbl_user(username,password,nama,nip,admin) VALUES('$username',MD5('$password'),'$nama','$nip','$admin')");
+                                            $query1 = mysqli_query($config, "INSERT INTO tbl_user(username,password,nama,NIP,admin) VALUES('$username',MD5('$password'),'$nama','$NIP','$admin')");
+                                            $new_user_id = mysqli_insert_id($config);
+                                            $query2 = mysqli_query($config, "INSERT INTO tbl_staf(id_user,nama,NIP) VALUES('$new_user_id',MD5('$nama'), $NIP')");
 
-                                            if($query != false){
+                                            if($query1 != false){
                                                 $_SESSION['succAdd'] = 'SUKSES! User baru berhasil ditambahkan';
                                                 header("Location: ./admin.php?page=sett&sub=usr");
                                                 die();
+                                                if($query2 != false){
+                                                    $_SESSION['succAdd'] = 'SUKSES! User baru berhasil ditambahkan';
+                                                    header("Location: ./admin.php?page=sett&sub=usr");
+                                                    die();
+                                                }else{
+                                                    $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
+                                                    echo '<script language="javascript">window.history.back();</script>';
+                                                }
                                             } else {
                                                 $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
                                                 echo '<script language="javascript">window.history.back();</script>';
@@ -180,7 +190,7 @@
                         </div>
                         <div class="input-field col s6">
                             <i class="material-icons prefix md-prefix">looks_one</i>
-                            <input id="nip" type="text" class="validate" name="nip" required>
+                            <input id="NIP" type="text" class="validate" name="NIP" required>
                                 <?php
                                     if(isset($_SESSION['nipuser'])){
                                         $nipuser = $_SESSION['nipuser'];
@@ -188,7 +198,7 @@
                                         unset($_SESSION['nipuser']);
                                     }
                                 ?>
-                            <label for="nip">NIP</label>
+                            <label for="NIP">NIP</label>
                         </div>
                         <div class="input-field col s6">
                             <i class="material-icons prefix md-prefix">supervisor_account</i><label>Pilih Tipe User</label><br/>

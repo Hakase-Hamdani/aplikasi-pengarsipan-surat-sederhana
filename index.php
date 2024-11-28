@@ -217,7 +217,7 @@
                                     if(mysqli_num_rows($queryStaf) > 0){
                                         list($id_staff, $nama, $NIP) = mysqli_fetch_array($queryStaf);
                                         
-                                        //buat session menggunakan data staff dari user yang logibn
+                                        //buat session menggunakan data staff dari user yang login
                                         $_SESSION['id_staff']= $id_staff;
                                         $_SESSION['nama']= $nama;
                                         $_SESSION['NIP']= $NIP;
