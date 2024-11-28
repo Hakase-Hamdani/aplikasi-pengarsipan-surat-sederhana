@@ -59,23 +59,40 @@
                                             echo '<script language="javascript">window.history.back();</script>';
                                         } else {
 
-                                            $query1 = mysqli_query($config, "INSERT INTO tbl_user(username,password,nama,NIP,admin) VALUES('$username',MD5('$password'),'$nama','$NIP','$admin')");
-                                            $new_user_id = mysqli_insert_id($config);
-                                            $query2 = mysqli_query($config, "INSERT INTO tbl_staf(id_user,nama,NIP) VALUES('$new_user_id',MD5('$nama'), $NIP')");
+                                            // Start transaction
+                                            mysqli_begin_transaction($config);
 
-                                            if($query1 != false){
+                                            try {
+                                                // First query: Insert into tbl_user
+                                                $query1 = mysqli_query($config, "INSERT INTO tbl_user(username, password, nama, NIP, admin) VALUES('$username', MD5('$password'), '$nama', '$NIP', '$admin')");
+                                                if (!$query1) {
+                                                    throw new Exception('Failed to insert into tbl_user.');
+                                                }
+
+                                                // Get the last inserted ID
+                                                $new_user_id = mysqli_insert_id($config);
+
+                                                // Second query: Insert into tbl_staf
+                                                $query2 = mysqli_query($config, "INSERT INTO tbl_staf(id_user, nama, NIP) VALUES('$new_user_id', '$nama', '$NIP')");
+                                                if (!$query2) {
+                                                    throw new Exception('Failed to insert into tbl_staf.');
+                                                }
+
+                                                // Commit transaction if both queries succeeded
+                                                mysqli_commit($config);
+
+                                                // Success message
                                                 $_SESSION['succAdd'] = 'SUKSES! User baru berhasil ditambahkan';
                                                 header("Location: ./admin.php?page=sett&sub=usr");
                                                 die();
-                                                if($query2 != false){
-                                                    $_SESSION['succAdd'] = 'SUKSES! User baru berhasil ditambahkan';
-                                                    header("Location: ./admin.php?page=sett&sub=usr");
-                                                    die();
-                                                }else{
-                                                    $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
-                                                    echo '<script language="javascript">window.history.back();</script>';
-                                                }
-                                            } else {
+                                            } catch (Exception $e) {
+                                                // Roll back the transaction if any query fails
+                                                mysqli_rollback($config);
+
+                                                // Log the error message for debugging (optional)
+                                                error_log($e->getMessage());
+
+                                                // Error message for the user
                                                 $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
                                                 echo '<script language="javascript">window.history.back();</script>';
                                             }

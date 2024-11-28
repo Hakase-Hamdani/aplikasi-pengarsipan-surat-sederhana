@@ -11,7 +11,7 @@
 ~~- Fitur backup dan restore database~~
 ### Fitur di atas sudah tidak berlaku, aplikasi ini sedang di edit dan disesuaikan. Aplikasi ini saya gunakan hanya sebagai template.
 
-Lihat [`commits`](https://github.com/Hakase-Hamdani/aplikasi-pengarsipan-surat-sederhana/commits/main/) untuk mengetahui edit yang sudah/sedang di lakukan.
+Lihat [`commits`](https://github.com/Hakase-Hamdani/aplikasi-pengarsipan-surat-sederhana/commits instansi_mandiri/) untuk mengetahui edit yang sudah/sedang di lakukan.
 
 Sebelum menggunakan aplikasi ini silakan atur konfigurasi database terlebih dahulu. Caranya,
 
