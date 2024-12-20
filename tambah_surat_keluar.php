@@ -24,6 +24,7 @@
                 $tgl_surat = $_REQUEST['tgl_surat'];
                 $keterangan = $_REQUEST['keterangan'];
                 $id_user = $_SESSION['id_user'];
+                $id_staf = $_SESSION['id_staff'];
 
                 //validasi input data
                 if(!preg_match("/^[0-9]*$/", $no_agenda)){
@@ -89,10 +90,11 @@
                                                         if($ukuran < 2500000){
 
                                                             move_uploaded_file($_FILES['file']['tmp_name'], $target_dir.$nfile);
-
-                                                            $query = mysqli_query($config, "INSERT INTO tbl_surat_keluar(no_agenda,tujuan,no_surat,isi,kode,tgl_surat,
-                                                                tgl_catat,file,keterangan,id_user)
-                                                                VALUES('$no_agenda','$tujuan','$no_surat','$isi','$nkode','$tgl_surat',NOW(),'$nfile','$keterangan','$id_user')");
+                                                            $kueri_file = "INSERT INTO tbl_surat_keluar(no_agenda,id_staf,tujuan,no_surat,isi,kode,tgl_surat,file,keterangan) VALUE ('$no_agenda', '$id_staf', '$tujuan', '$no_surat','$isi','$nkode','$tgl_surat', '$nfile',keterangan='$keterangan')";
+                                                            $query = mysqli_query($config, $kueri_file);
+                                                            //$query = mysqli_query($config, "INSERT INTO tbl_surat_keluar VALUE (no_agenda,tujuan,no_surat,isi,kode,tgl_surat,tgl_catat,file,keterangan,id_user)
+                                                             //   VALUES('$no_agenda','$tujuan','$no_surat','$isi','$nkode','$tgl_surat',NOW(),'$nfile','$keterangan','$id_user')");
+                                                            
 
                                                             if($query == true){
                                                                 $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
@@ -111,9 +113,10 @@
                                                         echo '<script language="javascript">window.history.back();</script>';
                                                     }
                                                 } else {
-                                                    $query = mysqli_query($config, "INSERT INTO tbl_surat_keluar(no_agenda,tujuan,no_surat,isi,kode,tgl_surat,
-                                                        tgl_catat,file,keterangan,id_user)
-                                                        VALUES('$no_agenda','$tujuan','$no_surat','$isi','$nkode','$tgl_surat',NOW(),'','$keterangan','$id_user')");
+                                                    $kueri_nofile = "INSERT INTO tbl_surat_keluar(no_agenda,id_staf,tujuan,no_surat,isi,kode,tgl_surat,keterangan) VALUE ('$no_agenda', '$id_staf', '$tujuan', '$no_surat','$isi','$nkode','$tgl_surat',keterangan='$keterangan')";
+                                                    //$query = mysqli_query($config, "INSERT INTO tbl_surat_keluar(no_agenda,tujuan,no_surat,isi,kode,tgl_surat, tgl_atat,file,keterangan,id_user)
+                                                    //    VALUES('$no_agenda','$tujuan','$no_surat','$isi','$nkode','$tgl_surat',NOW(),'','$keterangan','$id_user')");
+                                                    $query = mysqli_query($config, $kueri_nofile);
 
                                                     if($query == true){
                                                         $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
