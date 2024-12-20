@@ -218,6 +218,19 @@
                         </div>
                         <div class="input-field col s6">
                             <i class="material-icons prefix md-prefix">bookmark</i>
+                            <!--div class="input-field col s11 right" style="margin: -5px 0 20px;">
+                                <select class="browser-default validate" name="surat_keluar" id="kode" required>
+                                    <?php
+                                    /*$queryKlas = "SELECT * FROM tbl_klasifikasi";
+                                    $resKlas = mysqli_query($config, $queryKlas);
+                                    if ($resKlas && mysqli_num_rows($resKlas)>0){
+                                        while ($row = mysqli_fetch_assoc($resKlas)){
+                                            echo '<option value="'.$row['id_klasifikasi'].'">'.$row['kode'].'-'. $row['nama'].'</option>';
+                                        }
+                                    }*/
+                                    ?>
+                                </select>
+                            </div-->
                             <input id="kode" type="text" class="validate" name="kode" required>
                                 <?php
                                     if(isset($_SESSION['kodek'])){
@@ -226,6 +239,7 @@
                                         unset($_SESSION['kodek']);
                                     }
                                 ?>
+                            
                             <label for="kode">Kode Klasifikasi</label>
                         </div>
                         <div class="input-field col s6">

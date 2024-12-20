@@ -5,7 +5,7 @@
         header("Location: ./");
         die();
     } else {
-
+        $id_luser = $_SESSION['id_user'];
         if($_SESSION['role'] != 1 AND $_SESSION['role'] != 3){
             echo '<script language="javascript">
                     window.alert("ERROR! Anda tidak memiliki hak akses untuk membuka halaman ini");
@@ -28,7 +28,7 @@
             }
         } else {
 
-            $query = mysqli_query($config, "SELECT surat_keluar FROM tbl_sett");
+            $query = mysqli_query($config, "SELECT surat_keluar FROM tbl_sett WHERE id_user = $id_luser");
             list($surat_keluar) = mysqli_fetch_array($query);
 
             //pagging
@@ -144,7 +144,49 @@
                                 <tbody>';
 
                                 //script untuk mencari data
-                                $query = mysqli_query($config, "SELECT * FROM tbl_surat_keluar WHERE isi LIKE '%$cari%' ORDER by id_surat DESC LIMIT $curr, 15");
+                                $kueri_search = "   SELECT
+                                                        tbl_surat_keluar.id_surat,
+                                                        tbl_surat_keluar.no_surat,
+                                                        tbl_surat_keluar.tgl_surat,
+                                                        tbl_surat_keluar.tujuan,
+                                                        tbl_surat_keluar.isi,
+                                                        tbl_surat_keluar.no_agenda,
+                                                        tbl_surat_keluar.kode,
+                                                        tbl_surat_keluar.file,
+                                                        tbl_staf.nama AS staff_name,
+                                                        tbl_staf.id_user,
+                                                        tbl_staf.NIP,
+                                                        tbl_user.username,
+                                                        tbl_user.role
+                                                    FROM
+                                                            tbl_surat_keluar
+                                                    INNER JOIN
+                                                            tbl_staf
+                                                    ON
+                                                            tbl_surat_keluar.id_staf = tbl_staf.id_staff
+                                                    INNER JOIN
+                                                            tbl_user
+                                                    ON
+                                                            tbl_staf.id_user = tbl_user.id_user
+                                                    WHERE
+                                                            tbl_staf.id_user = $id_luser
+                                                    AND
+                                                        (
+                                                            tbl_surat_keluar.no_surat LIKE '%$cari%' OR
+                                                            tbl_surat_keluar.tgl_surat LIKE '%$cari%' OR
+                                                            tbl_surat_keluar.tujuan LIKE '%$cari%' OR
+                                                            tbl_surat_keluar.isi LIKE '%$cari%' OR
+                                                            tbl_surat_keluar.no_agenda LIKE '%$cari%' OR
+                                                            tbl_surat_keluar.kode LIKE '%$cari%' OR
+                                                            tbl_surat_keluar.file LIKE '%$cari%'
+                                                        )
+                                                    ORDER by
+                                                            tbl_surat_keluar.id_surat
+                                                    DESC LIMIT
+                                                            $curr, $limit
+                                                        ;";
+                                //$query = mysqli_query($config, "SELECT * FROM tbl_surat_keluar WHERE isi LIKE '%$cari%' ORDER by id_surat DESC LIMIT $curr, 15");
+                                $query = mysqli_query($config, $kueri_search);
                                 if(mysqli_num_rows($query) > 0){
                                     $no = 1;
                                     while($row = mysqli_fetch_array($query)){
@@ -196,7 +238,7 @@
                                         <div id="modal" class="modal">
                                             <div class="modal-content white">
                                                 <h5>Jumlah data yang ditampilkan per halaman</h5>';
-                                                $query = mysqli_query($config, "SELECT id_sett,surat_keluar FROM tbl_sett");
+                                                $query = mysqli_query($config, "SELECT id_sett,surat_keluar FROM tbl_sett WHERE id_user = $id_luser");
                                                 list($id_sett,$surat_keluar) = mysqli_fetch_array($query);
                                                 echo '
                                                 <div class="row">
@@ -223,7 +265,7 @@
                                                                     $surat_keluar = $_REQUEST['surat_keluar'];
                                                                     $id_user = $_SESSION['id_user'];
 
-                                                                    $query = mysqli_query($config, "UPDATE tbl_sett SET surat_keluar='$surat_keluar',id_user='$id_user' WHERE id_sett='$id_sett'");
+                                                                    $query = mysqli_query($config, "UPDATE tbl_sett SET surat_keluar='$surat_keluar' WHERE id_user='$id_luser'");
                                                                     if($query == true){
                                                                         header("Location: ./admin.php?page=tsk");
                                                                         die();
@@ -243,7 +285,38 @@
                             <tbody>';
 
                             //script untuk mencari data
-                            $query = mysqli_query($config, "SELECT * FROM tbl_surat_keluar ORDER by id_surat DESC LIMIT $curr, $limit");
+                            $kueri_show = "SELECT
+                                                tbl_surat_keluar.id_surat,
+                                                tbl_surat_keluar.no_surat,
+                                                tbl_surat_keluar.tgl_surat,
+                                                tbl_surat_keluar.tujuan,
+                                                tbl_surat_keluar.isi,
+                                                tbl_surat_keluar.no_agenda,
+                                                tbl_surat_keluar.kode,
+                                                tbl_surat_keluar.file,
+                                                tbl_staf.nama AS staff_name,
+                                                tbl_staf.id_user,
+                                                tbl_staf.NIP,
+                                                tbl_user.username,
+                                                tbl_user.role
+                                                FROM
+                                                    tbl_surat_keluar
+                                                INNER JOIN
+                                                    tbl_staf
+                                                ON
+                                                    tbl_surat_keluar.id_staf = tbl_staf.id_staff
+                                                INNER JOIN
+                                                    tbl_user
+                                                ON
+                                                    tbl_staf.id_user = tbl_user.id_user
+                                                WHERE
+                                                    tbl_staf.id_user = $id_luser
+                                                ORDER by
+                                                    tbl_surat_keluar.id_surat
+                                                DESC LIMIT
+                                                    $curr, $limit;
+                                                ";
+                            $query = mysqli_query($config, $kueri_show);
                             if(mysqli_num_rows($query) > 0){
                                 $no = 1;
                                 while($row = mysqli_fetch_array($query)){
@@ -259,7 +332,6 @@
                                     } echo '</td>
                                     <td>'.$row['tujuan'].'</td><td>'.$row['no_surat'].'<br/><hr/>'.indoDate($row['tgl_surat']).'</td>
                                     <td>';
-
                                     if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['id_user'] != 1){
                                         echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
                                     } else {
