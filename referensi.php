@@ -152,7 +152,14 @@
                             <tbody>';
 
                             //script untuk menampilkan data
-                            $query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi WHERE uraian LIKE '%$cari%' ORDER BY id_klasifikasi DESC LIMIT 15");
+                            //$query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi WHERE uraian LIKE '%$cari%' ORDER BY id_klasifikasi DESC LIMIT 15");
+                            $query_cari = "SELECT * FROM tbl_klasifikasi WHERE
+                                                                                                                kode LIKE '%$cari%' OR
+                                                                                                                nama LIKE '%$cari%' OR
+                                                                                                                uraian LIKE '%$cari%'
+                                                                                                            ORDER BY kode ASC
+                                                                                                            LIMIT 15";
+                            $query = mysqli_query($config, $query_cari);
                             if(mysqli_num_rows($query) > 0){
                                 while($row = mysqli_fetch_array($query)){
                                 echo '
@@ -165,9 +172,9 @@
                                         if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
                                             echo '<a class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> NO ACTION</a>';
                                         } else {
-                                          echo '<a class="btn small blue waves-effect waves-light" href="?page=ref&act=edit&id_klasifikasi='.$row['id_klasifikasi'].'">
+                                          echo '<a class="btn small blue waves-effect waves-light" href="?page=ref&act=edit&dkode='.$row['kode'].'">
                                                     <i class="material-icons">edit</i> EDIT</a>
-                                                <a class="btn small deep-orange waves-effect waves-light" href="?page=ref&act=del&id_klasifikasi='.$row['id_klasifikasi'].'">
+                                                <a class="btn small deep-orange waves-effect waves-light" href="?page=ref&act=del&dkode='.$row['kode'].'">
                                                     <i class="material-icons">delete</i> DEL</a>';
                                         } echo '
                                         </td>
@@ -241,7 +248,7 @@
 
                                     //script untuk menampilkan data
                                     //$query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi ORDER BY id_klasifikasi DESC LIMIT $curr, $limit");
-                                    $query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi DESC LIMIT $curr, $limit");
+                                    $query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi ORDER BY kode ASC LIMIT $curr, $limit");
                                     if(mysqli_num_rows($query) > 0){
                                         while($row = mysqli_fetch_array($query)){
                                           echo '
@@ -253,9 +260,9 @@
                                                 if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
                                                     echo '<a class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> NO ACTION</a>';
                                                 } else {
-                                                  echo '<a class="btn small blue waves-effect waves-light" href="?page=ref&act=edit&id_klasifikasi='.$row['id_klasifikasi'].'">
+                                                  echo '<a class="btn small blue waves-effect waves-light" href="?page=ref&act=edit&dkode='.$row['kode'].'">
                                                             <i class="material-icons">edit</i> EDIT</a>
-                                                        <a class="btn small deep-orange waves-effect waves-light" href="?page=ref&act=del&id_klasifikasi='.$row['id_klasifikasi'].'">
+                                                        <a class="btn small deep-orange waves-effect waves-light" href="?page=ref&act=del&dkode='.$row['kode'].'">
                                                             <i class="material-icons">delete</i> DEL</a>';
                                                 } echo '
                                                 </td>

@@ -8,8 +8,9 @@
 
         if(isset($_REQUEST['submit'])){
 
-                $id_klasifikasi = $_REQUEST['id_klasifikasi'];
-                $kode = $_REQUEST['kode'];
+                //$id_klasifikasi = $_REQUEST['id_klasifikasi'];
+                $kode = $_REQUEST['kode']; //id yang ada di WHERE
+                $ekode = $_REQUEST['ekode']; //id yang ada di set
                 $nama = $_REQUEST['nama'];
                 $uraian = $_REQUEST['uraian'];
 
@@ -17,7 +18,7 @@
                 if($_REQUEST['kode'] == "" || $_REQUEST['nama'] == "" || $_REQUEST['uraian'] == ""){
                     $_SESSION['errEmpty'] = 'ERROR! Semua form wajib diisi';
                     echo '<script language="javascript">
-                            window.location.href="./admin.php?page=ref&act=edit&id_klasifikasi='.$id_klasifikasi.'";
+                            window.location.href="./admin.php?page=ref&act=edit&dkode='.$kode.'";
                           </script>';
                 } else {
 
@@ -37,7 +38,25 @@
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
 
-                            $query = mysqli_query($config, "UPDATE tbl_klasifikasi SET kode='$kode', nama='$nama', uraian='$uraian' WHERE id_klasifikasi='$id_klasifikasi'");
+                            //$query = mysqli_query($config, "UPDATE tbl_klasifikasi SET kode='$kode', nama='$nama', uraian='$uraian' WHERE kode='$kode'");
+                            $query_update = "UPDATE tbl_klasifikasi SET kode='$ekode', nama='$nama', uraian='$uraian' WHERE kode='$kode'";
+                            /*
+                            //HANYA UNTUK DEBUGGING BECAUSE THE CODE IS SO FUCKING CONFUSING
+                            var_dump($query_update);
+                            echo "<br>";
+                            $data = [
+                                'kode' => $_REQUEST['kode'],   // id yang ada di WHERE
+                                'ekode' => $_REQUEST['ekode'], // id yang ada di SET
+                                'nama' => $_REQUEST['nama'],
+                                'uraian' => $_REQUEST['uraian']
+                            ];
+                            
+                            var_dump($data);
+                            
+                            die(); // Temporarily stop script execution to inspect the output
+                            */
+                            $query = mysqli_query($config, $query_update);
+
 
                             if($query != false){
                                 $_SESSION['succEdit'] = 'SUKSES! Data berhasil diupdate';
@@ -53,8 +72,8 @@
             }
         } else {
 
-            $id_klasifikasi = mysqli_real_escape_string($config, $_REQUEST['id_klasifikasi']);
-            $query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi WHERE id_klasifikasi='$id_klasifikasi'");
+            $kode = mysqli_real_escape_string($config, $_REQUEST['dkode']);
+            $query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi WHERE kode='$kode'");
             if(mysqli_num_rows($query) > 0){
                 $no = 1;
                 while($row = mysqli_fetch_array($query))
@@ -73,6 +92,7 @@
                                 <div class="nav-wrapper blue-grey darken-1">
                                     <ul class="left">
                                         <li class="waves-effect waves-light"><a href="#" class="judul"><i class="material-icons">edit</i> Edit Klasifikasi Surat</a></li>
+                                        <?php echo $kode; ?>
                                     </ul>
                                 </div>
                             </nav>
@@ -119,14 +139,14 @@
                             <!-- Row in form START -->
                             <div class="row">
                                 <div class="input-field col s3">
-                                    <input type="hidden" value="<?php echo $row['id_klasifikasi']; ?>" name="id_klasifikasi">
+                                    <input type="hidden" value="<?php echo $row['kode']; ?>" name="kode">
                                     <i class="material-icons prefix md-prefix">font_download</i>
-                                    <input id="kd" type="text" class="validate" name="kode" maxlength="30" value="<?php echo $row['kode']; ?>" required>
+                                    <input id="kd" type="text" class="validate" name="ekode" maxlength="30" value="<?php echo $row['kode']; ?>" required>
                                         <?php
-                                            if(isset($_SESSION['kode'])){
-                                                $kode = $_SESSION['kode'];
-                                                echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$kode.'</div>';
-                                                unset($_SESSION['kode']);
+                                            if(isset($_SESSION['ekode'])){
+                                                $kode = $_SESSION['ekode'];
+                                                echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$ekode.'</div>';
+                                                unset($_SESSION['ekode']);
                                             }
                                         ?>
                                     <label for="kd">Kode</label>

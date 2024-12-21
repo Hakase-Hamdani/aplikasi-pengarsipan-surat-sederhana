@@ -49,7 +49,10 @@
                                     echo '<script language="javascript">window.history.back();</script>';
                                 } else {
 
-                                    $query = mysqli_query($config, "INSERT INTO tbl_klasifikasi(kode,nama,uraian) VALUES('$kode','$nama','$uraian')");
+                                    $query_insert = "INSERT INTO tbl_klasifikasi(kode,nama,uraian) VALUES('$kode','$nama','$uraian')";
+                                    //var_dump($query_insert);
+                                    //die();
+                                    $query = mysqli_query($config, $query_insert);
 
                                     if($query != false){
                                         $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
