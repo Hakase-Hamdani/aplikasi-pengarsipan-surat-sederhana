@@ -2,6 +2,8 @@
     //cek session
     if(!empty($_SESSION['role'])){
         $query = mysqli_query($config, "SELECT * FROM tbl_instansi");
+        if  ($query && mysqli_num_rows($query) > 0){
+
         while($data = mysqli_fetch_array($query)){
             echo '
                 <div class="col s12" id="header-instansi">
@@ -29,6 +31,18 @@
                     </div>
                 </div>';
         }
+    } else {
+       echo '
+                <div class="col s12" id="header-instansi">
+                    <div class="card blue-grey white-text">
+                        <div class="card-content">
+                            <div class="circle left"><img class="logo" src="./asset/img/logo.png"/></div>
+                            <h5 class="ins">BELUM DI SET, BISA DI SETTING DI: Pengaturan > <a href = "?page=sett">Instansi</a></h5>
+                            <p class="almt">BELUM DI SET</p>
+                        </div>
+                    </div>
+                </div>';
+    }
     } else {
         header("Location: ../");
         die();

@@ -336,6 +336,7 @@
     } else {
         //Jika tbl_instansi kosong, isi dengan value seperti di bawah.
         $query = mysqli_query($config, "INSERT INTO tbl_instansi(dinas,alamat,no_telp,email,website) VALUES ('BELUM DI SET, BISA DI SETTING DI: Pengaturan > Instansi','BELUM DI SET','BELUM DI SET','BELUM DI SET','BELUM DI SET')");
-        echo '<script language="javascript">window.history.back();</script>';
+        header("Location: ././admin.php?page=sett");
+        //echo '<script language="javascript">window.history.back();</script>';
     }
 ?>
