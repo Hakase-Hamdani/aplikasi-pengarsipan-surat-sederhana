@@ -20,7 +20,7 @@
                 $query = mysqli_query($config, "SELECT * FROM tbl_instansi");
                 while($data = mysqli_fetch_array($query)){
             ?>
-                <span class="white-text copyright-date">&copy; <?php echo date("Y"); ?> <?php echo $data['dinas'] .'</span>
+                <span class="white-text">&copy; <?php echo date("Y"); ?> <?php echo $data['dinas'] .'</span>
                 ';?>
             <?php } ?>
         </div>
