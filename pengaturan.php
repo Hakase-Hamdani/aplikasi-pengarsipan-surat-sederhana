@@ -1,4 +1,13 @@
 <?php
+
+    
+    $query = mysqli_query($config, "SELECT * FROM tbl_instansi");
+
+    if ($query && mysqli_num_rows($query) > 0) { //JIKA tabel TIDAK kosong, jalankan seperti biasa, else turun ke baris terakhir
+        $query = mysqli_query($config, "SELECT * FROM tbl_instansi"); ///THIS IS DISGUSTING
+        $row = mysqli_fetch_assoc($query);
+        $id = $row['id_instansi'];
+    
     //cek session
     if(empty($_SESSION['role'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
@@ -37,7 +46,7 @@
                         die();
                     } else {
 
-                        $id_instansi = "1";
+                        $id_instansi = $id;  //Cek di line 3
                         $dinas = $_REQUEST['dinas'];
                         $alamat = $_REQUEST['alamat'];
                         $no_telp = $_REQUEST['no_telp'];
@@ -79,14 +88,16 @@
                                                             if(in_array($eks, $ekstensi) == true){
                                                                 if($ukuran < 2000000){
 
-                                                                    $query = mysqli_query($config, "SELECT logo FROM tbl_instansi");
-                                                                    list($logo) = mysqli_fetch_array($query);
+                                                                    $query1 = mysqli_query($config, "SELECT logo FROM tbl_instansi");
+                                                                    list($logo) = mysqli_fetch_array($query1);
 
                                                                     unlink($target_dir.$logo);
 
                                                                     move_uploaded_file($_FILES['logo']['tmp_name'], $target_dir.$nlogo);
-
-                                                                    $query = mysqli_query($config, "UPDATE tbl_instansi SET no_telp='$no_telp',dinas='$dinas',alamat='$alamat',email='$email',website='$website',logo='$nlogo' WHERE id_instansi='$id_instansi'");
+                                                                    $query_update = "UPDATE tbl_instansi SET no_telp='$no_telp',dinas='$dinas',alamat='$alamat',email='$email',website='$website',logo='$nlogo' WHERE id_instansi='$id_instansi'";
+                                                                    //var_dump($query_update);
+                                                                    //die();
+                                                                    $query = mysqli_query($config,$query_update);
 
                                                                     if($query == true){
                                                                         $_SESSION['succEdit'] = 'SUKSES! Data instansi berhasil diupdate';
@@ -107,8 +118,12 @@
                                                         } else {
 
                                                             //jika form logo kosong akan mengeksekusi script dibawah ini
-                                                            $query = mysqli_query($config, "UPDATE tbl_instansi SET no_telp='$no_telp',dinas='$dinas',alamat='$alamat',email='$email',website='$website',logo='$nlogo' WHERE id_instansi='$id_instansi'");
+                                                            $query_update_np = "UPDATE tbl_instansi SET no_telp='$no_telp',dinas='$dinas',alamat='$alamat',email='$email',website='$website' WHERE id_instansi='$id_instansi'";
+                                                            //var_dump($query_update_np);
+                                                            //die();
 
+                                                            $query = mysqli_query($config, $query_update_np);
+                                                            
                                                             if($query == true){
                                                                 $_SESSION['succEdit'] = 'SUKSES! Data instansi berhasil diupdate';
                                                                 header("Location: ././admin.php?page=sett");
@@ -140,7 +155,6 @@
                     if(mysqli_num_rows($query) > 0){
                         $no = 1;
                         while($row = mysqli_fetch_array($query)){?>
-
                         <!-- Row Start -->
                         <div class="row">
                             <!-- Secondary Nav START -->
@@ -313,10 +327,15 @@
                         <!-- Row form END -->
 
 <?php
+                            }
                         }
                     }
                 }
-            }
-        }
+            }   
+        }   
+    } else {
+        //Jika tbl_instansi kosong, isi dengan value seperti di bawah.
+        $query = mysqli_query($config, "INSERT INTO tbl_instansi(dinas,alamat,no_telp,email,website) VALUES ('BELUM DI SET, BISA DI SETTING DI: Pengaturan > Instansi','BELUM DI SET','BELUM DI SET','BELUM DI SET','BELUM DI SET')");
+        echo '<script language="javascript">window.history.back();</script>';
     }
 ?>
