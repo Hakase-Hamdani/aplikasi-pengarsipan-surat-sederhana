@@ -158,6 +158,7 @@
                     <li><a href="?page=gsk">Surat Keluar</a></li>
                 </ul-->
             <li><a href="?page=ref">Klasifikasi</a></li>
+            <li><a href="?page=div">Divisi</a></li>
             <?php
                 if($_SESSION['role'] == 1){ ?>
             <li><a class="dropdown-button" href="#!" data-activates="pengaturan">Pengaturan <i class="material-icons md-18">arrow_drop_down</i></a></li>

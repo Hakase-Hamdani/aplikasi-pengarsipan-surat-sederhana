@@ -71,6 +71,9 @@ Website     : https://masrud.com
                 case 'ref':
                     include "referensi.php";
                     break;
+                case 'div':
+                    include "divisi.php";
+                    break;
                 case 'sett':
                     include "pengaturan.php";
                     break;
