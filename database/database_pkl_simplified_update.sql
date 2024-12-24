@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 06, 2024 at 04:49 PM
+-- Generation Time: Dec 24, 2024 at 02:49 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,12 +24,31 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_divisi`
+--
+
+CREATE TABLE `tbl_divisi` (
+  `kode` varchar(50) NOT NULL,
+  `nama` varchar(250) DEFAULT NULL,
+  `uraian` mediumtext DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `tbl_divisi`
+--
+
+INSERT INTO `tbl_divisi` (`kode`, `nama`, `uraian`) VALUES
+('Dummy', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_instansi`
 --
 
 CREATE TABLE `tbl_instansi` (
   `id_instansi` int(10) NOT NULL,
-  `dinas` varchar(50) DEFAULT NULL,
+  `dinas` varchar(150) DEFAULT NULL,
   `alamat` varchar(250) DEFAULT NULL,
   `no_telp` varchar(50) DEFAULT NULL,
   `email` varchar(250) DEFAULT NULL,
@@ -42,7 +61,7 @@ CREATE TABLE `tbl_instansi` (
 --
 
 INSERT INTO `tbl_instansi` (`id_instansi`, `dinas`, `alamat`, `no_telp`, `email`, `website`, `logo`) VALUES
-(2, 'Kantor Perpajakan', 'Jl. Pajak No. 2', '08315931212', 'admin@pajak.go.id', '-', '');
+(7, 'Kantor Bawaslu Kota Banjarmasin', 'Jl. A. Yani', '083131319922', 'bawaslu@bjm.go.id', 'bawaslu.bjm.go.id', NULL);
 
 -- --------------------------------------------------------
 
@@ -61,7 +80,7 @@ CREATE TABLE `tbl_klasifikasi` (
 --
 
 INSERT INTO `tbl_klasifikasi` (`kode`, `nama`, `uraian`) VALUES
-('HK.00', 'Program Legislasi', ''),
+('HK.001', 'Program Legislasi', '--'),
 ('HK.01', 'Produk Hukum', ''),
 ('HK.01.00', 'Produk Hukum yang Bersifat Pengaturan', ''),
 ('HK.01.01', 'Produk Hukum yang Bersifat Penetapan', ''),
@@ -321,6 +340,7 @@ INSERT INTO `tbl_staf` (`id_staff`, `id_user`, `nama`, `NIP`) VALUES
 CREATE TABLE `tbl_surat_keluar` (
   `id_surat` int(10) NOT NULL,
   `id_staf` int(10) DEFAULT NULL,
+  `kode_divisi` varchar(50) DEFAULT NULL,
   `kode` varchar(50) DEFAULT NULL,
   `no_agenda` int(10) DEFAULT NULL,
   `tujuan` varchar(250) DEFAULT NULL,
@@ -336,10 +356,12 @@ CREATE TABLE `tbl_surat_keluar` (
 -- Dumping data for table `tbl_surat_keluar`
 --
 
-INSERT INTO `tbl_surat_keluar` (`id_surat`, `id_staf`, `kode`, `no_agenda`, `tujuan`, `no_surat`, `isi`, `tgl_surat`, `tgl_catat`, `file`, `keterangan`) VALUES
-(1, 1, 'PM.00', 100, 'PT. Dirgantara Indonesia', 'SK-001/2024', 'Surat resmi ke PT. Dirgantara Indonesia', '2024-12-06', '2024-12-06 15:39:19', NULL, 'URGENT'),
-(2, 2, 'PM.00.00', 101, 'PT. Teknologi Inovasi', 'SK-002/2024', 'Surat resmi ke PT. Teknologi Inovasi', NULL, '2024-12-06 15:36:19', NULL, 'URGENT'),
-(3, 3, 'PM.00.00', 102, 'CV. SUS', 'SK-003/2024', 'Surat resmi ke CV. Super Usaha Selaras', NULL, '2024-12-06 15:36:19', NULL, 'SECRET');
+INSERT INTO `tbl_surat_keluar` (`id_surat`, `id_staf`, `kode_divisi`, `kode`, `no_agenda`, `tujuan`, `no_surat`, `isi`, `tgl_surat`, `tgl_catat`, `file`, `keterangan`) VALUES
+(1, 1, 'Dummy', 'PM.00', 100, 'PT. Dirgantara Indonesia', 'SK-001/2024', 'Surat resmi ke PT. Dirgantara Indonesia', '2024-12-06', '2024-12-24 13:47:17', '9551-minimal-cute-rio-futaba.jpg', 'URGENT'),
+(2, 2, 'Dummy', 'PM.00.00', 101, 'PT. Teknologi Inovasi', 'SK-002/2024', 'Surat resmi ke PT. Teknologi Inovasi', NULL, '2024-12-24 13:47:21', NULL, 'URGENT'),
+(3, 3, 'Dummy', 'PM.00.00', 102, 'CV. SUS', 'SK-003/2024', 'Surat resmi ke CV. Super Usaha Selaras', NULL, '2024-12-24 13:47:41', NULL, 'SECRET'),
+(4, 1, 'Dummy', 'HK.001', 103, 'Dummy', 'Dummy', 'Dummy', '2024-12-16', '2024-12-24 13:47:29', NULL, NULL),
+(5, 1, 'Dummy', 'HK.001', 104, 'Test upload', 'Test upload', 'Test upload', '2024-12-26', '2024-12-24 13:47:33', '6338-Konachan_com___276233_brown_eyes_futaba_rio_glasses_gray_hair_long_hair_myrockys_seishun_buta_yarou_tie_watermark_1920x1080.jpg', NULL);
 
 -- --------------------------------------------------------
 
@@ -382,6 +404,12 @@ DELIMITER ;
 --
 
 --
+-- Indexes for table `tbl_divisi`
+--
+ALTER TABLE `tbl_divisi`
+  ADD PRIMARY KEY (`kode`);
+
+--
 -- Indexes for table `tbl_instansi`
 --
 ALTER TABLE `tbl_instansi`
@@ -413,7 +441,8 @@ ALTER TABLE `tbl_staf`
 ALTER TABLE `tbl_surat_keluar`
   ADD PRIMARY KEY (`id_surat`),
   ADD KEY `id_staf` (`id_staf`),
-  ADD KEY `id_kode` (`kode`);
+  ADD KEY `id_kode` (`kode`),
+  ADD KEY `kode_divisi` (`kode_divisi`);
 
 --
 -- Indexes for table `tbl_user`
@@ -429,7 +458,7 @@ ALTER TABLE `tbl_user`
 -- AUTO_INCREMENT for table `tbl_instansi`
 --
 ALTER TABLE `tbl_instansi`
-  MODIFY `id_instansi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_instansi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tbl_sett`
@@ -447,7 +476,7 @@ ALTER TABLE `tbl_staf`
 -- AUTO_INCREMENT for table `tbl_surat_keluar`
 --
 ALTER TABLE `tbl_surat_keluar`
-  MODIFY `id_surat` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_surat` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_user`
@@ -476,6 +505,7 @@ ALTER TABLE `tbl_staf`
 --
 ALTER TABLE `tbl_surat_keluar`
   ADD CONSTRAINT `tbl_surat_keluar_ibfk_2` FOREIGN KEY (`id_staf`) REFERENCES `tbl_staf` (`id_staff`),
+  ADD CONSTRAINT `tbl_surat_keluar_tbl_divisi_3` FOREIGN KEY (`kode_divisi`) REFERENCES `tbl_divisi` (`kode`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `tbl_surat_keluar_tbl_klasifikasi_3` FOREIGN KEY (`kode`) REFERENCES `tbl_klasifikasi` (`kode`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
