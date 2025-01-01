@@ -62,6 +62,14 @@ $(document).ready(function(){
     $('.tooltipped').tooltip({delay: 10});
 
     //jquery autocomplete
+    $( "#divisi" ).autocomplete({
+        serviceUrl: "kdivisi.php",   // Kode php untuk prosesing data.
+        dataType: "JSON",           // Tipe data JSON.
+        onSelect: function (suggestion) {
+            $( "#divisi" ).val(suggestion.kode);
+        }
+    });
+
     $( "#kode" ).autocomplete({
         serviceUrl: "kode.php",   // Kode php untuk prosesing data.
         dataType: "JSON",           // Tipe data JSON.

@@ -21,6 +21,7 @@
                 $isi = $_REQUEST['isi'];
                 $kode = substr($_REQUEST['kode'],0,30);
                 $nkode = trim($kode);
+                $divisi = $_REQUEST['divisi'];
                 $tgl_surat = $_REQUEST['tgl_surat'];
                 $keterangan = $_REQUEST['keterangan'];
                 $id_user = $_SESSION['id_user'];
@@ -51,6 +52,11 @@
                                     $_SESSION['kodek'] = 'Form Kode Klasifikasi hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan koma(,)';
                                     echo '<script language="javascript">window.history.back();</script>';
                                 } else {
+
+                                    if(!preg_match("/^[a-zA-Z0-9., ]*$/", $divisi)){
+                                        $_SESSION['divisi'] = 'Form Kode Klasifikasi hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan koma(,)';
+                                        echo '<script language="javascript">window.history.back();</script>';
+                                    } else {
 
                                     if(!preg_match("/^[0-9.-]*$/", $tgl_surat)){
                                         $_SESSION['tgl_suratk'] = 'Form Tanggal Surat hanya boleh mengandung angka dan minus(-)';
@@ -90,7 +96,7 @@
                                                         if($ukuran < 2500000){
 
                                                             move_uploaded_file($_FILES['file']['tmp_name'], $target_dir.$nfile);
-                                                            $kueri_file = "INSERT INTO tbl_surat_keluar(no_agenda,id_staf,tujuan,no_surat,isi,kode,tgl_surat,file,keterangan) VALUE ('$no_agenda', '$id_staf', '$tujuan', '$no_surat','$isi','$nkode','$tgl_surat', '$nfile',keterangan='$keterangan')";
+                                                            $kueri_file = "INSERT INTO tbl_surat_keluar(no_agenda,id_staf,tujuan,no_surat,isi,kode, kode_divisi,tgl_surat,file,keterangan) VALUE ('$no_agenda', '$id_staf', '$tujuan', '$no_surat','$isi','$nkode','$divisi','$tgl_surat', '$nfile',keterangan='$keterangan')";
                                                             $query = mysqli_query($config, $kueri_file);
                                                             //$query = mysqli_query($config, "INSERT INTO tbl_surat_keluar VALUE (no_agenda,tujuan,no_surat,isi,kode,tgl_surat,tgl_catat,file,keterangan,id_user)
                                                              //   VALUES('$no_agenda','$tujuan','$no_surat','$isi','$nkode','$tgl_surat',NOW(),'$nfile','$keterangan','$id_user')");
@@ -113,7 +119,7 @@
                                                         echo '<script language="javascript">window.history.back();</script>';
                                                     }
                                                 } else {
-                                                    $kueri_nofile = "INSERT INTO tbl_surat_keluar(no_agenda,id_staf,tujuan,no_surat,isi,kode,tgl_surat,keterangan) VALUE ('$no_agenda', '$id_staf', '$tujuan', '$no_surat','$isi','$nkode','$tgl_surat',keterangan='$keterangan')";
+                                                    $kueri_nofile = "INSERT INTO tbl_surat_keluar(no_agenda,id_staf,tujuan,no_surat,isi,kode, kode_divisi,tgl_surat,keterangan) VALUE ('$no_agenda', '$id_staf', '$tujuan', '$no_surat','$isi','$nkode','$divisi','$tgl_surat',keterangan='$keterangan')";
                                                     //$query = mysqli_query($config, "INSERT INTO tbl_surat_keluar(no_agenda,tujuan,no_surat,isi,kode,tgl_surat, tgl_atat,file,keterangan,id_user)
                                                     //    VALUES('$no_agenda','$tujuan','$no_surat','$isi','$nkode','$tgl_surat',NOW(),'','$keterangan','$id_user')");
                                                     $query = mysqli_query($config, $kueri_nofile);
@@ -136,6 +142,7 @@
                     }
                 }
             }
+        }
         } else {?>
 
             <!-- Row Start -->
@@ -244,6 +251,19 @@
                                 ?>
                             
                             <label for="kode">Kode Klasifikasi</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix md-prefix">bookmark</i>
+                            <input id="divisi" type="text" class="validate" name="divisi" required>
+                                <?php
+                                    if(isset($_SESSION['divisi'])){
+                                        $divisi = $_SESSION['divisi'];
+                                        echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$divisi.'</div>';
+                                        unset($_SESSION['divisi']);
+                                }
+                                ?>
+                            
+                            <label for="divisi">Divisi</label>
                         </div>
                         <div class="input-field col s6">
                             <i class="material-icons prefix md-prefix">place</i>
