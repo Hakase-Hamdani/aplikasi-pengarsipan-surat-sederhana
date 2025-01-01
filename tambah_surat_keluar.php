@@ -88,26 +88,36 @@
                                                 }
 
                                                 //jika form file tidak kosong akan mengekse
-                                                if($file != ""){
-
-                                                    $rand = rand(1,10000);
-                                                    $nfile = $rand."-".$file;
-                                                    if(in_array($eks, $ekstensi) == true){
-                                                        if($ukuran < 2500000){
-
-                                                            move_uploaded_file($_FILES['file']['tmp_name'], $target_dir.$nfile);
-                                                            $kueri_file = "INSERT INTO tbl_surat_keluar(no_agenda,id_staf,tujuan,no_surat,isi,kode, kode_divisi,tgl_surat,file,keterangan) VALUE ('$no_agenda', '$id_staf', '$tujuan', '$no_surat','$isi','$nkode','$divisi','$tgl_surat', '$nfile',keterangan='$keterangan')";
-                                                            $query = mysqli_query($config, $kueri_file);
-                                                            //$query = mysqli_query($config, "INSERT INTO tbl_surat_keluar VALUE (no_agenda,tujuan,no_surat,isi,kode,tgl_surat,tgl_catat,file,keterangan,id_user)
-                                                             //   VALUES('$no_agenda','$tujuan','$no_surat','$isi','$nkode','$tgl_surat',NOW(),'$nfile','$keterangan','$id_user')");
-                                                            
-
-                                                            if($query == true){
-                                                                $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
-                                                                header("Location: ./admin.php?page=tsk");
-                                                                die();
+                                                if ($file != "") {
+                                                    $rand = rand(1, 10000);
+                                                    $nfile = $rand . "-" . $file;
+                                                
+                                                    if (in_array($eks, $ekstensi)) {
+                                                        if ($ukuran < 2500000) {
+                                                            // Check if kode exists
+                                                            $kode_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_kode WHERE kode = '$nkode'");
+                                                            $kode_row = mysqli_fetch_assoc($kode_check);
+                                                
+                                                            // Check if kode_divisi exists
+                                                            $divisi_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_divisi WHERE kode_divisi = '$divisi'");
+                                                            $divisi_row = mysqli_fetch_assoc($divisi_check);
+                                                
+                                                            if ($kode_row['cnt'] > 0 && $divisi_row['cnt'] > 0) {
+                                                                move_uploaded_file($_FILES['file']['tmp_name'], $target_dir . $nfile);
+                                                                $kueri_file = "INSERT INTO tbl_surat_keluar(no_agenda, id_staf, tujuan, no_surat, isi, kode, kode_divisi, tgl_surat, file, keterangan) 
+                                                                               VALUES ('$no_agenda', '$id_staf', '$tujuan', '$no_surat', '$isi', '$nkode', '$divisi', '$tgl_surat', '$nfile', '$keterangan')";
+                                                                $query = mysqli_query($config, $kueri_file);
+                                                
+                                                                if ($query) {
+                                                                    $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
+                                                                    header("Location: ./admin.php?page=tsk");
+                                                                    die();
+                                                                } else {
+                                                                    $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
+                                                                    echo '<script language="javascript">window.history.back();</script>';
+                                                                }
                                                             } else {
-                                                                $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
+                                                                $_SESSION['errForeign'] = 'ERROR! Kode atau Kode Divisi tidak valid.';
                                                                 echo '<script language="javascript">window.history.back();</script>';
                                                             }
                                                         } else {
@@ -119,19 +129,33 @@
                                                         echo '<script language="javascript">window.history.back();</script>';
                                                     }
                                                 } else {
-                                                    $kueri_nofile = "INSERT INTO tbl_surat_keluar(no_agenda,id_staf,tujuan,no_surat,isi,kode, kode_divisi,tgl_surat,keterangan) VALUE ('$no_agenda', '$id_staf', '$tujuan', '$no_surat','$isi','$nkode','$divisi','$tgl_surat',keterangan='$keterangan')";
-                                                    //$query = mysqli_query($config, "INSERT INTO tbl_surat_keluar(no_agenda,tujuan,no_surat,isi,kode,tgl_surat, tgl_atat,file,keterangan,id_user)
-                                                    //    VALUES('$no_agenda','$tujuan','$no_surat','$isi','$nkode','$tgl_surat',NOW(),'','$keterangan','$id_user')");
-                                                    $query = mysqli_query($config, $kueri_nofile);
-
-                                                    if($query == true){
-                                                        $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
-                                                        header("Location: ./admin.php?page=tsk");
-                                                        die();
+                                                    // Check if kode exists
+                                                    $kode_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_klasifikasi WHERE kode = '$nkode'");
+                                                    $kode_row = mysqli_fetch_assoc($kode_check);
+                                                
+                                                    // Check if kode_divisi exists
+                                                    $divisi_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_divisi WHERE kode = '$divisi'");
+                                                    $divisi_row = mysqli_fetch_assoc($divisi_check);
+                                                
+                                                    if ($kode_row['cnt'] > 0 && $divisi_row['cnt'] > 0) {
+                                                        $kueri_nofile = "INSERT INTO tbl_surat_keluar(no_agenda, id_staf, tujuan, no_surat, isi, kode, kode_divisi, tgl_surat, keterangan) 
+                                                                         VALUES ('$no_agenda', '$id_staf', '$tujuan', '$no_surat', '$isi', '$nkode', '$divisi', '$tgl_surat', '$keterangan')";
+                                                        $query = mysqli_query($config, $kueri_nofile);
+                                                
+                                                        if ($query) {
+                                                            $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
+                                                            header("Location: ./admin.php?page=tsk");
+                                                            die();
+                                                        } else {
+                                                            $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
+                                                            echo '<script language="javascript">window.history.back();</script>';
+                                                        }
                                                     } else {
-                                                        $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
+                                                        $_SESSION['errForeign'] = 'ERROR! Kode atau Kode Divisi tidak valid.';
                                                         echo '<script language="javascript">window.history.back();</script>';
                                                     }
+                                                }
+                                                
                                                 }
                                             }
                                         }
@@ -143,7 +167,7 @@
                 }
             }
         }
-        } else {?>
+         else {?>
 
             <!-- Row Start -->
             <div class="row">
@@ -188,6 +212,19 @@
                         </div>';
                     unset($_SESSION['errEmpty']);
                 }
+                if(isset($_SESSION['errForeign'])){
+                    $errForeign = $_SESSION['errForeign'];
+                    echo '<div id="alert-message" class="row">
+                            <div class="col m12">
+                                <div class="card red lighten-5">
+                                    <div class="card-content notif">
+                                        <span class="card-title red-text"><i class="material-icons md-36">clear</i> '.$errForeign.'</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>';
+                    unset($_SESSION['errForeign']);
+                }
             ?>
 
             <!-- Row form Start -->
@@ -228,19 +265,6 @@
                         </div>
                         <div class="input-field col s6">
                             <i class="material-icons prefix md-prefix">bookmark</i>
-                            <!--div class="input-field col s11 right" style="margin: -5px 0 20px;">
-                                <select class="browser-default validate" name="surat_keluar" id="kode" required>
-                                    <?php
-                                    /*$queryKlas = "SELECT * FROM tbl_klasifikasi";
-                                    $resKlas = mysqli_query($config, $queryKlas);
-                                    if ($resKlas && mysqli_num_rows($resKlas)>0){
-                                        while ($row = mysqli_fetch_assoc($resKlas)){
-                                            echo '<option value="'.$row['id_klasifikasi'].'">'.$row['kode'].'-'. $row['nama'].'</option>';
-                                        }
-                                    }*/
-                                    ?>
-                                </select>
-                            </div-->
                             <input id="kode" type="text" class="validate" name="kode" required>
                                 <?php
                                     if(isset($_SESSION['kodek'])){
