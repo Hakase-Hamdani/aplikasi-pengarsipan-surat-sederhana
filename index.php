@@ -1,18 +1,15 @@
 <?php
-    //jangan di macam-macami
     ob_start();
     session_start();
 
-    //cek session. Jika session admin, lompat ke admin.php
-    if(isset($_SESSION['role'])){
+    //cek session
+    if(isset($_SESSION['admin'])){
         header("Location: ./admin.php");
         die();
     }
-    
-    //jangan di macam-macami
+
     require_once 'include/config.php';
     require_once 'include/functions.php';
-    //jangan ubah any instances of $config, variabel buat koneksi database
     $config = conn($host, $username, $password, $database);
 ?>
 
@@ -28,6 +25,11 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <?php
+        $query = mysqli_query($config, "SELECT logo from tbl_instansi");
+        list($logo) = mysqli_fetch_array($query);
+        echo '<link rel="shortcut icon" href="upload/'.$logo.'">';
+    ?>
     <!-- Meta END -->
 
     <!--[if lt IE 9]>
@@ -174,59 +176,53 @@
                     <!-- Row Form START -->
                     <div class="row">
 
+                    <?php
+                        $query = mysqli_query($config, "SELECT * FROM tbl_instansi");
+                        while($data = mysqli_fetch_array($query)){
+                    ?>
                     <!-- Logo and title START -->
-                    <!-- Buat Logo dan Nama Aplikasi di login -->
                     <div class="col s12">
                         <div class="card-content">
                             <h5 class="center" id="title">Aplikasi Manajemen Surat</h5>
-                            <img id="logo" src="upload/logo.png">'
+                            <?php echo '<img id="logo" src="upload/'.$data['logo'].'">';?>
                             <h4 class="center" id="smk">
+                            <?php echo ''.$data['nama'].'';?>
                             </h4>
                             <div class="batas"></div>
                         </div>
                     </div>
-                    <!-- Logic login -->
+                    <!-- Logo and title END -->
                     <?php
-                        if(isset($_REQUEST['submit'])){ //even submit, terjadi saat tombol LOGIN ditekan
+                        }
+                    ?>
+
+                    <?php
+                        if(isset($_REQUEST['submit'])){
 
                             //validasi form kosong
-                            if($_REQUEST['username'] == "" || $_REQUEST['password'] == ""){ //cek apakah kolom username dan password terisi saat event submit
+                            if($_REQUEST['username'] == "" || $_REQUEST['password'] == ""){
                                 echo '<div class="upss red-text"><i class="material-icons">error_outline</i> <strong>ERROR!</strong> Username dan Password wajib diisi.
                                 <a class="btn-large waves-effect waves-light blue-grey col s11" href="" style="margin: 20px 0 0 5px;"><i class="material-icons md-24">arrow_back</i> Kembali ke login form</a></div>';
                             } else {
-                                
-                                //ambil dari kolom username dan password
+
                                 $username = trim(htmlspecialchars(mysqli_real_escape_string($config, $_REQUEST['username'])));
                                 $password = trim(htmlspecialchars(mysqli_real_escape_string($config, $_REQUEST['password'])));
 
-                                //cek dari tbl_user, apakah username dan password di atas ada.
-                                //$query = mysqli_query(masukkan di $config, "PILIH id_user, username, role. DARI tbl_user DIMANA username tapi case-sensitive DAN cari password dekode dari MD5 sama dengan yang ada di database)
-                                //Ganti menggunakan password_verify() daripada pakai MD5, TAPI HANYA SETELAH FUNGSI REGISTER SUDAH DIBUAT
-                                $queryLogin = mysqli_query($config, "SELECT id_user, username, role FROM tbl_user WHERE username=BINARY'$username' AND password=MD5('$password')");
+                                $query = mysqli_query($config, "SELECT id_user, username, nama, nip, admin FROM tbl_user WHERE username=BINARY'$username' AND password=MD5('$password')");
 
-                                if(mysqli_num_rows($queryLogin) > 0){ //operasikan kueri diatas
-                                    list($id_user, $username, $role) = mysqli_fetch_array($queryLogin);
+                                if(mysqli_num_rows($query) > 0){
+                                    list($id_user, $username, $nama, $nip, $admin) = mysqli_fetch_array($query);
 
                                     //buat session
                                     $_SESSION['id_user'] = $id_user;
                                     $_SESSION['username'] = $username;
-                                    $_SESSION['role'] = $role;
+                                    $_SESSION['nama'] = $nama;
+                                    $_SESSION['nip'] = $nip;
+                                    $_SESSION['admin'] = $admin;
 
-                                    //baca data dari tbl_staf, berdasarkan id_user yang login
-                                    $queryStaf = mysqli_query($config, "SELECT id_staff, nama, NIP FROM tbl_staf WHERE id_user = '$id_user'");
-                                    if(mysqli_num_rows($queryStaf) > 0){
-                                        list($id_staff, $nama, $NIP) = mysqli_fetch_array($queryStaf);
-                                        
-                                        //buat session menggunakan data staff dari user yang login
-                                        $_SESSION['id_staff']= $id_staff;
-                                        $_SESSION['nama']= $nama;
-                                        $_SESSION['NIP']= $NIP;
-
-                                    }
-
-                                    header("Location: ./admin.php"); //setelah login, redirect ke admin.php
+                                    header("Location: ./admin.php");
                                     die();
-                                } else { //Jika jika user atau password tidak ditemukan
+                                } else {
 
                                     //session error
                                     $_SESSION['errLog'] = '<center>Username & Password tidak ditemukan!</center>';
@@ -241,13 +237,13 @@
                     <form class="col s12 m12 offset-4 offset-4" method="POST" action="" >
                         <div class="row">
                             <?php
-                                if(isset($_SESSION['errLog'])){ //Error jika user atau password tidak ditemukan
+                                if(isset($_SESSION['errLog'])){
                                     $errLog = $_SESSION['errLog'];
                                     echo '<div id="alert-message" class="error red lighten-5"><div class="center"><i class="material-icons">error_outline</i> <strong>LOGIN GAGAL!</strong></div>
                                     '.$errLog.'</div>';
                                     unset($_SESSION['errLog']);
                                 }
-                                if(isset($_SESSION['err'])){ //WHAT THE HELL IS THIS??? //Kayaknya buat "fatal error" bullshit
+                                if(isset($_SESSION['err'])){
                                     $err = $_SESSION['err'];
                                     echo '<div id="alert-message" class="error red lighten-5"><div class="center"><i class="material-icons">error_outline</i> <strong>ERROR!</strong></div>
                                     '.$err.'</div>';
