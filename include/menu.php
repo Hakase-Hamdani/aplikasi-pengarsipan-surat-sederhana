@@ -54,9 +54,8 @@
                         <a class="collapsible-header"><i class="material-icons">repeat</i> Transaksi Surat</a>
                         <div class="collapsible-body">
                             <ul>
-                                <!--li><a href="?page=tsm">Surat Masuk</a></li-->
+                                <li><a href="?page=tsm">Surat Masuk</a></li>
                                 <li><a href="?page=tsk">Surat Keluar</a></li>
-                                <li><a href="?page=gsk">Galeri Surat Masuk</a></li>
                             </ul>
                         </div>
                    </li>
@@ -67,7 +66,7 @@
             </li>
             <li class="no-padding">
                 <ul class="collapsible collapsible-accordion">
-                    <!--li>
+                    <li>
                         <a class="collapsible-header"><i class="material-icons">assignment</i> Buku Agenda</a>
                         <div class="collapsible-body">
                             <ul>
@@ -75,12 +74,12 @@
                                 <li><a href="?page=ask">Surat Keluar</a></li>
                             </ul>
                         </div>
-                    </li-->
+                    </li>
                 </ul>
             </li>
             <li class="no-padding">
                 <ul class="collapsible collapsible-accordion">
-                    <!--li>
+                    <li>
                         <a class="collapsible-header"><i class="material-icons">image</i> Galeri File</a>
                         <div class="collapsible-body">
                             <ul>
@@ -88,7 +87,7 @@
                                 <li><a href="?page=gsk">Surat Keluar</a></li>
                             </ul>
                         </div>
-                    </li-->
+                    </li>
                 </ul>
             </li>
             <li><a href="?page=ref"><i class="material-icons middle">class</i> Klasifikasi</a></li>
@@ -140,25 +139,23 @@
                 if($_SESSION['role'] == 1 || $_SESSION['role'] == 3){ ?>
             <li><a class="dropdown-button" href="#!" data-activates="transaksi">Transaksi Surat <i class="material-icons md-18">arrow_drop_down</i></a></li>
                 <ul id='transaksi' class='dropdown-content'>
-                    <!--li><a href="?page=tsm">Surat Masuk</a></li-->
+                    <li><a href="?page=tsm">Surat Masuk</a></li>
                     <li><a href="?page=tsk">Surat Keluar</a></li>
-                    <li><a href="?page=gsk">Galeri Surat Masuk</a></li>
                 </ul>
             <?php
                 }
             ?>
-            <!--li><a class="dropdown-button" href="#!" data-activates="agenda">Buku Agenda <i class="material-icons md-18">arrow_drop_down</i></a></li>
+            <li><a class="dropdown-button" href="#!" data-activates="agenda">Buku Agenda <i class="material-icons md-18">arrow_drop_down</i></a></li>
                 <ul id='agenda' class='dropdown-content'>
                     <li><a href="?page=asm">Surat Masuk</a></li>
                     <li><a href="?page=ask">Surat Keluar</a></li>
-                </ul-->
-            <!--li><a class="dropdown-button" href="#!" data-activates="agenda">Galeri File <i class="material-icons md-18">arrow_drop_down</i></a></li>
+                </ul>
+            <li><a class="dropdown-button" href="#!" data-activates="agenda">Galeri File <i class="material-icons md-18">arrow_drop_down</i></a></li>
                 <ul id='agenda' class='dropdown-content'>
                     <li><a href="?page=gsm">Surat Masuk</a></li>
                     <li><a href="?page=gsk">Surat Keluar</a></li>
-                </ul-->
+                </ul>
             <li><a href="?page=ref">Klasifikasi</a></li>
-            <li><a href="?page=div">Divisi</a></li>
             <?php
                 if($_SESSION['role'] == 1){ ?>
             <li><a class="dropdown-button" href="#!" data-activates="pengaturan">Pengaturan <i class="material-icons md-18">arrow_drop_down</i></a></li>
