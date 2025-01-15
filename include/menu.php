@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(!empty($_SESSION['role'])){
+    if(!empty($_SESSION['admin'])){
 ?>
 
 <nav class="blue-grey darken-1">
@@ -48,7 +48,7 @@
             <li><a href="./"><i class="material-icons middle">dashboard</i> Beranda</a></li>
             <li class="no-padding">
                 <?php
-                    if($_SESSION['role'] == 1 || $_SESSION['role'] == 3){ ?>
+                    if($_SESSION['admin'] == 1 || $_SESSION['admin'] == 3){ ?>
                 <ul class="collapsible collapsible-accordion">
                     <li>
                         <a class="collapsible-header"><i class="material-icons">repeat</i> Transaksi Surat</a>
@@ -90,10 +90,11 @@
                     </li>
                 </ul>
             </li>
-            <li><a href="?page=ref"><i class="material-icons middle">class</i> Klasifikasi</a></li>
+            <li><a href="?page=ref"><i class="material-icons middle">class</i> Referensi</a></li>
+            <li><a href="?page=div"><i class="material-icons middle">class</i> Divisi</a></li>
             <li class="no-padding">
             <?php
-                if($_SESSION['role'] == 1){ ?>
+                if($_SESSION['admin'] == 1){ ?>
                 <ul class="collapsible collapsible-accordion">
                     <li>
                         <a class="collapsible-header"><i class="material-icons">settings</i> Pengaturan</a>
@@ -111,7 +112,7 @@
                 }
             ?>
             <?php
-                if($_SESSION['role'] == 2){ ?>
+                if($_SESSION['admin'] == 2){ ?>
                 <ul class="collapsible collapsible-accordion">
                     <li>
                         <a class="collapsible-header"><i class="material-icons">settings</i> Pengaturan</a>
@@ -136,7 +137,7 @@
             <li><div class="grs"></></li>
             <li><a href="./"><i class="material-icons"></i>&nbsp; Beranda</a></li>
             <?php
-                if($_SESSION['role'] == 1 || $_SESSION['role'] == 3){ ?>
+                if($_SESSION['admin'] == 1 || $_SESSION['admin'] == 3){ ?>
             <li><a class="dropdown-button" href="#!" data-activates="transaksi">Transaksi Surat <i class="material-icons md-18">arrow_drop_down</i></a></li>
                 <ul id='transaksi' class='dropdown-content'>
                     <li><a href="?page=tsm">Surat Masuk</a></li>
@@ -155,9 +156,10 @@
                     <li><a href="?page=gsm">Surat Masuk</a></li>
                     <li><a href="?page=gsk">Surat Keluar</a></li>
                 </ul>
-            <li><a href="?page=ref">Klasifikasi</a></li>
+            <li><a href="?page=ref">Referensi</a></li>
+            <li><a href="?page=div">Divisi</a></li>
             <?php
-                if($_SESSION['role'] == 1){ ?>
+                if($_SESSION['admin'] == 1){ ?>
             <li><a class="dropdown-button" href="#!" data-activates="pengaturan">Pengaturan <i class="material-icons md-18">arrow_drop_down</i></a></li>
                 <ul id='pengaturan' class='dropdown-content'>
                     <li><a href="?page=sett">Instansi</a></li>
@@ -170,7 +172,20 @@
                 }
             ?>
             <?php
-                if($_SESSION['role'] == 2){ ?>
+                if($_SESSION['admin'] == 2){ ?>
+            <li><a class="dropdown-button" href="#!" data-activates="report">Report <i class="material-icons md-18">arrow_drop_down</i></a></li>
+                <ul id='report' class='dropdown-content'>
+                    <li><a href="?page=skk">Surat Per Klasifikasi</a></li>
+                    <li><a href="?page=skc">Jumlah Klasifikasi Digunakan</a></li>
+                    <li><a href="?page=ssc">Jumlah Surat Per Staf</a></li>
+                    <li><a href="?page=sdd">Jumlah Surat Per Divisi</a></li>
+                    <li><a href="?page=dummy">Dummy</a></li>
+                </ul>
+            <?php
+                }
+            ?>
+            <?php
+                if($_SESSION['admin'] == 2){ ?>
             <li><a class="dropdown-button" href="#!" data-activates="pengaturan">Pengaturan <i class="material-icons md-18">arrow_drop_down</i></a></li>
                 <ul id='pengaturan' class='dropdown-content'>
                     <li><a href="?page=sett">Instansi</a></li>
