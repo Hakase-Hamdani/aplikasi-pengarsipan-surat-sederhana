@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -23,7 +23,7 @@
                     break;
             }
         } else {
-            //mengatur jumlah tampilan data
+
             $query = mysqli_query($config, "SELECT referensi FROM tbl_sett");
             list($referensi) = mysqli_fetch_array($query);
 
@@ -46,16 +46,17 @@
                                 <div class="nav-wrapper blue-grey darken-1">
                                     <div class="col m7">
                                         <ul class="left">
-                                        <li class="waves-effect waves-light hide-on-small-only"><a href="?page=div" class="judul"><i class="material-icons">class</i> Divisi Surat</a></li>';
-                                            if($_SESSION['role'] == 1 || $_SESSION['role'] == 2){
-                                                echo '<li class="waves-effect waves-light"><a href="?page=div&act=add"><i class="material-icons md-24">add_circle</i> Tambah Data</a></li>';
+                                            <li class="waves-effect waves-light hide-on-small-only"><a href="?page=ref" class="judul"><i class="material-icons">class</i> Klasifikasi Surat</a></li>';
+                                            if($_SESSION['admin'] == 1 || $_SESSION['admin'] == 2){
+                                                echo '<li class="waves-effect waves-light"><a href="?page=ref&act=add"><i class="material-icons md-24">add_circle</i> Tambah Data</a></li>
+                                                <li class="waves-effect waves-light"><a href="?page=ref&act=imp"><i class="material-icons md-24">file_upload</i> Import Data</a></li>';
                                             } else {
                                                 echo '';
                                             } echo '
                                         </ul>
                                     </div>
                                     <div class="col m5 hide-on-med-and-down">
-                                        <form method="post" action="?page=div">
+                                        <form method="post" action="?page=ref">
                                             <div class="input-field round-in-box">
                                                 <input id="search" type="search" name="cari" placeholder="Ketik dan tekan enter mencari data..." required>
                                                 <label for="search"><i class="material-icons">search</i></label>
@@ -134,7 +135,7 @@
                     <div class="col s12" style="margin-top: -18px;">
                         <div class="card blue lighten-5">
                             <div class="card-content">
-                                <p class="description">Hasil pencarian untuk kata kunci <strong>"'.stripslashes($cari).'"</strong><span class="right"><a href="?page=div"><i class="material-icons md-36" style="color: #333;">clear</i></a></span></p>
+                                <p class="description">Hasil pencarian untuk kata kunci <strong>"'.stripslashes($cari).'"</strong><span class="right"><a href="?page=ref"><i class="material-icons md-36" style="color: #333;">clear</i></a></span></p>
                             </div>
                         </div>
                     </div>
@@ -152,14 +153,7 @@
                             <tbody>';
 
                             //script untuk menampilkan data
-                            //$query = mysqli_query($config, "SELECT * FROM tbl_divisi WHERE uraian LIKE '%$cari%' ORDER BY id_klasifikasi DESC LIMIT 15");
-                            $query_cari = "SELECT * FROM tbl_divisi WHERE
-                                                                                                                kode LIKE '%$cari%' OR
-                                                                                                                nama LIKE '%$cari%' OR
-                                                                                                                uraian LIKE '%$cari%'
-                                                                                                            ORDER BY kode ASC
-                                                                                                            LIMIT 15";
-                            $query = mysqli_query($config, $query_cari);
+                            $query = mysqli_query($config, "SELECT * FROM tbl_divisi WHERE uraian LIKE '%$cari%' ORDER BY kode DESC LIMIT 15");
                             if(mysqli_num_rows($query) > 0){
                                 while($row = mysqli_fetch_array($query)){
                                 echo '
@@ -169,12 +163,12 @@
                                         <td>'.$row['uraian'].'</td>
                                         <td>';
 
-                                        if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
+                                        if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 2){
                                             echo '<a class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> NO ACTION</a>';
                                         } else {
-                                          echo '<a class="btn small blue waves-effect waves-light" href="?page=div&act=edit&dkode='.$row['kode'].'">
+                                          echo '<a class="btn small blue waves-effect waves-light" href="?page=div&act=edit&kode='.$row['kode'].'">
                                                     <i class="material-icons">edit</i> EDIT</a>
-                                                <a class="btn small deep-orange waves-effect waves-light" href="?page=div&act=del&dkode='.$row['kode'].'">
+                                                <a class="btn small deep-orange waves-effect waves-light" href="?page=div&act=del&kode='.$row['kode'].'">
                                                     <i class="material-icons">delete</i> DEL</a>';
                                         } echo '
                                         </td>
@@ -230,7 +224,7 @@
 
                                                                             $query = mysqli_query($config, "UPDATE tbl_sett SET referensi='$referensi',id_user='$id_user' WHERE id_sett='$id_sett'");
                                                                             if($query == true){
-                                                                                header("Location: ./admin.php?page=div");
+                                                                                header("Location: ./admin.php?page=ref");
                                                                                 die();
                                                                             }
                                                                         } echo '
@@ -247,7 +241,6 @@
                                     <tbody>';
 
                                     //script untuk menampilkan data
-                                    //$query = mysqli_query($config, "SELECT * FROM tbl_divisi ORDER BY id_klasifikasi DESC LIMIT $curr, $limit");
                                     $query = mysqli_query($config, "SELECT * FROM tbl_divisi ORDER BY kode ASC LIMIT $curr, $limit");
                                     if(mysqli_num_rows($query) > 0){
                                         while($row = mysqli_fetch_array($query)){
@@ -257,19 +250,19 @@
                                                 <td>'.$row['uraian'].'</td>
                                                 <td>';
 
-                                                if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
+                                                if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 2){
                                                     echo '<a class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> NO ACTION</a>';
                                                 } else {
-                                                  echo '<a class="btn small blue waves-effect waves-light" href="?page=div&act=edit&dkode='.$row['kode'].'">
+                                                  echo '<a class="btn small blue waves-effect waves-light" href="?page=div&act=edit&kode='.$row['kode'].'">
                                                             <i class="material-icons">edit</i> EDIT</a>
-                                                        <a class="btn small deep-orange waves-effect waves-light" href="?page=div&act=del&dkode='.$row['kode'].'">
+                                                        <a class="btn small deep-orange waves-effect waves-light" href="?page=div&act=del&kode='.$row['kode'].'">
                                                             <i class="material-icons">delete</i> DEL</a>';
                                                 } echo '
                                                 </td>
                                             </tr>';
                                         }
                                     } else {
-                                        echo '<tr><td colspan="5"><center><p class="add">Tidak ada data yang ditemukan. <u><a href="?page=div&act=add">Tambah data baru</a></u></p></center></td></tr>';
+                                        echo '<tr><td colspan="5"><center><p class="add">Tidak ada data yang ditemukan. <u><a href="?page=ref&act=add">Tambah data baru</a></u></p></center></td></tr>';
                                     }
                                   echo '</tbody></table><br/><br/>
                             </div>
@@ -288,8 +281,8 @@
                             //first and previous pagging
                             if($pg > 1){
                                 $prev = $pg - 1;
-                                echo '<li><a href="?page=div&pg=1"><i class="material-icons md-48">first_page</i></a></li>
-                                      <li><a href="?page=div&pg='.$prev.'"><i class="material-icons md-48">chevron_left</i></a></li>';
+                                echo '<li><a href="?page=ref&pg=1"><i class="material-icons md-48">first_page</i></a></li>
+                                      <li><a href="?page=ref&pg='.$prev.'"><i class="material-icons md-48">chevron_left</i></a></li>';
                             } else {
                                 echo '<li class="disabled"><a href="#"><i class="material-icons md-48">first_page</i></a></li>
                                       <li class="disabled"><a href="#"><i class="material-icons md-48">chevron_left</i></a></li>';
@@ -297,16 +290,16 @@
 
                             for ($i = 1; $i <= $cpg; $i++) {
                                 if ((($i >= $pg - 3) && ($i <= $pg + 3)) || ($i == 1) || ($i == $cpg)) {
-                                    if ($i == $pg) echo '<li class="active waves-effect waves-dark"><a href="?page=div&pg='.$i.'"> '.$i.' </a></li>';
-                                    else echo '<li class="waves-effect waves-dark"><a href="?page=div&pg='.$i.'"> '.$i.' </a></li>';
+                                    if ($i == $pg) echo '<li class="active waves-effect waves-dark"><a href="?page=ref&pg='.$i.'"> '.$i.' </a></li>';
+                                    else echo '<li class="waves-effect waves-dark"><a href="?page=ref&pg='.$i.'"> '.$i.' </a></li>';
                                 }
                             }
 
                             //last and next pagging
                             if($pg < $cpg){
                                 $next = $pg + 1;
-                                echo '<li><a href="?page=div&pg='.$next.'"><i class="material-icons md-48">chevron_right</i></a></li>
-                                      <li><a href="?page=div&pg='.$cpg.'"><i class="material-icons md-48">last_page</i></a></li>';
+                                echo '<li><a href="?page=ref&pg='.$next.'"><i class="material-icons md-48">chevron_right</i></a></li>
+                                      <li><a href="?page=ref&pg='.$cpg.'"><i class="material-icons md-48">last_page</i></a></li>';
                             } else {
                                 echo '<li class="disabled"><a href="#"><i class="material-icons md-48">chevron_right</i></a></li>
                                       <li class="disabled"><a href="#"><i class="material-icons md-48">last_page</i></a></li>';

@@ -1,12 +1,12 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
     } else {
 
-        if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
+        if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 2){
             echo '<script language="javascript">
                     window.alert("ERROR! Anda tidak memiliki hak akses untuk menambahkan data");
                     window.location.href="./admin.php?page=ref";
@@ -24,6 +24,7 @@
                     $kode = $_REQUEST['kode'];
                     $nama = $_REQUEST['nama'];
                     $uraian = $_REQUEST['uraian'];
+                    $id_user = $_SESSION['admin'];
 
                     //validasi input data
                     if(!preg_match("/^[a-zA-Z0-9. ]*$/", $kode)){
@@ -49,10 +50,7 @@
                                     echo '<script language="javascript">window.history.back();</script>';
                                 } else {
 
-                                    $query_insert = "INSERT INTO tbl_divisi(kode,nama,uraian) VALUES('$kode','$nama','$uraian')";
-                                    //var_dump($query_insert);
-                                    //die();
-                                    $query = mysqli_query($config, $query_insert);
+                                    $query = mysqli_query($config, "INSERT INTO tbl_divisi(kode,nama,uraian,id_user) VALUES('$kode','$nama','$uraian','$id_user')");
 
                                     if($query != false){
                                         $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
@@ -75,7 +73,7 @@
                         <nav class="secondary-nav">
                             <div class="nav-wrapper blue-grey darken-1">
                                 <ul class="left">
-                                    <li class="waves-effect waves-light"><a href="?page=ref&act=add" class="judul"><i class="material-icons">bookmark</i> Tambah Divisi</a></li>
+                                    <li class="waves-effect waves-light"><a href="?page=ref&act=add" class="judul"><i class="material-icons">bookmark</i> Tambah Klasifikasi Surat</a></li>
                                 </ul>
                             </div>
                         </nav>
@@ -160,7 +158,7 @@
                                             unset($_SESSION['uraian']);
                                         }
                                     ?>
-                                <label for="uraian">Uraian (Isi dengan "<b>-</b>" jika kosong)</label>
+                                <label for="uraian">Uraian</label>
                             </div>
                         </div>
                         <!-- Row in form END -->

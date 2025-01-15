@@ -1,12 +1,12 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
     } else {
 
-        if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
+        if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 2){
             echo '<script language="javascript">
                     window.alert("ERROR! Anda tidak memiliki hak akses untuk menambahkan data");
                     window.location.href="./admin.php?page=ref";
@@ -24,6 +24,7 @@
                     $kode = $_REQUEST['kode'];
                     $nama = $_REQUEST['nama'];
                     $uraian = $_REQUEST['uraian'];
+                    $id_user = $_SESSION['admin'];
 
                     //validasi input data
                     if(!preg_match("/^[a-zA-Z0-9. ]*$/", $kode)){
@@ -48,11 +49,11 @@
                                     $_SESSION['duplikasi'] = 'Kode sudah ada, pilih yang lainnya!';
                                     echo '<script language="javascript">window.history.back();</script>';
                                 } else {
+                                    $sql = "INSERT INTO tbl_klasifikasi(kode,nama,uraian,id_user) VALUES('$kode','$nama','$uraian','$id_user')";
+                                    //var_dump($sql);
+                                    
 
-                                    $query_insert = "INSERT INTO tbl_klasifikasi(kode,nama,uraian) VALUES('$kode','$nama','$uraian')";
-                                    //var_dump($query_insert);
-                                    //die();
-                                    $query = mysqli_query($config, $query_insert);
+                                    $query = mysqli_query($config, $sql);
 
                                     if($query != false){
                                         $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
@@ -160,7 +161,7 @@
                                             unset($_SESSION['uraian']);
                                         }
                                     ?>
-                                <label for="uraian">Uraian (Isi dengan "<b>-</b>" jika kosong)</label>
+                                <label for="uraian">Uraian</label>
                             </div>
                         </div>
                         <!-- Row in form END -->

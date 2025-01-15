@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -8,17 +8,17 @@
 
         if(isset($_REQUEST['submit'])){
 
-                //$id_klasifikasi = $_REQUEST['id_klasifikasi'];
-                $kode = $_REQUEST['kode']; //id yang ada di WHERE
-                $ekode = $_REQUEST['ekode']; //id yang ada di set
+                $koden = $_REQUEST['koden'];
+                $kode = $_REQUEST['kode'];
                 $nama = $_REQUEST['nama'];
                 $uraian = $_REQUEST['uraian'];
+                $id_user = $_SESSION['admin'];
 
                 //validasi form kosong
                 if($_REQUEST['kode'] == "" || $_REQUEST['nama'] == "" || $_REQUEST['uraian'] == ""){
                     $_SESSION['errEmpty'] = 'ERROR! Semua form wajib diisi';
                     echo '<script language="javascript">
-                            window.location.href="./admin.php?page=ref&act=edit&dkode='.$kode.'";
+                            window.location.href="./admin.php?page=ref&act=edit&id_klasifikasi='.$koden.'";
                           </script>';
                 } else {
 
@@ -38,25 +38,10 @@
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
 
-                            //$query = mysqli_query($config, "UPDATE tbl_klasifikasi SET kode='$kode', nama='$nama', uraian='$uraian' WHERE kode='$kode'");
-                            $query_update = "UPDATE tbl_klasifikasi SET kode='$ekode', nama='$nama', uraian='$uraian' WHERE kode='$kode'";
-                            /*
-                            //HANYA UNTUK DEBUGGING BECAUSE THE CODE IS SO FUCKING CONFUSING
-                            var_dump($query_update);
-                            echo "<br>";
-                            $data = [
-                                'kode' => $_REQUEST['kode'],   // id yang ada di WHERE
-                                'ekode' => $_REQUEST['ekode'], // id yang ada di SET
-                                'nama' => $_REQUEST['nama'],
-                                'uraian' => $_REQUEST['uraian']
-                            ];
-                            
-                            var_dump($data);
-                            
-                            die(); // Temporarily stop script execution to inspect the output
-                            */
-                            $query = mysqli_query($config, $query_update);
-
+                            $sql = "UPDATE tbl_klasifikasi SET kode='$koden', nama='$nama', uraian='$uraian', id_user='$id_user' WHERE kode='$kode'";
+                            //var_dump($sql);
+                            //die();
+                            $query = mysqli_query($config, $sql);
 
                             if($query != false){
                                 $_SESSION['succEdit'] = 'SUKSES! Data berhasil diupdate';
@@ -72,12 +57,12 @@
             }
         } else {
 
-            $kode = mysqli_real_escape_string($config, $_REQUEST['dkode']);
-            $query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi WHERE kode='$kode'");
+            $koden = mysqli_real_escape_string($config, $_REQUEST['kode']);
+            $query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi WHERE kode='$koden'");
             if(mysqli_num_rows($query) > 0){
                 $no = 1;
                 while($row = mysqli_fetch_array($query))
-                if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
+                if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 2){
                     echo '<script language="javascript">
                             window.alert("ERROR! Anda tidak memiliki hak akses untuk mengedit data ini");
                             window.location.href="./admin.php?page=ref";
@@ -92,7 +77,6 @@
                                 <div class="nav-wrapper blue-grey darken-1">
                                     <ul class="left">
                                         <li class="waves-effect waves-light"><a href="#" class="judul"><i class="material-icons">edit</i> Edit Klasifikasi Surat</a></li>
-                                        <?php echo $kode; ?>
                                     </ul>
                                 </div>
                             </nav>
@@ -141,12 +125,12 @@
                                 <div class="input-field col s3">
                                     <input type="hidden" value="<?php echo $row['kode']; ?>" name="kode">
                                     <i class="material-icons prefix md-prefix">font_download</i>
-                                    <input id="kd" type="text" class="validate" name="ekode" maxlength="30" value="<?php echo $row['kode']; ?>" required>
+                                    <input id="kd" type="text" class="validate" name="koden" maxlength="30" value="<?php echo $row['kode']; ?>" required>
                                         <?php
-                                            if(isset($_SESSION['ekode'])){
-                                                $kode = $_SESSION['ekode'];
-                                                echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$ekode.'</div>';
-                                                unset($_SESSION['ekode']);
+                                            if(isset($_SESSION['kode'])){
+                                                $kode = $_SESSION['kode'];
+                                                echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$kode.'</div>';
+                                                unset($_SESSION['kode']);
                                             }
                                         ?>
                                     <label for="kd">Kode</label>
@@ -173,7 +157,7 @@
                                                 unset($_SESSION['uraian']);
                                             }
                                         ?>
-                                    <label for="uraian">Uraian (Isi dengan "<b>-</b>" jika kosong)</label>
+                                    <label for="uraian">Uraian</label>
                                 </div>
                             </div>
                             <!-- Row in form END -->
