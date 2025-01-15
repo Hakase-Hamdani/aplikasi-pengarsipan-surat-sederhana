@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -10,7 +10,7 @@
 
             //validasi form kosong
             if($_REQUEST['no_agenda'] == "" || $_REQUEST['no_surat'] == "" || $_REQUEST['tujuan'] == "" || $_REQUEST['isi'] == ""
-                || $_REQUEST['kode'] == "" || $_REQUEST['tgl_surat'] == ""  || /*$_REQUEST['keterangan'] == ""*/){
+                || $_REQUEST['kode'] == "" || $_REQUEST['tgl_surat'] == ""  || $_REQUEST['keterangan'] == ""){
                 $_SESSION['errEmpty'] = 'ERROR! Semua form wajib diisi';
                 echo '<script language="javascript">window.history.back();</script>';
             } else {
@@ -25,7 +25,6 @@
                 $tgl_surat = $_REQUEST['tgl_surat'];
                 $keterangan = $_REQUEST['keterangan'];
                 $id_user = $_SESSION['id_user'];
-                $id_staf = $_SESSION['id_staff'];
 
                 //validasi input data
                 if(!preg_match("/^[0-9]*$/", $no_agenda)){
@@ -85,6 +84,7 @@
 
                                                 if (! is_dir($target_dir)) {
                                                     mkdir($target_dir, 0755, true);
+                                                    //die();
                                                 }
 
                                                 //jika form file tidak kosong akan mengekse
@@ -94,19 +94,20 @@
                                                 
                                                     if (in_array($eks, $ekstensi)) {
                                                         if ($ukuran < 2500000) {
-                                                            // Check if kode exists
-                                                            $kode_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_kode WHERE kode = '$nkode'");
+                                                            // Validate foreign keys
+                                                            $kode_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_klasifikasi WHERE kode = '$nkode'");
                                                             $kode_row = mysqli_fetch_assoc($kode_check);
                                                 
-                                                            // Check if kode_divisi exists
-                                                            $divisi_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_divisi WHERE kode_divisi = '$divisi'");
+                                                            $divisi_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_divisi WHERE kode = '$divisi'");
                                                             $divisi_row = mysqli_fetch_assoc($divisi_check);
                                                 
                                                             if ($kode_row['cnt'] > 0 && $divisi_row['cnt'] > 0) {
+                                                                // Move uploaded file
                                                                 move_uploaded_file($_FILES['file']['tmp_name'], $target_dir . $nfile);
-                                                                $kueri_file = "INSERT INTO tbl_surat_keluar(no_agenda, id_staf, tujuan, no_surat, isi, kode, kode_divisi, tgl_surat, file, keterangan) 
-                                                                               VALUES ('$no_agenda', '$id_staf', '$tujuan', '$no_surat', '$isi', '$nkode', '$divisi', '$tgl_surat', '$nfile', '$keterangan')";
-                                                                $query = mysqli_query($config, $kueri_file);
+                                                
+                                                                // Insert into database
+                                                                $query = mysqli_query($config, "INSERT INTO tbl_surat_keluar(no_agenda, tujuan, no_surat, isi, kode, divisi, tgl_surat, tgl_catat, file, keterangan, id_user)
+                                                                                                VALUES('$no_agenda', '$tujuan', '$no_surat', '$isi', '$nkode', '$divisi', '$tgl_surat', NOW(), '$nfile', '$keterangan', '$id_user')");
                                                 
                                                                 if ($query) {
                                                                     $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
@@ -117,7 +118,7 @@
                                                                     echo '<script language="javascript">window.history.back();</script>';
                                                                 }
                                                             } else {
-                                                                $_SESSION['errForeign'] = 'ERROR! Kode atau Kode Divisi tidak valid.';
+                                                                $_SESSION['errForeign'] = 'ERROR! Kode atau Divisi tidak valid.';
                                                                 echo '<script language="javascript">window.history.back();</script>';
                                                             }
                                                         } else {
@@ -129,18 +130,17 @@
                                                         echo '<script language="javascript">window.history.back();</script>';
                                                     }
                                                 } else {
-                                                    // Check if kode exists
+                                                    // Validate foreign keys
                                                     $kode_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_klasifikasi WHERE kode = '$nkode'");
                                                     $kode_row = mysqli_fetch_assoc($kode_check);
                                                 
-                                                    // Check if kode_divisi exists
                                                     $divisi_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_divisi WHERE kode = '$divisi'");
                                                     $divisi_row = mysqli_fetch_assoc($divisi_check);
                                                 
                                                     if ($kode_row['cnt'] > 0 && $divisi_row['cnt'] > 0) {
-                                                        $kueri_nofile = "INSERT INTO tbl_surat_keluar(no_agenda, id_staf, tujuan, no_surat, isi, kode, kode_divisi, tgl_surat, keterangan) 
-                                                                         VALUES ('$no_agenda', '$id_staf', '$tujuan', '$no_surat', '$isi', '$nkode', '$divisi', '$tgl_surat', '$keterangan')";
-                                                        $query = mysqli_query($config, $kueri_nofile);
+                                                        // Insert without a file
+                                                        $query = mysqli_query($config, "INSERT INTO tbl_surat_keluar(no_agenda, tujuan, no_surat, isi, kode, divisi, tgl_surat, tgl_catat, file, keterangan, id_user)
+                                                                                        VALUES('$no_agenda', '$tujuan', '$no_surat', '$isi', '$nkode', '$divisi', '$tgl_surat', NOW(), '', '$keterangan', '$id_user')");
                                                 
                                                         if ($query) {
                                                             $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
@@ -151,13 +151,11 @@
                                                             echo '<script language="javascript">window.history.back();</script>';
                                                         }
                                                     } else {
-                                                        $_SESSION['errForeign'] = 'ERROR! Kode atau Kode Divisi tidak valid.';
+                                                        $_SESSION['errForeign'] = 'ERROR! Kode atau Divisi tidak valid.';
                                                         echo '<script language="javascript">window.history.back();</script>';
                                                     }
                                                 }
                                                 
-                                                }
-                                            }
                                         }
                                     }
                                 }
@@ -167,7 +165,9 @@
                 }
             }
         }
-         else {?>
+    }
+}
+        else {?>
 
             <!-- Row Start -->
             <div class="row">
@@ -273,7 +273,6 @@
                                         unset($_SESSION['kodek']);
                                     }
                                 ?>
-                            
                             <label for="kode">Kode Klasifikasi</label>
                         </div>
                         <div class="input-field col s6">

@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -10,7 +10,7 @@
 
             //validasi form kosong
             if($_REQUEST['no_agenda'] == "" || $_REQUEST['no_surat'] == "" || $_REQUEST['tujuan'] == "" || $_REQUEST['isi'] == ""
-                || $_REQUEST['kode'] == "" || $_REQUEST['tgl_surat'] == ""  /*|| $_REQUEST['keterangan'] == ""*/){
+                || $_REQUEST['kode'] == "" || $_REQUEST['tgl_surat'] == ""  || $_REQUEST['keterangan'] == ""){
                     $_SESSION['errEmpty'] = 'ERROR! Semua form wajib diisi';
                     echo '<script language="javascript">window.history.back();</script>';
             } else {
@@ -25,8 +25,7 @@
                 $divisi = $_REQUEST['divisi'];
                 $tgl_surat = $_REQUEST['tgl_surat'];
                 $keterangan = $_REQUEST['keterangan'];
-                $id_staf = $_SESSION['id_staff'];
-                
+                $id_user = $_SESSION['id_user'];
 
                 //validasi input data
                 if(!preg_match("/^[0-9]*$/", $no_agenda)){
@@ -90,11 +89,11 @@
                                                     if ($ukuran < 2500000) {
                                                         $id_surat = $_REQUEST['id_surat'];
                                             
-                                                        // Check foreign keys validity
-                                                        $kode_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_kode WHERE kode = '$nkode'");
+                                                        // Validate foreign keys
+                                                        $kode_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_klasifikasi WHERE kode = '$nkode'");
                                                         $kode_row = mysqli_fetch_assoc($kode_check);
                                             
-                                                        $divisi_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_divisi WHERE kode_divisi = '$kode_divisi'");
+                                                        $divisi_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_divisi WHERE kode = '$divisi'");
                                                         $divisi_row = mysqli_fetch_assoc($divisi_check);
                                             
                                                         if ($kode_row['cnt'] > 0 && $divisi_row['cnt'] > 0) {
@@ -102,16 +101,15 @@
                                                             list($existing_file) = mysqli_fetch_array($query);
                                             
                                                             if (!empty($existing_file)) {
-                                                                // If file already exists, delete it
                                                                 unlink($target_dir . $existing_file);
                                                             }
                                             
                                                             move_uploaded_file($_FILES['file']['tmp_name'], $target_dir . $nfile);
                                             
                                                             $query = mysqli_query($config, "UPDATE tbl_surat_keluar 
-                                                                                            SET no_agenda='$no_agenda', id_staf='$id_staf', tujuan='$tujuan', no_surat='$no_surat', 
-                                                                                                isi='$isi', kode='$nkode', kode_divisi='$kode_divisi', tgl_surat='$tgl_surat', 
-                                                                                                file='$nfile', keterangan='$keterangan' 
+                                                                                            SET no_agenda='$no_agenda', tujuan='$tujuan', no_surat='$no_surat', isi='$isi', 
+                                                                                                kode='$nkode', divisi='$divisi', tgl_surat='$tgl_surat', file='$nfile', 
+                                                                                                keterangan='$keterangan', id_user='$id_user' 
                                                                                             WHERE id_surat='$id_surat'");
                                             
                                                             if ($query) {
@@ -123,7 +121,7 @@
                                                                 echo '<script language="javascript">window.history.back();</script>';
                                                             }
                                                         } else {
-                                                            $_SESSION['errForeign'] = 'ERROR! Kode atau Kode Divisi tidak valid.';
+                                                            $_SESSION['errForeign'] = 'ERROR! Kode atau Divisi tidak valid.';
                                                             echo '<script language="javascript">window.history.back();</script>';
                                                         }
                                                     } else {
@@ -135,10 +133,9 @@
                                                     echo '<script language="javascript">window.history.back();</script>';
                                                 }
                                             } else {
-                                                // If no file is uploaded
                                                 $id_surat = $_REQUEST['id_surat'];
                                             
-                                                // Check foreign keys validity
+                                                // Validate foreign keys
                                                 $kode_check = mysqli_query($config, "SELECT COUNT(*) AS cnt FROM tbl_klasifikasi WHERE kode = '$nkode'");
                                                 $kode_row = mysqli_fetch_assoc($kode_check);
                                             
@@ -148,8 +145,8 @@
                                                 if ($kode_row['cnt'] > 0 && $divisi_row['cnt'] > 0) {
                                                     $query = mysqli_query($config, "UPDATE tbl_surat_keluar 
                                                                                     SET no_agenda='$no_agenda', tujuan='$tujuan', no_surat='$no_surat', isi='$isi', 
-                                                                                        kode='$nkode', kode_divisi='$divisi', tgl_surat='$tgl_surat', 
-                                                                                        keterangan='$keterangan', id_staf='$id_staf' 
+                                                                                        kode='$nkode', divisi='$divisi', tgl_surat='$tgl_surat', keterangan='$keterangan', 
+                                                                                        id_user='$id_user' 
                                                                                     WHERE id_surat='$id_surat'");
                                             
                                                     if ($query) {
@@ -161,10 +158,11 @@
                                                         echo '<script language="javascript">window.history.back();</script>';
                                                     }
                                                 } else {
-                                                    $_SESSION['errForeign'] = 'ERROR! Kode atau Kode Divisi tidak valid.';
+                                                    $_SESSION['errForeign'] = 'ERROR! Kode atau Divisi tidak valid.';
                                                     echo '<script language="javascript">window.history.back();</script>';
                                                 }
-                                            }                                           
+                                            }
+                                            
                                         }
                                     }
                                 }
@@ -174,28 +172,12 @@
                 }
             }
         }
-     }
-      else {
+        } else {
 
             $id_surat = mysqli_real_escape_string($config, $_REQUEST['id_surat']);
-            $kueri = "SELECT
-                        id_staf,
-                        kode_divisi,
-                        kode,
-                        no_agenda,
-                        tujuan,
-                        no_surat,
-                        isi,
-                        tgl_surat,
-                        file,
-                        keterangan
-                      FROM
-                        tbl_surat_keluar
-                      WHERE
-                        id_surat = $id_surat;";
-            $query = mysqli_query($config, $kueri);
-            list($id_staf,$divisi, $kode, $no_agenda, $tujuan, $no_surat, $isi, $tgl_surat, $file, $keterangan) = mysqli_fetch_array($query);
-            if($_SESSION['id_staff'] != $id_staf AND $_SESSION['id_staff'] != 1){
+            $query = mysqli_query($config, "SELECT id_surat, no_agenda, tujuan, no_surat, isi, kode, divisi, tgl_surat, file, keterangan, id_user FROM tbl_surat_keluar WHERE id_surat='$id_surat'");
+            list($id_surat, $no_agenda, $tujuan, $no_surat, $isi, $kode, $divisi, $tgl_surat, $file, $keterangan, $id_user) = mysqli_fetch_array($query);
+            if($_SESSION['id_user'] != $id_user AND $_SESSION['id_user'] != 1){
                 echo '<script language="javascript">
                         window.alert("ERROR! Anda tidak memiliki hak akses untuk mengedit data ini");
                         window.location.href="./admin.php?page=tsk";
@@ -203,8 +185,6 @@
             } else {?>
 
                 <!-- Row Start -->
-                <?php //echo $id_staf ?>
-                <?php //echo $divisi ?>
                 <div class="row">
                     <!-- Secondary Nav START -->
                     <div class="col s12">
@@ -409,6 +389,7 @@
 
                 </div>
                 <!-- Row form END -->
+                 
 
 <?php
             }
