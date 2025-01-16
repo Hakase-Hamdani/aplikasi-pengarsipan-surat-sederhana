@@ -1,6 +1,6 @@
 <?php
     //session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -31,8 +31,7 @@
                     $curr = ($pg - 1) * $limit;
                 }
 
-                //$query = mysqli_query($config, "SELECT * FROM tbl_user LIMIT $curr, $limit");
-                $query = mysqli_query($config, "SELECT tbl_user.id_user, tbl_user.username, tbl_user.role, tbl_staf.id_staff, tbl_staf.nama, tbl_staf.NIP FROM tbl_user INNER JOIN tbl_staf ON tbl_user.id_user = tbl_staf.id_user LIMIT $curr, $limit");
+                $query = mysqli_query($config, "SELECT * FROM tbl_user LIMIT $curr, $limit");
                 echo '<!-- Row Start -->
                     <div class="row">
                         <!-- Secondary Nav START -->
@@ -121,15 +120,15 @@
                                     <tr>
                                     <td>'.$no++.'</td>';
 
-                                    if($row['role'] == 1){
-                                        $row['role'] = 'Super role';
-                                    } elseif($row['role'] == 2){
-                                        $row['role'] = 'Administrator';
+                                    if($row['admin'] == 1){
+                                        $row['admin'] = 'Super Admin';
+                                    } elseif($row['admin'] == 2){
+                                        $row['admin'] = 'Administrator';
                                     } else {
-                                        $row['role'] = 'User Biasa';
+                                        $row['admin'] = 'User Biasa';
                                     } echo '<td>'.$row['username'].'</td>
-                                            <td>'.$row['nama'].'<br/>'.$row['NIP'].'</td>
-                                            <td>'.$row['role'].'</td>
+                                            <td>'.$row['nama'].'<br/>'.$row['nip'].'</td>
+                                            <td>'.$row['admin'].'</td>
                                             <td>';
 
                                     if($_SESSION['username'] == $row['username']){
@@ -156,9 +155,7 @@
                     </div>
                     <!-- Row form END -->';
 
-                    //$query = mysqli_query($config, "SELECT * FROM tbl_user");
-                    $query = mysqli_query($config, "SELECT tbl_user.id_user, tbl_user.username, tbl_user.role, tbl_staf.id_staff, tbl_staf.nama, tbl_staf.NIP FROM tbl_user INNER JOIN tbl_staf ON tbl_user.id_user = tbl_staf.id_user");
-
+                    $query = mysqli_query($config, "SELECT * FROM tbl_user");
                     $cdata = mysqli_num_rows($query);
                     $cpg = ceil($cdata/$limit);
 

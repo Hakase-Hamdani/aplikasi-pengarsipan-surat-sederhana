@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(!empty($_SESSION['role'])){
+    if(!empty($_SESSION['admin'])){
 
         require_once 'include/config.php';
         require_once 'include/functions.php';
