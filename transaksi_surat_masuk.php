@@ -1,12 +1,12 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
     } else {
 
-        if($_SESSION['role'] != 1 AND $_SESSION['role'] != 3){
+        if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 3){
             echo '<script language="javascript">
                     window.alert("ERROR! Anda tidak memiliki hak akses untuk membuka halaman ini");
                     window.location.href="./logout.php";
@@ -150,7 +150,15 @@
                             <tbody>';
 
                             //script untuk mencari data
-                            $query = mysqli_query($config, "SELECT * FROM tbl_surat_masuk WHERE isi LIKE '%$cari%' ORDER by id_surat DESC LIMIT 15");
+                            if ($_SESSION['admin'] == 3) {
+                                $sql = "SELECT * FROM tbl_surat_masuk WHERE isi LIKE '%$cari%' ORDER by id_surat DESC LIMIT 15";
+                            } else {
+                                $id_user = $_SESSION['id_user'];
+                                $sql = "SELECT * FROM tbl_surat_masuk WHERE isi LIKE '%$cari%' AND id_user = '$id_user' ORDER by id_surat DESC LIMIT 15";                                
+                            }
+                            //var_dump($sql);
+                            //die();
+                            $query = mysqli_query($config, $sql);
                             if(mysqli_num_rows($query) > 0){
                                 $no = 1;
                                 while($row = mysqli_fetch_array($query)){
@@ -254,7 +262,15 @@
                                 <tbody>';
 
                                 //script untuk menampilkan data
-                                $query = mysqli_query($config, "SELECT * FROM tbl_surat_masuk ORDER by id_surat DESC LIMIT $curr, $limit");
+                                if ($_SESSION['admin'] == 3) {
+                                    $sql = "SELECT * FROM tbl_surat_masuk ORDER by id_surat DESC LIMIT $curr, $limit";
+                                } else {
+                                    $id_user = $_SESSION['id_user'];
+                                    $sql = "SELECT * FROM tbl_surat_masuk WHERE id_user = '$id_user' ORDER by id_surat  DESC LIMIT $curr, $limit";
+                                }
+                                //var_dump($sql);
+                                //die();
+                                $query = mysqli_query($config, $sql);
                                 if(mysqli_num_rows($query) > 0){
                                     $no = 1;
                                     while($row = mysqli_fetch_array($query)){
@@ -272,16 +288,15 @@
                                         <td>'.$row['no_surat'].'<br/><hr/>'.indoDate($row['tgl_surat']).'</td>
                                         <td>';
 
-                                        if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['id_user'] != 1){
+                                        //if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['id_user'] != 1)
+                                        if($_SESSION['admin'] != 1){
                                             echo '<a class="btn small yellow darken-3 waves-effect waves-light" href="?page=ctk&id_surat='.$row['id_surat'].'" target="_blank">
-                                                <i class="material-icons">print</i> PRINT</a>';
-                                        } else {
+                                                <i class="material-icons">print</i> PRINT</a>
+                                                <a class="btn small light-green waves-effect waves-light tooltipped" data-position="left" data-tooltip="Pilih Disp untuk menambahkan Disposisi Surat" href="?page=tsm&act=disp&id_surat='.$row['id_surat'].'">
+                                                    <i class="material-icons">description</i> DISP</a>';
+                                        } else  if($_SESSION['admin'] != 2) {
                                           echo '<a class="btn small blue waves-effect waves-light" href="?page=tsm&act=edit&id_surat='.$row['id_surat'].'">
                                                     <i class="material-icons">edit</i> EDIT</a>
-                                                <a class="btn small light-green waves-effect waves-light tooltipped" data-position="left" data-tooltip="Pilih Disp untuk menambahkan Disposisi Surat" href="?page=tsm&act=disp&id_surat='.$row['id_surat'].'">
-                                                    <i class="material-icons">description</i> DISP</a>
-                                                <a class="btn small yellow darken-3 waves-effect waves-light" href="?page=ctk&id_surat='.$row['id_surat'].'" target="_blank">
-                                                    <i class="material-icons">print</i> PRINT</a>
                                                 <a class="btn small deep-orange waves-effect waves-light" href="?page=tsm&act=del&id_surat='.$row['id_surat'].'">
                                                     <i class="material-icons">delete</i> DEL</a>';
                                         } echo '

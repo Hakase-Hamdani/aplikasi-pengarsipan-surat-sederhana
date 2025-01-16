@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -39,7 +39,10 @@
                     $no = 1;
                     while($row = mysqli_fetch_array($query)){
 
-                    if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['id_user'] != 1){
+                    //if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['id_user'] != 1)
+                    if($_SESSION['admin'] != 3){
+                        //var_dump($_SESSION['id_user']);
+                        //die();
                         echo '<script language="javascript">
                                 window.alert("ERROR! Anda tidak memiliki hak akses untuk melihat data ini");
                                 window.location.href="./admin.php?page=tsm";
