@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -163,7 +163,8 @@
         $query = mysqli_query($config, "SELECT id_surat, no_agenda, no_surat, asal_surat, isi, kode, indeks, tgl_surat, file, keterangan, id_user FROM tbl_surat_masuk WHERE id_surat='$id_surat'");
         list($id_surat, $no_agenda, $no_surat, $asal_surat, $isi, $kode, $indeks, $tgl_surat, $file, $keterangan, $id_user) = mysqli_fetch_array($query);
 
-        if($_SESSION['id_user'] != $id_user AND $_SESSION['id_user'] != 1){
+        //if($_SESSION['id_user'] != $id_user AND $_SESSION['id_user'] != 1)
+        if($_SESSION['admin'] != 1){
             echo '<script language="javascript">
                     window.alert("ERROR! Anda tidak memiliki hak akses untuk mengedit data ini");
                     window.location.href="./admin.php?page=tsm";
@@ -324,7 +325,7 @@
                             <div class="file-field input-field">
                                 <div class="btn light-green darken-1">
                                     <span>File</span>
-                                    <input type="file" id="file" name="file">
+                                    <input type="file" id="file" name="file" capture="environment" accept="image/*">
                                 </div>
                                 <div class="file-path-wrapper">
                                     <input class="file-path validate" type="text" value="<?php echo $file ;?>" placeholder="Upload file/scan gambar surat masuk">
@@ -366,4 +367,7 @@
             }
         }
     }
+    //var_dump($_SESSION['id_surat']);
+    //var_dump($id_user);
+    //var_dump($_SESSION['admin']);
 ?>
