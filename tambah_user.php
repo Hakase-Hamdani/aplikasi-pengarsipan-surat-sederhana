@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -8,7 +8,7 @@
         if(isset($_REQUEST['submit'])){
 
             //validasi form kosong
-            if($_REQUEST['username'] == "" || $_REQUEST['password'] == "" || $_REQUEST['nama'] == "" || $_REQUEST['NIP'] == "" || $_REQUEST['admin'] == ""){
+            if($_REQUEST['username'] == "" || $_REQUEST['password'] == "" || $_REQUEST['nama'] == "" || $_REQUEST['nip'] == "" || $_REQUEST['admin'] == ""){
                 $_SESSION['errEmpty'] = 'ERROR! Semua form wajib diisi!';
                 header("Location: ./admin.php?page=sett&sub=usr&act=add");
                 die();
@@ -17,7 +17,7 @@
                 $username = $_REQUEST['username'];
                 $password = $_REQUEST['password'];
                 $nama = $_REQUEST['nama'];
-                $NIP = $_REQUEST['NIP'];
+                $nip = $_REQUEST['nip'];
                 $admin = $_REQUEST['admin'];
 
                 //validasi input data
@@ -31,7 +31,7 @@
                         echo '<script language="javascript">window.history.back();</script>';
                     } else {
 
-                        if(!preg_match("/^[0-9. -]*$/", $NIP)){
+                        if(!preg_match("/^[0-9. -]*$/", $nip)){
                             $_SESSION['nipuser'] = 'Form NIP hanya boleh mengandung karakter angka, spasi dan minus(-)';
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
@@ -59,40 +59,13 @@
                                             echo '<script language="javascript">window.history.back();</script>';
                                         } else {
 
-                                            // Start transaction
-                                            mysqli_begin_transaction($config);
+                                            $query = mysqli_query($config, "INSERT INTO tbl_user(username,password,nama,nip,admin) VALUES('$username',MD5('$password'),'$nama','$nip','$admin')");
 
-                                            try {
-                                                // First query: Insert into tbl_user
-                                                $query1 = mysqli_query($config, "INSERT INTO tbl_user(username, password, nama, NIP, admin) VALUES('$username', MD5('$password'), '$nama', '$NIP', '$admin')");
-                                                if (!$query1) {
-                                                    throw new Exception('Failed to insert into tbl_user.');
-                                                }
-
-                                                // Get the last inserted ID
-                                                $new_user_id = mysqli_insert_id($config);
-
-                                                // Second query: Insert into tbl_staf
-                                                $query2 = mysqli_query($config, "INSERT INTO tbl_staf(id_user, nama, NIP) VALUES('$new_user_id', '$nama', '$NIP')");
-                                                if (!$query2) {
-                                                    throw new Exception('Failed to insert into tbl_staf.');
-                                                }
-
-                                                // Commit transaction if both queries succeeded
-                                                mysqli_commit($config);
-
-                                                // Success message
+                                            if($query != false){
                                                 $_SESSION['succAdd'] = 'SUKSES! User baru berhasil ditambahkan';
                                                 header("Location: ./admin.php?page=sett&sub=usr");
                                                 die();
-                                            } catch (Exception $e) {
-                                                // Roll back the transaction if any query fails
-                                                mysqli_rollback($config);
-
-                                                // Log the error message for debugging (optional)
-                                                error_log($e->getMessage());
-
-                                                // Error message for the user
+                                            } else {
                                                 $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
                                                 echo '<script language="javascript">window.history.back();</script>';
                                             }
@@ -207,7 +180,7 @@
                         </div>
                         <div class="input-field col s6">
                             <i class="material-icons prefix md-prefix">looks_one</i>
-                            <input id="NIP" type="text" class="validate" name="NIP" required>
+                            <input id="nip" type="text" class="validate" name="nip" required>
                                 <?php
                                     if(isset($_SESSION['nipuser'])){
                                         $nipuser = $_SESSION['nipuser'];
@@ -215,7 +188,7 @@
                                         unset($_SESSION['nipuser']);
                                     }
                                 ?>
-                            <label for="NIP">NIP</label>
+                            <label for="nip">NIP</label>
                         </div>
                         <div class="input-field col s6">
                             <i class="material-icons prefix md-prefix">supervisor_account</i><label>Pilih Tipe User</label><br/>

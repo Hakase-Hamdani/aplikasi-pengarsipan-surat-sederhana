@@ -1,7 +1,7 @@
 <?php
 
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -9,45 +9,45 @@
 
         if($_REQUEST['id_user'] == 1){
             echo '<script language="javascript">
-                    window.alert("ERROR! Super role tidak boleh diedit");
-                    window.location.href="./role.php?page=sett&sub=usr";
+                    window.alert("ERROR! Super Admin tidak boleh diedit");
+                    window.location.href="./admin.php?page=sett&sub=usr";
                   </script>';
         } else {
 
             if($_REQUEST['id_user'] == $_SESSION['id_user']){
                 echo '<script language="javascript">
-                        window.alert("ERROR! Anda tidak diperbolehkan mengedit tipe akun Anda sendiri. Hubungi super role untuk mengeditnya");
-                        window.location.href="./role.php?page=sett&sub=usr";
+                        window.alert("ERROR! Anda tidak diperbolehkan mengedit tipe akun Anda sendiri. Hubungi super admin untuk mengeditnya");
+                        window.location.href="./admin.php?page=sett&sub=usr";
                       </script>';
             } else {
 
                 if(isset($_REQUEST['submit'])){
 
                     $id_user = $_REQUEST['id_user'];
-                    $role = $_REQUEST['role'];
+                    $admin = $_REQUEST['admin'];
 
                     if($id_user == $_SESSION['id_user']){
                         echo '<script language="javascript">
-                                window.alert("ERROR! Anda tidak boleh mengedit akun Anda sendiri. Hubungi super role untuk mengeditnya");
-                                window.location.href="./role.php?page=sett&sub=usr";
+                                window.alert("ERROR! Anda tidak boleh mengedit akun Anda sendiri. Hubungi super admin untuk mengeditnya");
+                                window.location.href="./admin.php?page=sett&sub=usr";
                               </script>';
                     } else {
 
-                        if(!preg_match("/^[2-3]*$/", $role)){
+                        if(!preg_match("/^[2-3]*$/", $admin)){
                             $_SESSION['tipeuser'] = 'Form Tipe User hanya boleh mengandung karakter angka 2 atau 3';
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
 
-                            $query = mysqli_query($config, "UPDATE tbl_user SET role='$role' WHERE id_user='$id_user'");
+                            $query = mysqli_query($config, "UPDATE tbl_user SET admin='$admin' WHERE id_user='$id_user'");
 
                             if($query == true){
                                 $_SESSION['succEdit'] = 'SUKSES! Tipe user berhasil diupdate';
-                                header("Location: ./role.php?page=sett&sub=usr");
+                                header("Location: ./admin.php?page=sett&sub=usr");
                                 die();
                             } else {
                                 $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
                                 echo '<script language="javascript">
-                                        window.location.href="./role.php?page=sett&sub=usr&act=edit&id_user='.$id_user.'";
+                                        window.location.href="./admin.php?page=sett&sub=usr&act=edit&id_user='.$id_user.'";
                                       </script>';
                             }
                         }
@@ -55,7 +55,7 @@
                 } else {
 
                     $id_user = mysqli_real_escape_string($config, $_REQUEST['id_user']);
-                    $query = mysqli_query($config, "SELECT tbl_user.id_user, tbl_user.username, tbl_user.role, tbl_staf.id_staff, tbl_staf.nama, tbl_staf.NIP FROM tbl_user INNER JOIN tbl_staf ON tbl_user.id_user = tbl_staf.id_user WHERE tbl_user.id_user='$id_user'");
+                    $query = mysqli_query($config, "SELECT * FROM tbl_user WHERE id_user='$id_user'");
                     if(mysqli_num_rows($query) > 0){
                         $no = 1;
                         while($row = mysqli_fetch_array($query)){?>
@@ -114,10 +114,10 @@
                                     <div class="input-field col s6">
                                         <i class="material-icons prefix md-prefix">supervisor_account</i><label>Pilih tipe user</label><br/>
                                         <div class="input-field col s11 right">
-                                            <select class="browser-default" name="role" id="role" required>
-                                                <option value="<?php echo $row['role']; ?>">
+                                            <select class="browser-default" name="admin" id="admin" required>
+                                                <option value="<?php echo $row['admin']; ?>">
                                                     <?php
-                                                        if($row['role'] == 2){
+                                                        if($row['admin'] == 2){
                                                             echo 'Administrator';
                                                         } else {
                                                             echo 'User Biasa';

@@ -1,9 +1,7 @@
 <?php
     //cek session
-    if(!empty($_SESSION['role'])){
+    if(!empty($_SESSION['admin'])){
         $query = mysqli_query($config, "SELECT * FROM tbl_instansi");
-        if  ($query && mysqli_num_rows($query) > 0){
-
         while($data = mysqli_fetch_array($query)){
             echo '
                 <div class="col s12" id="header-instansi">
@@ -15,34 +13,22 @@
                                 echo '<div class="circle left"><img class="logo" src="./asset/img/logo.png"/></div>';
                             }
 
-                            if(!empty($data['dinas'])){
-                                echo '<h5 class="ins">'.$data['dinas'].'</h5>';
+                            if(!empty($data['nama'])){
+                                echo '<h5 class="ins">'.$data['nama'].'</h5>';
                             } else {
-                                echo '<h5 class="ins">BELUM DI SET, BISA DI SETTING DI: Pengaturan > Instansi</h5>';
+                                echo '<h5 class="ins">SMK AL - Husna Loceret Nganjuk</h5>';
                             }
 
                             if(!empty($data['alamat'])){
                                 echo '<p class="almt">'.$data['alamat'].'</p>';
                             } else {
-                                echo '<p class="almt">-----</p>';
+                                echo '<p class="almt">Jalan Raya Kediri Gg. Kwagean No. 04 Loceret Telp/Fax. (0358) 329806 Nganjuk 64471</p>';
                             }
                             echo '
                         </div>
                     </div>
                 </div>';
         }
-    } else {
-       echo '
-                <div class="col s12" id="header-instansi">
-                    <div class="card blue-grey white-text">
-                        <div class="card-content">
-                            <div class="circle left"><img class="logo" src="./asset/img/logo.png"/></div>
-                            <h5 class="ins">BELUM DI SET, BISA DI SETTING DI: Pengaturan > <a href = "?page=sett">Instansi</a></h5>
-                            <p class="almt">BELUM DI SET</p>
-                        </div>
-                    </div>
-                </div>';
-    }
     } else {
         header("Location: ../");
         die();
