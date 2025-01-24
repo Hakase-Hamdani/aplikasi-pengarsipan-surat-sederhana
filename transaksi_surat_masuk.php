@@ -137,7 +137,7 @@
                         </div>
 
                         <div class="col m12" id="colres">
-                        <table class="bordered" id="tbl">
+                        <table id="dataTable2" class="bordered" id="tbl">
                             <thead class="blue lighten-4" id="head">
                                 <tr>
                                     <th width="10%">No. Agenda<br/>Kode</th>
@@ -204,7 +204,7 @@
 
                         echo '
                         <div class="col m12" id="colres">
-                            <table class="bordered" id="tbl">
+                            <table id="dataTable2" class="bordered" id="tbl">
                                 <thead class="blue lighten-4" id="head">
                                     <tr>
                                         <th width="10%">No. Agenda<br/>Kode</th>

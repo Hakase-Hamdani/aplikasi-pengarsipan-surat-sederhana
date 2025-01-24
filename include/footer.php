@@ -53,8 +53,17 @@ $(document).ready(function(){
         paging: false,     // Disables pagination (removes "Show Entries")
         searching: false,  // Disables the search box
         info: false        // Removes "Showing X to Y of Z entries"
-        
-  });
+    });
+
+    $('#dataTable2').DataTable({
+        columnDefs: [
+        { orderable: false, targets: -1 } // Excludes the last column
+        ],
+        ordering: true,
+        paging: false,     // Disables pagination (removes "Show Entries")
+        searching: false,  // Disables the search box
+        info: false        // Removes "Showing X to Y of Z entries"
+    });
     
     //jquery dropdown
     $(".dropdown-button").dropdown({ hover: false });
