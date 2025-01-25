@@ -86,7 +86,7 @@ Website     : https://masrud.com
                     break;
                 ////
                 case 'sk': //Laporan Daftar Surat Per Klasifikasi (surat join klasifikasi dengan where id_klasifikasi)
-                    include "surat-klas.php";
+                    include "surat_join_klas.php";
                     break;
                 case 'skc': //Laporan Pengarsipan Berdasarkan Klasifikasi Surat (surat join klasifikasi dengan count)
                     include "surat-klas-count.php";
