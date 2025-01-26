@@ -63,19 +63,55 @@
         </style>';
 
         if(isset($_REQUEST['submit'])){
-
+            //
+            //Untuk mengambil data
+            //
+            $klasifikasi = $_REQUEST['klasifikasi'];
             $dari_tanggal = $_REQUEST['dari_tanggal'];
             $sampai_tanggal = $_REQUEST['sampai_tanggal'];
 
-            if($_REQUEST['dari_tanggal'] == "" || $_REQUEST['sampai_tanggal'] == ""){
-                header("Location: ./admin.php?page=ask");
+            if($_REQUEST['klasifikasi'] == ""){
+                header("Location: ./admin.php?page=sk");
                 die();
             } else {
-
-                $query = mysqli_query($config, "SELECT * FROM tbl_surat_keluar WHERE tgl_catat BETWEEN '$dari_tanggal' AND '$sampai_tanggal'");
+                    
+                    //
+                    //Kueri untuk mengambil data berdasarkan tanggal dan kode.
+                    //
+                    
+                    $sql = "SELECT 
+                                sk.no_agenda,
+                                sk.no_surat,
+                                sk.tujuan,
+                                sk.isi,
+                                sk.tgl_surat,
+                                sk.tgl_catat,
+                                sk.keterangan,
+                                us.nama AS username,
+                                k.nama AS nama_klas
+                            FROM 
+                                tbl_surat_keluar sk
+                            INNER JOIN
+                                tbl_user us
+                            INNER JOIN 
+                                tbl_klasifikasi k 
+                            ON 
+                                sk.kode = '$klasifikasi'
+                            WHERE 
+                                k.kode = 'CLS0012' AND
+                            	sk.tgl_catat BETWEEN '$dari_tanggal' AND '$sampai_tanggal';";
+                               
+                $query = mysqli_query($config, $sql);
 
                 $query2 = mysqli_query($config, "SELECT nama FROM tbl_instansi");
                 list($nama) = mysqli_fetch_array($query2);
+
+                //
+                //Untuk menampilkan data nama klasifikasi terpilih
+                //
+
+                $query3 = mysqli_query($config, "SELECT kode, nama FROM tbl_klasifikasi WHERE kode = '$klasifikasi'");
+                $klasifikasi_view = mysqli_fetch_assoc($query3);
 
                 echo '
                     <!-- SHOW DAFTAR AGENDA -->
@@ -88,7 +124,7 @@
                                     <div class="nav-wrapper blue-grey darken-1">
                                         <div class="col 12">
                                             <ul class="left">
-                                                <li class="waves-effect waves-light"><a href="?page=ask" class="judul"><i class="material-icons">print</i> Cetak Agenda Surat Keluar<a></li>
+                                                <li class="waves-effect waves-light"><a href="?page=ask" class="judul"><i class="material-icons">print</i> Report List Surat Berdasarkan Klasifikasi<a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -101,9 +137,29 @@
 
                     <!-- Row form Start -->
                     <!-- INI BUAT INPUT -->
-                    <div class="row jarak-form black-text">
-                        <form class="col s12" method="post" action="">
-                            
+                <form class="col s12" method="post" action="">
+                    <div class="row jarak-form black-text">';
+                        
+                        //
+                        //Kode untuk menampikan dan mengisi dropdown dari database
+                        //
+
+                        $sql = "SELECT * FROM tbl_klasifikasi";
+                        $dropdown = mysqli_query($config, $sql);
+                        echo '<label for="klasifikasi">Klasifikasi</label>
+                        <select class="browser-default" name="klasifikasi" id="klasifikasi" required>';
+                        if(mysqli_num_rows($dropdown) > 0){
+                            while ($row = mysqli_fetch_assoc($dropdown)){
+                                echo '<option value="' .$row['kode']. '">' .$row['nama']. '</option>';}
+                        } else {
+                            echo '<option value="">No categories found</option>';
+                        }
+                        echo '</select>
+                    </div>';
+                    
+
+                        echo '
+                        <div class="row jarak-form black-text">
                             <div class="input-field col s3">
                                 <i class="material-icons prefix md-prefix">date_range</i>
                                 <input id="dari_tanggal" type="text" name="dari_tanggal" id="dari_tanggal" required>
@@ -114,16 +170,25 @@
                                 <input id="sampai_tanggal" type="text" name="sampai_tanggal" id="sampai_tanggal" required>
                                 <label for="sampai_tanggal">Sampai Tanggal</label>
                             </div>
-                            <div class="col s6">
-                                <button type="submit" name="submit" class="btn-large blue waves-effect waves-light"> TAMPILKAN <i class="material-icons">visibility</i></button>
+                        </div>
+                        <div class="row jarak-form black-text">
+                            <div class="col s13">
+                                <br/><button type="submit" name="submit" class="btn-large blue waves-effect waves-light"> TAMPILKAN <i class="material-icons">visibility</i></button>
                             </div>
-                        </form>
+                        </div>
+                    
                     </div>
+                </form>
                     <!-- INI BUAT INPUT -->
                     <!-- Row form END -->
 
                     <div class="row agenda">
                         <div class="disp hidd">';
+
+                            //
+                            //Kode untuk menampilkan header report
+                            //
+
                             $query2 = mysqli_query($config, "SELECT institusi, nama, status, alamat, logo FROM tbl_instansi");
                             list($institusi, $nama, $status, $alamat, $logo) = mysqli_fetch_array($query2);
                                 echo '<img class="logodisp" src="./upload/'.$logo.'"/>';
@@ -138,9 +203,13 @@
 
                             </div>
                             <div class="separator"></div>
-                            <h5 class="hid">AGENDA SURAT KELUAR</h5>
+                            
+                            <!--GANTI YANG DIBAWAH UNTUK TAMPILAN JUDUL REPORT-->
+                            <h5 class="hid">Report List Surat Berdasarkan Klasifikasi</h5>
                         <div class="col s10">
-                            <p class="warna agenda">Agenda Surat Keluar dari tanggal <strong>'.indoDate($dari_tanggal).'</strong> sampai dengan tanggal <strong>'.indoDate($sampai_tanggal).'</strong></p>
+
+                            <!--GANTI YANG DIBAWAH UNTUK TAMPILAN JUDUL REPORT-->
+                            <p class="warna agenda">Report List Surat Berdasarkan Klasifikasi <strong>'.$klasifikasi_view['kode'].' / '.$klasifikasi_view['nama'].'</strong>  dari tanggal <strong>'.indoDate($dari_tanggal).'</strong> sampai dengan tanggal <strong>'.indoDate($sampai_tanggal).'</strong></p>
                         </div>
                         <div class="col s2">
                             <button type="submit" onClick="window.print()" class="btn-large deep-orange waves-effect waves-light right">CETAK <i class="material-icons">print</i></button>
@@ -150,14 +219,13 @@
                         <table class="bordered" id="tbl" width="100%">
                             <thead class="blue lighten-4">
                                 <tr>
-                                    <th width="3%">No</th>
-                                    <th width="5%">Kode</th>
-                                    <th width="21%">Isi Ringkas</th>
-                                    <th width="18%">Tujuan Surat</th>
-                                    <th width="15%">Nomor Surat</th>
-                                    <th width="10%">Tanggal<br/> Surat</th>
-                                    <th width="12%">Pengelola</th>
-                                    <th width="10%">Keterangan</th>
+                                    <th width="5%">No</th>
+                                    <th width="5%">No. Surat</th>
+                                    <th width="10%">Tujuan</th>
+                                    <th width="25%">Isi</th>
+                                    <th width="20%">Tgl Surat<br/>Tgl Catat</th>
+                                    <th width="20%">Keterangan</th>
+                                    <th width="15%">Pengelola</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -168,25 +236,13 @@
                                  echo '
                                     <tr>
                                         <td>'.$row['no_agenda'].'</td>
-                                        <td>'.$row['kode'].'</td>
-                                        <td>'.$row['isi'].'</td>
-                                        <td>'.$row['tujuan'].'</td>
                                         <td>'.$row['no_surat'].'</td>
-                                        <td>'.indoDate($row['tgl_surat']).'</td>
-                                        <td>';
-
-                                        if($row['id_user'] == 1){
-                                            $row['id_user'] = 'Administrator';
-                                        } else {
-                                            $id_user = $row['id_user'];
-                                            $query3 = mysqli_query($config, "SELECT nama FROM tbl_user WHERE id_user='$id_user'");
-                                            list($nama) = mysqli_fetch_array($query3);
-                                            $row['id_user'] = ''.$nama.'';
-                                        }
-
-                                        echo ''.$row['id_user'].'</td>
-                                        <td>'.$row['keterangan'].'';
-                                 echo ' </td>
+                                        <td>'.$row['tujuan'].'</td>
+                                        <td>'.$row['isi'].'</td>
+                                        <td>'.indoDate($row['tgl_surat']).'<br/>' .indoDate($row['tgl_catat']). '</td>
+                                        <td>'.$row['keterangan'].'</td>
+                                        <td>'.$row['username'].'</td>';
+                                 echo '
                                 </tr>';
                                     }
                                 } else {
@@ -207,7 +263,7 @@
                                 <div class="nav-wrapper blue-grey darken-1">
                                     <div class="col 12">
                                         <ul class="left">
-                                            <li class="waves-effect waves-light"><a href="?page=ask" class="judul"><i class="material-icons">print</i> Cetak Agenda Surat Keluar<a></li>
+                                            <li class="waves-effect waves-light"><a href="?page=ask" class="judul"><i class="material-icons">print</i> Report List Surat Berdasarkan Klasifikasi<a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -220,26 +276,48 @@
 
                 <!-- Row form Start -->
                 <!-- INI BUAT INPUT AWAL -->
-                <div class="row jarak-form black-text">
-                    <form class="col s12" method="post" action="">';
+                <form class="col s12" method="post" action="">
+                    <div class="row jarak-form black-text">';
+
+                        //
+                        //Kode untuk menampikan dan mengisi dropdown dari database
+                        //
+
                         $sql = "SELECT * FROM tbl_klasifikasi";
                         $dropdown = mysqli_query($config, $sql);
-                        echo '<select class="browser-default" name="klasifikasi" id="klasifikasi" required>';
+                        echo '<label for="klasifikasi">Klasifikasi</label>
+                        <select class="browser-default" name="klasifikasi" id="klasifikasi" required>';
                         if(mysqli_num_rows($dropdown) > 0){
                             while ($row = mysqli_fetch_assoc($dropdown)){
                                 echo '<option value="' .$row['kode']. '">' .$row['nama']. '</option>';}
                         } else {
                             echo '<option value="">No categories found</option>';
                         }
-                        echo '</select>';
+                        echo '</select>
+                    </div>';
+                    
 
                         echo '
-                        <br>
-                        <div class="col s6">
-                            <button type="submit" name="submit" class="btn-large blue waves-effect waves-light"> TAMPILKAN <i class="material-icons">visibility</i></button>
+                        <div class="row jarak-form black-text">
+                            <div class="input-field col s3">
+                                <i class="material-icons prefix md-prefix">date_range</i>
+                                <input id="dari_tanggal" type="text" name="dari_tanggal" id="dari_tanggal" required>
+                                <label for="dari_tanggal">Dari Tanggal</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <i class="material-icons prefix md-prefix">date_range</i>
+                                <input id="sampai_tanggal" type="text" name="sampai_tanggal" id="sampai_tanggal" required>
+                                <label for="sampai_tanggal">Sampai Tanggal</label>
+                            </div>
                         </div>
-                    </form>
-                </div>
+                        <div class="row jarak-form black-text">
+                            <div class="col s13">
+                                <br/><button type="submit" name="submit" class="btn-large blue waves-effect waves-light"> TAMPILKAN <i class="material-icons">visibility</i></button>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </form>
                 <!-- INI BUAT INPUT -->
                 <div class="jarak"></div>';
         }
