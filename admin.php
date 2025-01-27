@@ -89,7 +89,7 @@ Website     : https://masrud.com
                     include "surat_join_klas.php";
                     break;
                 case 'skc': //Laporan Pengarsipan Berdasarkan Klasifikasi Surat (surat join klasifikasi dengan count)
-                    include "surat-klas-count.php";
+                    include "surat_klas_count.php";
                     break;
                 case 'ssc': //Laporan Jumlah Surat Per Staff (surat join staff dengan count)
                     include "surat-staf-count.php";
