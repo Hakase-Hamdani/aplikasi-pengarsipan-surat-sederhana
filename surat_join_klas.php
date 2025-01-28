@@ -70,7 +70,7 @@
             $dari_tanggal = $_REQUEST['dari_tanggal'];
             $sampai_tanggal = $_REQUEST['sampai_tanggal'];
 
-            if($_REQUEST['klasifikasi'] == ""){
+            if($_REQUEST['dari_tanggal'] == "" || $_REQUEST['sampai_tanggal'] == ""){
                 header("Location: ./admin.php?page=sk");
                 die();
             } else {
@@ -124,7 +124,7 @@
                                     <div class="nav-wrapper blue-grey darken-1">
                                         <div class="col 12">
                                             <ul class="left">
-                                                <li class="waves-effect waves-light"><a href="?page=ask" class="judul"><i class="material-icons">print</i> Report List Surat Berdasarkan Klasifikasi<a></li>
+                                                <li class="waves-effect waves-light"><a href="?page=sk" class="judul"><i class="material-icons">print</i> Report List Surat Berdasarkan Klasifikasi<a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -263,7 +263,7 @@
                                 <div class="nav-wrapper blue-grey darken-1">
                                     <div class="col 12">
                                         <ul class="left">
-                                            <li class="waves-effect waves-light"><a href="?page=ask" class="judul"><i class="material-icons">print</i> Report List Surat Berdasarkan Klasifikasi<a></li>
+                                            <li class="waves-effect waves-light"><a href="?page=sk" class="judul"><i class="material-icons">print</i> Report List Surat Berdasarkan Klasifikasi<a></li>
                                         </ul>
                                     </div>
                                 </div>

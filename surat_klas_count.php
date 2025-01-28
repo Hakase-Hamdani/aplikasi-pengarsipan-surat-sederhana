@@ -66,52 +66,63 @@
             //
             //Untuk mengambil data
             //
-            $klasifikasi = $_REQUEST['klasifikasi'];
+            $JOIN = $_REQUEST['JOIN'];
             $dari_tanggal = $_REQUEST['dari_tanggal'];
             $sampai_tanggal = $_REQUEST['sampai_tanggal'];
 
-            if($_REQUEST['klasifikasi'] == ""){
+            if($_REQUEST['dari_tanggal'] == "" || $_REQUEST['sampai_tanggal'] == "" || $_REQUEST['JOIN'] == ""){
                 header("Location: ./admin.php?page=sk");
                 die();
             } else {
+
+                    //
+                    // UNTUK MENENTUKAN JOIN
+                    //
+
+                    if($_REQUEST['JOIN'] == "1"){ //Hitung klasifikasi tak terpakai sebagai 0
+                        $JOIN = "SELECT 
+                                    tk.kode AS KdKlasifikasi,
+                                    tk.nama AS KlasNama,
+                                    COUNT(tsk.id_surat) AS TtlSurat
+                                FROM 
+                                    tbl_klasifikasi tk
+                                LEFT JOIN 
+                                    tbl_surat_keluar tsk 
+                                    ON tk.kode = tsk.kode 
+                                    AND tsk.tgl_surat BETWEEN '$dari_tanggal' AND '$dari_tanggal'
+                                GROUP BY 
+                                    tk.kode, tk.nama
+                                ORDER BY 
+                                    TtlSurat DESC;";
+                        $IsHitung = "termasuk klasifikasi tidak terpakai";
+                    } else {  //Klasifikasi tidak terpakai tidak dihitung
+                        $JOIN = "SELECT 
+                                    tk.kode AS KdKlasifikasi,
+                                    tk.nama AS KlasNama,
+                                    COUNT(tsk.id_surat) AS TtlSurat
+                                FROM 
+                                    tbl_klasifikasi tk
+                                INNER JOIN 
+                                    tbl_surat_keluar tsk ON tk.kode = tsk.kode
+                                WHERE 
+                                    tsk.tgl_surat BETWEEN '$dari_tanggal' AND '$sampai_tanggal'
+                                GROUP BY 
+                                    tk.kode, tk.nama
+                                ORDER BY 
+                                    TtlSurat DESC;";
+                        $IsHitung = "tidak termasuk klasifikasi tidak terpakai";
+                    }
                     
                     //
-                    //Kueri untuk mengambil data berdasarkan tanggal dan kode.
+                    // Kueri untuk mengambil data berdasarkan tanggal dan kode.
                     //
                     
-                    $sql = "SELECT 
-                                sk.no_agenda,
-                                sk.no_surat,
-                                sk.tujuan,
-                                sk.isi,
-                                sk.tgl_surat,
-                                sk.tgl_catat,
-                                sk.keterangan,
-                                us.nama AS username,
-                                k.nama AS nama_klas
-                            FROM 
-                                tbl_surat_keluar sk
-                            INNER JOIN
-                                tbl_user us
-                            INNER JOIN 
-                                tbl_klasifikasi k 
-                            ON 
-                                sk.kode = '$klasifikasi'
-                            WHERE 
-                                k.kode = 'CLS0012' AND
-                            	sk.tgl_catat BETWEEN '$dari_tanggal' AND '$sampai_tanggal';";
+                $sql = $JOIN;
                                
                 $query = mysqli_query($config, $sql);
 
                 $query2 = mysqli_query($config, "SELECT nama FROM tbl_instansi");
                 list($nama) = mysqli_fetch_array($query2);
-
-                //
-                //Untuk menampilkan data nama klasifikasi terpilih
-                //
-
-                $query3 = mysqli_query($config, "SELECT kode, nama FROM tbl_klasifikasi WHERE kode = '$klasifikasi'");
-                $klasifikasi_view = mysqli_fetch_assoc($query3);
 
                 echo '
                     <!-- SHOW DAFTAR AGENDA -->
@@ -124,7 +135,7 @@
                                     <div class="nav-wrapper blue-grey darken-1">
                                         <div class="col 12">
                                             <ul class="left">
-                                                <li class="waves-effect waves-light"><a href="?page=ask" class="judul"><i class="material-icons">print</i> Report List Surat Berdasarkan Klasifikasi<a></li>
+                                                <li class="waves-effect waves-light"><a href="?page=skc" class="judul"><i class="material-icons">print</i> Report Jumlah Penggunaan Klasifikasi<a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -138,27 +149,23 @@
                     <!-- Row form Start -->
                     <!-- INI BUAT INPUT -->
                 <form class="col s12" method="post" action="">
-                    <div class="row jarak-form black-text">';
-                        
-                        //
-                        //Kode untuk menampikan dan mengisi dropdown dari database
-                        //
+                    <div class="row jarak-form black-text">
 
-                        $sql = "SELECT * FROM tbl_klasifikasi";
-                        $dropdown = mysqli_query($config, $sql);
-                        echo '<label for="klasifikasi">Klasifikasi</label>
-                        <select class="browser-default" name="klasifikasi" id="klasifikasi" required>';
-                        if(mysqli_num_rows($dropdown) > 0){
-                            while ($row = mysqli_fetch_assoc($dropdown)){
-                                echo '<option value="' .$row['kode']. '">' .$row['nama']. '</option>';}
-                        } else {
-                            echo '<option value="">No categories found</option>';
-                        }
-                        echo '</select>
-                    </div>';
+                        
+                        <!--Kode untuk menampikan dan mengisi dropdown dari database-->
+                        
+
+                        <label for="JOIN">Hitung Klasifikasi Tidak Terpakai?</label>
+                        <select class="browser-default" name="JOIN" id="JOIN" required>
+                                <option value="">Pilih salah satu</option>
+                                <option value="1">Ya</option>
+                                <option value="2">Tidak</option>
+                        
+                        </select>
+                    </div>
                     
 
-                        echo '
+                        
                         <div class="row jarak-form black-text">
                             <div class="input-field col s3">
                                 <i class="material-icons prefix md-prefix">date_range</i>
@@ -205,11 +212,11 @@
                             <div class="separator"></div>
                             
                             <!--GANTI YANG DIBAWAH UNTUK TAMPILAN JUDUL REPORT-->
-                            <h5 class="hid">Report List Surat Berdasarkan Klasifikasi</h5>
+                            <h5 class="hid">Report Jumlah Penggunaan Klasifikasi</h5>
                         <div class="col s10">
 
                             <!--GANTI YANG DIBAWAH UNTUK TAMPILAN JUDUL REPORT-->
-                            <p class="warna agenda">Report List Surat Berdasarkan Klasifikasi <strong>'.$klasifikasi_view['kode'].' / '.$klasifikasi_view['nama'].'</strong>  dari tanggal <strong>'.indoDate($dari_tanggal).'</strong> sampai dengan tanggal <strong>'.indoDate($sampai_tanggal).'</strong></p>
+                            <p class="warna agenda">Report Jumlah Penggunaan Klasifikasi dari tanggal <strong>'.indoDate($dari_tanggal).'</strong> sampai dengan tanggal <strong>'.indoDate($sampai_tanggal).'</strong> '. $IsHitung .'.</p>
                         </div>
                         <div class="col s2">
                             <button type="submit" onClick="window.print()" class="btn-large deep-orange waves-effect waves-light right">CETAK <i class="material-icons">print</i></button>
@@ -219,13 +226,9 @@
                         <table class="bordered" id="tbl" width="100%">
                             <thead class="blue lighten-4">
                                 <tr>
-                                    <th width="5%">No</th>
-                                    <th width="5%">No. Surat</th>
-                                    <th width="10%">Tujuan</th>
-                                    <th width="25%">Isi</th>
-                                    <th width="20%">Tgl Surat<br/>Tgl Catat</th>
-                                    <th width="20%">Keterangan</th>
-                                    <th width="15%">Pengelola</th>
+                                    <th width="33%">Kode Klasifikasi</th>
+                                    <th width="33%">Nama Klasifikasi</th>
+                                    <th width="33%">Jumlah Surat</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -235,13 +238,9 @@
                                 while($row = mysqli_fetch_array($query)){
                                  echo '
                                     <tr>
-                                        <td>'.$row['no_agenda'].'</td>
-                                        <td>'.$row['no_surat'].'</td>
-                                        <td>'.$row['tujuan'].'</td>
-                                        <td>'.$row['isi'].'</td>
-                                        <td>'.indoDate($row['tgl_surat']).'<br/>' .indoDate($row['tgl_catat']). '</td>
-                                        <td>'.$row['keterangan'].'</td>
-                                        <td>'.$row['username'].'</td>';
+                                        <td>'.$row['KdKlasifikasi'].'</td>
+                                        <td>'.$row['KlasNama'].'</td>
+                                        <td>'.$row['TtlSurat'].'</td>';
                                  echo '
                                 </tr>';
                                     }
@@ -263,7 +262,7 @@
                                 <div class="nav-wrapper blue-grey darken-1">
                                     <div class="col 12">
                                         <ul class="left">
-                                            <li class="waves-effect waves-light"><a href="?page=ask" class="judul"><i class="material-icons">print</i> Report List Surat Berdasarkan Klasifikasi<a></li>
+                                            <li class="waves-effect waves-light"><a href="?page=skc" class="judul"><i class="material-icons">print</i> Report Jumlah Penggunaan Klasifikasi<a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -277,27 +276,23 @@
                 <!-- Row form Start -->
                 <!-- INI BUAT INPUT AWAL -->
                 <form class="col s12" method="post" action="">
-                    <div class="row jarak-form black-text">';
+                    <div class="row jarak-form black-text">
 
-                        //
-                        //Kode untuk menampikan dan mengisi dropdown dari database
-                        //
+                        
+                        <!--Kode untuk menampikan dan mengisi dropdown dari database-->
+                        
 
-                        $sql = "SELECT * FROM tbl_klasifikasi";
-                        $dropdown = mysqli_query($config, $sql);
-                        echo '<label for="klasifikasi">Klasifikasi</label>
-                        <select class="browser-default" name="klasifikasi" id="klasifikasi" required>';
-                        if(mysqli_num_rows($dropdown) > 0){
-                            while ($row = mysqli_fetch_assoc($dropdown)){
-                                echo '<option value="' .$row['kode']. '">' .$row['nama']. '</option>';}
-                        } else {
-                            echo '<option value="">No categories found</option>';
-                        }
-                        echo '</select>
-                    </div>';
+                        <label for="JOIN">Hitung Klasifikasi Tidak Terpakai?</label>
+                        <select class="browser-default" name="JOIN" id="JOIN" required>
+                                <option value="">Pilih salah satu</option>
+                                <option value="1">Ya</option>
+                                <option value="2">Tidak</option>
+                        
+                        </select>
+                    </div>
                     
 
-                        echo '
+                        
                         <div class="row jarak-form black-text">
                             <div class="input-field col s3">
                                 <i class="material-icons prefix md-prefix">date_range</i>
