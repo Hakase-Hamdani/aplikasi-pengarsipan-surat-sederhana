@@ -23,6 +23,12 @@ Phone/WA    : 0852-3290-4156
 Email       : rudi@masrud.com
 Website     : https://masrud.com
 
+
+MODIFIED BY
+
+Developer   : Muhammad Hamdani
+Website     : fauxnet.blogspot.com
+
 -->
 <!doctype html>
 <html lang="en">
