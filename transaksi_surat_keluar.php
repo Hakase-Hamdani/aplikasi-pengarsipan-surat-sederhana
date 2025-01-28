@@ -161,7 +161,7 @@
                                         <td>'.$row['tujuan'].'</td><td>'.$row['no_surat'].'<br/><hr/>'.indoDate($row['tgl_surat']).'</td>
                                         <td>';
 
-                                        if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['id_user'] != 1){
+                                        if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['admin'] != 1){
                                             echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
                                         } else {
                                           echo '<a class="btn small blue waves-effect waves-light" href="?page=tsk&act=edit&id_surat='.$row['id_surat'].'">
@@ -261,7 +261,7 @@
                                     <td>'.$row['tujuan'].'</td><td>'.$row['no_surat'].'<br/><hr/>'.indoDate($row['tgl_surat']).'</td>
                                     <td>';
 
-                                    if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['id_user'] != 1){
+                                    if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['admin'] != 1){
                                         echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
                                     } else {
                                       echo '<a class="btn small blue waves-effect waves-light" href="?page=tsk&act=edit&id_surat='.$row['id_surat'].'">
