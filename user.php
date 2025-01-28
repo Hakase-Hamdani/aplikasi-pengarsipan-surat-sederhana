@@ -1,6 +1,6 @@
 <?php
     //session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();

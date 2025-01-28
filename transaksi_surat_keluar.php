@@ -1,12 +1,12 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
     } else {
 
-        if($_SESSION['role'] != 1 AND $_SESSION['role'] != 3){
+        if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 3){
             echo '<script language="javascript">
                     window.alert("ERROR! Anda tidak memiliki hak akses untuk membuka halaman ini");
                     window.location.href="./logout.php";
@@ -131,7 +131,7 @@
                         </div>
 
                         <div class="col m12" id="colres">
-                            <table class="bordered" id="tbl">
+                            <table id="dataTable" class="bordered" id="tbl">
                                 <thead class="blue lighten-4" id="head">
                                     <tr>
                                         <th width="10%">No. Agenda<br/>Kode</th>
@@ -150,7 +150,7 @@
                                     while($row = mysqli_fetch_array($query)){
                                       echo '
                                       <tr>
-                                        <td>'.$row['no_agenda'].'<br/><hr/>'.$row['kode'].'</td>
+                                        <td>'.$row['no_agenda'].'<br/><hr/>'.$row['kode'].'<br/><hr/>'.$row['divisi'].'</td>
                                         <td>'.substr($row['isi'],0,200).'<br/><br/><strong>File :</strong>';
 
                                         if(!empty($row['file'])){
@@ -161,7 +161,7 @@
                                         <td>'.$row['tujuan'].'</td><td>'.$row['no_surat'].'<br/><hr/>'.indoDate($row['tgl_surat']).'</td>
                                         <td>';
 
-                                        if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['id_user'] != 1){
+                                        if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['admin'] != 1){
                                             echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
                                         } else {
                                           echo '<a class="btn small blue waves-effect waves-light" href="?page=tsk&act=edit&id_surat='.$row['id_surat'].'">
@@ -183,11 +183,12 @@
                     } else {
 
                         echo '
+                        
                         <div class="col m12" id="colres">
-                        <table class="bordered" id="tbl">
+                        <table id="dataTable" class="bordered" id="tbl">
                             <thead class="blue lighten-4" id="head">
                                 <tr>
-                                    <th width="10%">No. Agenda<br/>Kode</th>
+                                    <th width="10%">No. Agenda<br/>Kode<br/>Divisi</th>
                                     <th width="31%">Isi Ringkas<br/> File</th>
                                     <th width="24%">Tujuan</th>
                                     <th width="19%">No. Surat<br/>Tgl Surat</th>
@@ -249,7 +250,7 @@
                                 while($row = mysqli_fetch_array($query)){
                                   echo '
                                   <tr>
-                                    <td>'.$row['no_agenda'].'<br/><hr/>'.$row['kode'].'</td>
+                                    <td>'.$row['no_agenda'].'<br/><hr/>'.$row['kode'].'<br/><hr/>'.$row['divisi'].'</td>
                                     <td>'.substr($row['isi'],0,200).'<br/><br/><strong>File :</strong>';
 
                                     if(!empty($row['file'])){
@@ -260,7 +261,7 @@
                                     <td>'.$row['tujuan'].'</td><td>'.$row['no_surat'].'<br/><hr/>'.indoDate($row['tgl_surat']).'</td>
                                     <td>';
 
-                                    if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['id_user'] != 1){
+                                    if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['admin'] != 1){
                                         echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
                                     } else {
                                       echo '<a class="btn small blue waves-effect waves-light" href="?page=tsk&act=edit&id_surat='.$row['id_surat'].'">

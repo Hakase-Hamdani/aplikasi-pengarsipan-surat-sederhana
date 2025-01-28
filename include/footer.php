@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(!empty($_SESSION['role'])){
+    if(!empty($_SESSION['admin'])){
 ?>
 
 <noscript>
@@ -20,7 +20,7 @@
                 $query = mysqli_query($config, "SELECT * FROM tbl_instansi");
                 while($data = mysqli_fetch_array($query)){
             ?>
-                <span class="white-text copyright-date">&copy; <?php echo date("Y"); ?> <?php echo $data['nama'] .'</span>
+                <span>&copy; <?php echo date("Y"); ?> <?php echo $data['nama'] .'</span>
                 ';?>
             <?php } ?>
         </div>
@@ -34,8 +34,37 @@
 <script type="text/javascript" src="asset/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="asset/js/jquery.autocomplete.min.js"></script>
 <script data-pace-options='{ "ajax": false }' src='asset/js/pace.min.js'></script>
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+<!-- jQuery and DataTables JS --
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script-->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function(){
+    
+    $('#dataTable').DataTable({
+        columnDefs: [
+        { orderable: false, targets: -1 } // Excludes the last column
+        ],
+        ordering: true,
+        paging: false,     // Disables pagination (removes "Show Entries")
+        searching: false,  // Disables the search box
+        info: false        // Removes "Showing X to Y of Z entries"
+    });
+
+    $('#dataTable2').DataTable({
+        columnDefs: [
+        { orderable: false, targets: -1 } // Excludes the last column
+        ],
+        ordering: true,
+        paging: false,     // Disables pagination (removes "Show Entries")
+        searching: false,  // Disables the search box
+        info: false        // Removes "Showing X to Y of Z entries"
+    });
+    
     //jquery dropdown
     $(".dropdown-button").dropdown({ hover: false });
 
@@ -62,6 +91,13 @@ $(document).ready(function(){
     $('.tooltipped').tooltip({delay: 10});
 
     //jquery autocomplete
+    $( "#divisi" ).autocomplete({
+        serviceUrl: "kdivisi.php",   // Kode php untuk prosesing data.
+        dataType: "JSON",           // Tipe data JSON.
+        onSelect: function (suggestion) {
+            $( "#divisi" ).val(suggestion.kode);
+        }
+    });
     $( "#kode" ).autocomplete({
         serviceUrl: "kode.php",   // Kode php untuk prosesing data.
         dataType: "JSON",           // Tipe data JSON.

@@ -21,8 +21,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
----
+Modifications made by [Muhammad Hamdani/Hakase-Hamdani] in [2024-2025].
 
-Modifications made by [Muhammad Hamdani/Hakase-Hamdani] in [2024].
+SEE COMMIT HISTORY TO SEE CHANGES BEING MADE.
+
 These modifications are also licensed under the MIT License.
-

@@ -1,19 +1,19 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
     } else {
 
-        $id_klasifikasi = mysqli_real_escape_string($config, $_REQUEST['id_klasifikasi']);
-        $query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi WHERE id_klasifikasi='$id_klasifikasi'");
+        $kode = mysqli_real_escape_string($config, $_REQUEST['kode']);
+        $query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi WHERE kode='$kode'");
 
     	if(mysqli_num_rows($query) > 0){
             $no = 1;
             while($row = mysqli_fetch_array($query)){
 
-            if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
+            if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 2){
                 echo '<script language="javascript">
                         window.alert("ERROR! Anda tidak memiliki hak akses untuk menghapus data ini");
                         window.location.href="./admin.php?page=ref";
@@ -66,7 +66,7 @@
         			   		</table>
     			        </div>
                         <div class="card-action">
-        	                <a href="?page=ref&act=del&submit=yes&id_klasifikasi='.$row['id_klasifikasi'].'" class="btn-large deep-orange waves-effect waves-light white-text">HAPUS <i class="material-icons">delete</i></a>
+        	                <a href="?page=ref&act=del&submit=yes&kode='.$row['kode'].'" class="btn-large deep-orange waves-effect waves-light white-text">HAPUS <i class="material-icons">delete</i></a>
         	                <a href="?page=ref" class="btn-large blue waves-effect waves-light white-text">BATAL <i class="material-icons">clear</i></a>
         	            </div>
                     </div>
@@ -75,9 +75,12 @@
             <!-- Row form END -->';
 
         	if(isset($_REQUEST['submit'])){
-        		$id_klasifikasi = $_REQUEST['id_klasifikasi'];
+        		$kode = $_REQUEST['kode'];
+                $sql = "DELETE FROM tbl_klasifikasi WHERE kode='$kode'";
+                //var_dump($sql);
+                //die();
 
-                $query = mysqli_query($config, "DELETE FROM tbl_klasifikasi WHERE id_klasifikasi='$id_klasifikasi'");
+                $query = mysqli_query($config, $sql);
 
             	if($query == true){
                     $_SESSION['succDel'] = 'SUKSES! Data berhasil dihapus<br/>';
@@ -86,7 +89,7 @@
             	} else {
                     $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
                     echo '<script language="javascript">
-                            window.location.href="./admin.php?page=ref&act=del&id_klasifikasi='.$id_klasifikasi.'";
+                            window.location.href="./admin.php?page=ref&act=del&kode='.$kode.'";
                           </script>';
             	}
             }

@@ -1,12 +1,12 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
     } else {
 
-        if($_SESSION['role'] != 1){
+        if($_SESSION['admin'] != 1){
             echo '<script language="javascript">
                     window.alert("ERROR! Anda tidak memiliki hak akses untuk membuka halaman ini");
                     window.location.href="./logout.php";

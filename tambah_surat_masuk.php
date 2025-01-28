@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -319,7 +319,7 @@
                             <div class="file-field input-field">
                                 <div class="btn light-green darken-1">
                                     <span>File</span>
-                                    <input type="file" id="file" name="file">
+                                    <input type="file" id="file" name="file" capture="environment" accept="image/*">
                                 </div>
                                 <div class="file-path-wrapper">
                                     <input class="file-path validate" type="text" placeholder="Upload file/scan gambar surat masuk">

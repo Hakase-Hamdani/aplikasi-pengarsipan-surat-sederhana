@@ -1,6 +1,6 @@
 <?php
     //cek session
-    if(empty($_SESSION['role'])){
+    if(empty($_SESSION['admin'])){
         $_SESSION['err'] = '<center>Anda harus login terlebih dahulu!</center>';
         header("Location: ./");
         die();
@@ -8,17 +8,17 @@
 
         if(isset($_REQUEST['submit'])){
 
-                $id_klasifikasi = $_REQUEST['id_klasifikasi'];
+                $koden = $_REQUEST['koden'];
                 $kode = $_REQUEST['kode'];
                 $nama = $_REQUEST['nama'];
                 $uraian = $_REQUEST['uraian'];
-                $id_user = $_SESSION['role'];
+                $id_user = $_SESSION['admin'];
 
                 //validasi form kosong
                 if($_REQUEST['kode'] == "" || $_REQUEST['nama'] == "" || $_REQUEST['uraian'] == ""){
                     $_SESSION['errEmpty'] = 'ERROR! Semua form wajib diisi';
                     echo '<script language="javascript">
-                            window.location.href="./admin.php?page=ref&act=edit&id_klasifikasi='.$id_klasifikasi.'";
+                            window.location.href="./admin.php?page=ref&act=edit&id_klasifikasi='.$koden.'";
                           </script>';
                 } else {
 
@@ -38,7 +38,10 @@
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
 
-                            $query = mysqli_query($config, "UPDATE tbl_klasifikasi SET kode='$kode', nama='$nama', uraian='$uraian', id_user='$id_user' WHERE id_klasifikasi='$id_klasifikasi'");
+                            $sql = "UPDATE tbl_klasifikasi SET kode='$koden', nama='$nama', uraian='$uraian', id_user='$id_user' WHERE kode='$kode'";
+                            //var_dump($sql);
+                            //die();
+                            $query = mysqli_query($config, $sql);
 
                             if($query != false){
                                 $_SESSION['succEdit'] = 'SUKSES! Data berhasil diupdate';
@@ -54,12 +57,12 @@
             }
         } else {
 
-            $id_klasifikasi = mysqli_real_escape_string($config, $_REQUEST['id_klasifikasi']);
-            $query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi WHERE id_klasifikasi='$id_klasifikasi'");
+            $koden = mysqli_real_escape_string($config, $_REQUEST['kode']);
+            $query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi WHERE kode='$koden'");
             if(mysqli_num_rows($query) > 0){
                 $no = 1;
                 while($row = mysqli_fetch_array($query))
-                if($_SESSION['role'] != 1 AND $_SESSION['role'] != 2){
+                if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 2){
                     echo '<script language="javascript">
                             window.alert("ERROR! Anda tidak memiliki hak akses untuk mengedit data ini");
                             window.location.href="./admin.php?page=ref";
@@ -120,9 +123,9 @@
                             <!-- Row in form START -->
                             <div class="row">
                                 <div class="input-field col s3">
-                                    <input type="hidden" value="<?php echo $row['id_klasifikasi']; ?>" name="id_klasifikasi">
+                                    <input type="hidden" value="<?php echo $row['kode']; ?>" name="kode">
                                     <i class="material-icons prefix md-prefix">font_download</i>
-                                    <input id="kd" type="text" class="validate" name="kode" maxlength="30" value="<?php echo $row['kode']; ?>" required>
+                                    <input id="kd" type="text" class="validate" name="koden" maxlength="30" value="<?php echo $row['kode']; ?>" required>
                                         <?php
                                             if(isset($_SESSION['kode'])){
                                                 $kode = $_SESSION['kode'];
