@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 15, 2025 at 04:03 PM
+-- Generation Time: Jan 29, 2025 at 09:26 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -114,6 +114,7 @@ CREATE TABLE `tbl_klasifikasi` (
 --
 
 INSERT INTO `tbl_klasifikasi` (`kode`, `nama`, `uraian`, `id_user`) VALUES
+('CL004', 'UN-USED', 'UN-USED', 2),
 ('CLS0012', 'Budget Proposals', 'Classification for financial documents', 2),
 ('CLS002', 'Employee Records', 'Classification for HR-related files', NULL),
 ('CLS003', 'Technical Issues', 'Classification for IT-related issues', NULL);
@@ -203,7 +204,8 @@ INSERT INTO `tbl_surat_masuk` (`id_surat`, `no_agenda`, `no_surat`, `asal_surat`
 (1, 201, 'IN2025-001', 'Vendor A', 'Proposal for software license', 'CLS001', 'DivK', 'PRO-01', '2025-01-01', '2025-01-02', 'proposal.pdf', 'Under review', 1),
 (2, 202, 'IN2025-002', 'Employee B', 'Request for leave', 'CLS002', '', 'EMP-02', '2025-01-03', '2025-01-04', 'leave_request.docx', 'Approved', 4),
 (3, 203, 'IN2025-003', 'Client XAZ', 'Report on server downtime', 'CLS003', '', 'REP-03', '2025-01-05', '2025-01-06', '4874-2025-01-1121.51.02347357144613034705.jpg', 'Resolved', 1),
-(4, 204, 'user2', 'user2', 'user2', 'CLS0012', NULL, 'user2', '2025-01-31', '2025-01-13', '', 'user2', 4);
+(4, 204, 'user2', 'user2', 'user2', 'CLS0012', NULL, 'user2', '2025-01-31', '2025-01-13', '', 'user2', 4),
+(5, 205, '12/12/123', 'Test Disposisi', 'Tes User Disposisi', 'CL004', NULL, 'AX112', '2025-01-10', '2025-01-28', '', 'xxx', 3);
 
 -- --------------------------------------------------------
 
@@ -225,10 +227,11 @@ CREATE TABLE `tbl_user` (
 --
 
 INSERT INTO `tbl_user` (`id_user`, `username`, `password`, `nama`, `nip`, `admin`) VALUES
-(1, 'user', '21232f297a57a5a743894a0e4a801fc3', 'user', '123456', 1),
-(2, 'administrator', '21232f297a57a5a743894a0e4a801fc3', 'ADMINISTRATOR', '789012', 2),
-(3, 'disposisi', '13bb8b589473803f26a02e338f949b8c', 'IT Support', '345678', 3),
-(4, 'user2', '21232f297a57a5a743894a0e4a801fc3', 'user 2', '123456', 1);
+(1, 'user_one', 'a3f05c8283e5350106829f855c93c07d', 'user', '123456', 1),
+(2, 'administrator', 'a3f05c8283e5350106829f855c93c07d', 'ADMINISTRATOR', '789012', 2),
+(3, 'disposisi', 'a3f05c8283e5350106829f855c93c07d', 'IT Support', '345678', 3),
+(4, 'user2', 'a3f05c8283e5350106829f855c93c07d', 'user 2', '123456', 1),
+(5, 'disposisi2', 'a3f05c8283e5350106829f855c93c07d', 'disposisi2', '12333', 3);
 
 --
 -- Indexes for dumped tables
@@ -312,13 +315,13 @@ ALTER TABLE `tbl_surat_keluar`
 -- AUTO_INCREMENT for table `tbl_surat_masuk`
 --
 ALTER TABLE `tbl_surat_masuk`
-  MODIFY `id_surat` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_surat` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  MODIFY `id_user` tinyint(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_user` tinyint(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
