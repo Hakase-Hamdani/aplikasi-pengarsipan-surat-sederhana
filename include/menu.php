@@ -72,8 +72,12 @@
                         <a class="collapsible-header"><i class="material-icons">assignment</i> Report</a>
                         <div class="collapsible-body">
                             <ul>
-                                <li><a href="?page=asm">Surat Masuk</a></li>
-                                <li><a href="?page=ask">Surat Keluar</a></li>
+                                <li><a href="?page=asm">Agenda Surat Masuk</a></li>
+                                <li><a href="?page=ask">Agenda Surat Keluar</a></li>
+                                <li><a href="?page=sk">List Surat Berdasarkan Klasifikasi</a></li>
+                                <li><a href="?page=skc">Jumlah Penggunaan Klasifikasi</a></li>
+                                <li><a href="?page=suc">Jumlah Surat Per Staff</a></li>
+                                <li><a href="?page=sdc">Jumlah Surat Per Divisi</a></li>
                             </ul>
                         </div>
                     </li>
@@ -108,8 +112,6 @@
                             <ul>
                                 <li><a href="?page=sett">Instansi</a></li>
                                 <li><a href="?page=sett&sub=usr">User</a></li>
-                                <li><a href="?page=sett&sub=back">Backup Database</a></li>
-                                <li><a href="?page=sett&sub=rest">Restore Database</a></li>
                             </ul>
                         </div>
                     </li>
@@ -156,8 +158,12 @@
                 if($_SESSION['admin'] == 1){ //REPORT HANYA TERSEDIA BAGI USER ?>
             <li><a class="dropdown-button" href="#!" data-activates="agenda">Report <i class="material-icons md-18">arrow_drop_down</i></a></li>
                 <ul id='agenda' class='dropdown-content'>
-                    <li><a href="?page=asm">Surat Masuk</a></li>
-                    <li><a href="?page=ask">Surat Keluar</a></li>
+                    <li><a href="?page=asm">Agenda Surat Masuk</a></li>
+                    <li><a href="?page=ask">Agenda Surat Keluar</a></li>
+                    <li><a href="?page=sk">List Surat Berdasarkan Klasifikasi</a></li>
+                    <li><a href="?page=skc">Jumlah Penggunaan Klasifikasi</a></li>
+                    <li><a href="?page=suc">Jumlah Surat Per Staff</a></li>
+                    <li><a href="?page=sdc">Jumlah Surat Per Divisi</a></li>
                 </ul>
             <?php
                 }
@@ -178,9 +184,6 @@
                 <ul id='pengaturan' class='dropdown-content'>
                     <li><a href="?page=sett">Instansi</a></li>
                     <li><a href="?page=sett&sub=usr">User</a></li>
-                    <li class="divider"></li>
-                    <li><a href="?page=sett&sub=back">Backup Database</a></li>
-                    <li><a href="?page=sett&sub=rest">Restore Database</a></li>
                 </ul>
             <?php
                 }
