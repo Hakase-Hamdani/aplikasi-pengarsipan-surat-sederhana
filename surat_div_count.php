@@ -81,24 +81,24 @@
 
                     if($_REQUEST['JOIN'] == "1"){ //Hitung Masuk
                         $JOIN = "SELECT 
-                                    u.id_user,
-                                    u.nama,
+                                    d.kode AS division_code,
+                                    d.nama AS division_name,
                                     COUNT(s.id_surat) AS total_letters
-                                FROM tbl_user u
-                                LEFT JOIN tbl_surat_masuk s ON u.id_user = s.id_user
-                                WHERE s.tgl_surat BETWEEN '$dari_tanggal' AND '$sampai_tanggal'
-                                GROUP BY u.id_user, u.username
+                                FROM tbl_divisi d
+                                LEFT JOIN tbl_surat_masuk s ON d.kode = s.divisi
+                                AND s.tgl_surat BETWEEN '2024-01-01' AND '2025-12-31'
+                                GROUP BY d.kode, d.nama
                                 ORDER BY total_letters DESC;";
                         $IsHitung = "Masuk";
                     } else {  //Hitung Keluar
                         $JOIN = "SELECT 
-                                    u.id_user,
-                                    u.nama,
+                                    d.kode AS division_code,
+                                    d.nama AS division_name,
                                     COUNT(s.id_surat) AS total_letters
-                                FROM tbl_user u
-                                LEFT JOIN tbl_surat_keluar s ON u.id_user = s.id_user
-                                WHERE s.tgl_surat BETWEEN '$dari_tanggal' AND '$sampai_tanggal'
-                                GROUP BY u.id_user, u.username
+                                FROM tbl_divisi d
+                                LEFT JOIN tbl_surat_keluar s ON d.kode = s.divisi
+                                AND s.tgl_surat BETWEEN '2024-01-01' AND '2025-12-31'
+                                GROUP BY d.kode, d.nama
                                 ORDER BY total_letters DESC;";
                         $IsHitung = "Keluar";
                     }
@@ -125,7 +125,7 @@
                                     <div class="nav-wrapper blue-grey darken-1">
                                         <div class="col 12">
                                             <ul class="left">
-                                                <li class="waves-effect waves-light"><a href="?page=suc" class="judul"><i class="material-icons">print</i> Report Jumlah Penggunaan Klasifikasi<a></li>
+                                                <li class="waves-effect waves-light"><a href="?page=sdc" class="judul"><i class="material-icons">print</i> Report Jumlah Surat Per Divisi<a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -202,11 +202,11 @@
                             <div class="separator"></div>
                             
                             <!--GANTI YANG DIBAWAH UNTUK TAMPILAN JUDUL REPORT-->
-                            <h5 class="hid">Report Jumlah Surat Per Staff</h5>
+                            <h5 class="hid">Report Jumlah Surat Per Divisi</h5>
                         <div class="col s10">
 
                             <!--GANTI YANG DIBAWAH UNTUK TAMPILAN JUDUL REPORT-->
-                            <p class="warna agenda">Report Jumlah <strong>Surat '. $IsHitung .'</strong> Per Staff dari tanggal <strong>'.indoDate($dari_tanggal).'</strong> sampai dengan tanggal <strong>'.indoDate($sampai_tanggal).'</strong>.</p>
+                            <p class="warna agenda">Report Jumlah <strong>Surat '. $IsHitung .'</strong> Per Divisi dari tanggal <strong>'.indoDate($dari_tanggal).'</strong> sampai dengan tanggal <strong>'.indoDate($sampai_tanggal).'</strong>.</p>
                         </div>
                         <div class="col s2">
                             <button type="submit" onClick="window.print()" class="btn-large deep-orange waves-effect waves-light right">CETAK <i class="material-icons">print</i></button>
@@ -217,8 +217,9 @@
                             <thead class="blue lighten-4">
                                 <tr>
                                     <th width="10%">No.</th>
-                                    <th width="45%">Nama Staff</th>
-                                    <th width="45%">Total Surat</th>
+                                    <th width="25%">Kode Divisi</th>
+                                    <th width="25%">Nama Divisi</th>
+                                    <th width="15%">Total Surat</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -230,7 +231,8 @@
                                  echo '
                                     <tr>
                                         <td>'.$i++.'</td>
-                                        <td>'.$row['nama'].'</td>
+                                        <td>'.$row['division_code'].'</td>
+                                        <td>'.$row['division_name'].'</td>
                                         <td>'.$row['total_letters'].'</td>';
                                  echo '
                                 </tr>';
@@ -253,7 +255,7 @@
                                 <div class="nav-wrapper blue-grey darken-1">
                                     <div class="col 12">
                                         <ul class="left">
-                                            <li class="waves-effect waves-light"><a href="?page=suc" class="judul"><i class="material-icons">print</i> Report Jumlah Penggunaan Klasifikasi<a></li>
+                                            <li class="waves-effect waves-light"><a href="?page=sdc" class="judul"><i class="material-icons">print</i> Report Jumlah Surat Per Divisi<a></li>
                                         </ul>
                                     </div>
                                 </div>

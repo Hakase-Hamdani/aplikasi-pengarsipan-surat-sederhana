@@ -125,7 +125,7 @@
                                     <div class="nav-wrapper blue-grey darken-1">
                                         <div class="col 12">
                                             <ul class="left">
-                                                <li class="waves-effect waves-light"><a href="?page=suc" class="judul"><i class="material-icons">print</i> Report Jumlah Penggunaan Klasifikasi<a></li>
+                                                <li class="waves-effect waves-light"><a href="?page=suc" class="judul"><i class="material-icons">print</i> Report Jumlah Surat Per Staff<a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -253,7 +253,7 @@
                                 <div class="nav-wrapper blue-grey darken-1">
                                     <div class="col 12">
                                         <ul class="left">
-                                            <li class="waves-effect waves-light"><a href="?page=suc" class="judul"><i class="material-icons">print</i> Report Jumlah Penggunaan Klasifikasi<a></li>
+                                            <li class="waves-effect waves-light"><a href="?page=suc" class="judul"><i class="material-icons">print</i> Report Jumlah Surat Per Staff<a></li>
                                         </ul>
                                     </div>
                                 </div>

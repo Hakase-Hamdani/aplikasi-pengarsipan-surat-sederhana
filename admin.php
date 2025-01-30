@@ -101,8 +101,8 @@ Website     : fauxnet.blogspot.com
                 case 'suc': //Laporan Jumlah Surat Per Staff (surat join staff dengan count)
                     include "surat_user_count.php";
                     break;
-                case 'sdd': //Laporan Jumlah Surat Per Bidang/Divisi (surat join bidang dengan count)
-                    include "surat-div-count.php";
+                case 'sdc': //Laporan Jumlah Surat Per Bidang/Divisi (surat join bidang dengan count)
+                    include "surat_div_count.php";
                     break;
                 case 'dummy': //Laporan Komprehensif Output Surat (surat join bidang join staf join klasifikasi)
                     include "dummy.php";
