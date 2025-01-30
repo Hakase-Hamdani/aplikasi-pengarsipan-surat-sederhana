@@ -150,7 +150,7 @@
                             <tbody>';
 
                             //script untuk mencari data
-                            if ($_SESSION['admin'] == 3) {
+                            if ($_SESSION['admin'] == 3 || $_SESSION['admin'] == 1) {
                                 $sql = "SELECT * FROM tbl_surat_masuk WHERE isi LIKE '%$cari%' ORDER by id_surat DESC LIMIT 15";
                             } else {
                                 $id_user = $_SESSION['id_user'];
@@ -176,8 +176,7 @@
                                     <td>'.$row['no_surat'].'<br/><hr/>'.indoDate($row['tgl_surat']).'</td>
                                     <td>';
 
-                                    if ($_SESSION['admin'] == 1) {
-                                        // Admin level 1: Show all options regardless of ownership
+                                    if ($_SESSION['admin'] == 1 || $_SESSION['admin'] == 3) {
                                         echo '<a class="btn small blue waves-effect waves-light" href="?page=tsm&act=edit&id_surat=' . $row['id_surat'] . '">
                                                 <i class="material-icons">edit</i> EDIT</a>
                                               <a class="btn small light-green waves-effect waves-light tooltipped" data-position="left" data-tooltip="Pilih Disp untuk menambahkan Disposisi Surat" href="?page=tsm&act=disp&id_surat=' . $row['id_surat'] . '">
@@ -186,27 +185,15 @@
                                                 <i class="material-icons">print</i> PRINT</a>
                                               <a class="btn small deep-orange waves-effect waves-light" href="?page=tsm&act=del&id_surat=' . $row['id_surat'] . '">
                                                 <i class="material-icons">delete</i> DEL</a>';
-                                    } elseif ($_SESSION['admin'] == 3) {
-                                        if ($_SESSION['id_user'] == $row['id_user']) {
-                                            // Admin level 3, owner: Show all options
-                                            echo '<a class="btn small blue waves-effect waves-light" href="?page=tsm&act=edit&id_surat=' . $row['id_surat'] . '">
-                                                    <i class="material-icons">edit</i> EDIT</a>
-                                                  <a class="btn small light-green waves-effect waves-light tooltipped" data-position="left" data-tooltip="Pilih Disp untuk menambahkan Disposisi Surat" href="?page=tsm&act=disp&id_surat=' . $row['id_surat'] . '">
-                                                    <i class="material-icons">description</i> DISP</a>
-                                                  <a class="btn small yellow darken-3 waves-effect waves-light" href="?page=ctk&id_surat=' . $row['id_surat'] . '" target="_blank">
-                                                    <i class="material-icons">print</i> PRINT</a>
-                                                  <a class="btn small deep-orange waves-effect waves-light" href="?page=tsm&act=del&id_surat=' . $row['id_surat'] . '">
-                                                    <i class="material-icons">delete</i> DEL</a>';
                                         } else {
                                             // Admin level 3, not owner: Show only PRINT and DISP
-                                            echo '<a class="btn small light-green waves-effect waves-light tooltipped" data-position="left" data-tooltip="Pilih Disp untuk menambahkan Disposisi Surat" href="?page=tsm&act=disp&id_surat=' . $row['id_surat'] . '">
-                                                    <i class="material-icons">description</i> DISP</a>
+                                            echo '<a class="btn small blue waves-effect waves-light" href="?page=tsm&act=edit&id_surat=' . $row['id_surat'] . '">
+                                                     <i class="material-icons">edit</i> EDIT</a>
+                                                  <a class="btn small deep-orange waves-effect waves-light" href="?page=tsm&act=del&id_surat=' . $row['id_surat'] . '">
+                                                     <i class="material-icons">delete</i> DEL</a>
                                                   <a class="btn small yellow darken-3 waves-effect waves-light" href="?page=ctk&id_surat=' . $row['id_surat'] . '" target="_blank">
-                                                    <i class="material-icons">print</i> PRINT</a>';
-                                        } echo '
-                                        </td>
-                                    </tr>';
-                                    }}
+                                                     <i class="material-icons">print</i> PRINT</a>';
+                                        }}
                             } else {
                                 echo '<tr><td colspan="5"><center><p class="add">Tidak ada data yang ditemukan</p></center></td></tr>';
                             }
@@ -277,7 +264,7 @@
                                 <tbody>';
 
                                 //script untuk menampilkan data
-                                if ($_SESSION['admin'] == 3) {
+                                if ($_SESSION['admin'] == 3 || $_SESSION['admin'] == 1) {
                                     $sql = "SELECT * FROM tbl_surat_masuk ORDER by id_surat DESC LIMIT $curr, $limit";
                                 } else {
                                     $id_user = $_SESSION['id_user'];
@@ -304,8 +291,7 @@
                                         <td>';
 
                                         //if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['id_user'] != 1)
-                                        if ($_SESSION['admin'] == 1) {
-                                            // Admin level 1: Show all options regardless of ownership
+                                        if ($_SESSION['admin'] == 1 || $_SESSION['admin'] == 3) {
                                             echo '<a class="btn small blue waves-effect waves-light" href="?page=tsm&act=edit&id_surat=' . $row['id_surat'] . '">
                                                     <i class="material-icons">edit</i> EDIT</a>
                                                   <a class="btn small light-green waves-effect waves-light tooltipped" data-position="left" data-tooltip="Pilih Disp untuk menambahkan Disposisi Surat" href="?page=tsm&act=disp&id_surat=' . $row['id_surat'] . '">
@@ -314,27 +300,15 @@
                                                     <i class="material-icons">print</i> PRINT</a>
                                                   <a class="btn small deep-orange waves-effect waves-light" href="?page=tsm&act=del&id_surat=' . $row['id_surat'] . '">
                                                     <i class="material-icons">delete</i> DEL</a>';
-                                        } elseif ($_SESSION['admin'] == 3) {
-                                            if ($_SESSION['id_user'] == $row['id_user']) {
-                                                // Admin level 3, owner: Show all options
-                                                echo '<a class="btn small blue waves-effect waves-light" href="?page=tsm&act=edit&id_surat=' . $row['id_surat'] . '">
-                                                        <i class="material-icons">edit</i> EDIT</a>
-                                                      <a class="btn small light-green waves-effect waves-light tooltipped" data-position="left" data-tooltip="Pilih Disp untuk menambahkan Disposisi Surat" href="?page=tsm&act=disp&id_surat=' . $row['id_surat'] . '">
-                                                        <i class="material-icons">description</i> DISP</a>
-                                                      <a class="btn small yellow darken-3 waves-effect waves-light" href="?page=ctk&id_surat=' . $row['id_surat'] . '" target="_blank">
-                                                        <i class="material-icons">print</i> PRINT</a>
-                                                      <a class="btn small deep-orange waves-effect waves-light" href="?page=tsm&act=del&id_surat=' . $row['id_surat'] . '">
-                                                        <i class="material-icons">delete</i> DEL</a>';
                                             } else {
                                                 // Admin level 3, not owner: Show only PRINT and DISP
-                                                echo '<a class="btn small light-green waves-effect waves-light tooltipped" data-position="left" data-tooltip="Pilih Disp untuk menambahkan Disposisi Surat" href="?page=tsm&act=disp&id_surat=' . $row['id_surat'] . '">
-                                                        <i class="material-icons">description</i> DISP</a>
+                                                echo '<a class="btn small blue waves-effect waves-light" href="?page=tsm&act=edit&id_surat=' . $row['id_surat'] . '">
+                                                         <i class="material-icons">edit</i> EDIT</a>
+                                                      <a class="btn small deep-orange waves-effect waves-light" href="?page=tsm&act=del&id_surat=' . $row['id_surat'] . '">
+                                                         <i class="material-icons">delete</i> DEL</a>
                                                       <a class="btn small yellow darken-3 waves-effect waves-light" href="?page=ctk&id_surat=' . $row['id_surat'] . '" target="_blank">
-                                                        <i class="material-icons">print</i> PRINT</a>';
-                                            } echo '
-                                        </td>
-                                    </tr>';
-                                        }}
+                                                         <i class="material-icons">print</i> PRINT</a>';
+                                            }}
                             } else {
                                 echo '<tr><td colspan="5"><center><p class="add">Tidak ada data untuk ditampilkan. <u><a href="?page=tsm&act=add">Tambah data baru</a></u></p></center></td></tr>';
                             }
@@ -342,8 +316,13 @@
                         </div>
                     </div>
                     <!-- Row form END -->';
-
-                    $query = mysqli_query($config, "SELECT * FROM tbl_surat_masuk");
+                    if ($_SESSION['admin'] == 3 || $_SESSION['admin'] == 1) {
+                        $sql = "SELECT * FROM tbl_surat_masuk";
+                    } else {
+                        $id_user = $_SESSION['id_user'];
+                        $sql = "SELECT * FROM tbl_surat_masuk WHERE id_user = '$id_user'";
+                    }
+                    $query = mysqli_query($config, $sql);
                     $cdata = mysqli_num_rows($query);
                     $cpg = ceil($cdata/$limit);
 
