@@ -21,6 +21,7 @@
                 $isi = $_REQUEST['isi'];
                 $kode = substr($_REQUEST['kode'],0,30);
                 $nkode = trim($kode);
+                $divisi = $_REQUEST['divisi'];
                 $indeks = $_REQUEST['indeks'];
                 $tgl_surat = $_REQUEST['tgl_surat'];
                 $keterangan = $_REQUEST['keterangan'];
@@ -51,6 +52,11 @@
                                     $_SESSION['kode'] = 'Form Kode Klasifikasi hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan koma(,)';
                                     echo '<script language="javascript">window.history.back();</script>';
                                 } else {
+
+                                    if (!preg_match("/^[a-zA-Z0-9.,\/\- ]*$/", $divisi)) {
+                                        $_SESSION['divisi'] = 'Form Kode Klasifikasi hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan koma(,)';
+                                        echo '<script language="javascript">window.history.back();</script>';
+                                    } else {
 
                                     if(!preg_match("/^[a-zA-Z0-9., -]*$/", $indeks)){
                                         $_SESSION['indeks'] = 'Form Indeks hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan koma(,) dan minus (-)';
@@ -87,22 +93,34 @@
                                                     }
 
                                                     //jika form file tidak kosong akan mengeksekusi script dibawah ini
-                                                    if($file != ""){
-
-                                                        $rand = rand(1,10000);
-                                                        $nfile = $rand."-".$file;
-
-                                                        //validasi file
-                                                        if(in_array($eks, $ekstensi) == true){
-                                                            if($ukuran < 2500000){
-
-                                                                move_uploaded_file($_FILES['file']['tmp_name'], $target_dir.$nfile);
-
-                                                                $query = mysqli_query($config, "INSERT INTO tbl_surat_masuk(no_agenda,no_surat,asal_surat,isi,kode,indeks,tgl_surat,
-                                                                    tgl_diterima,file,keterangan,id_user)
-                                                                        VALUES('$no_agenda','$no_surat','$asal_surat','$isi','$nkode','$indeks','$tgl_surat',NOW(),'$nfile','$keterangan','$id_user')");
-
-                                                                if($query == true){
+                                                    if ($file != "") {
+                                                        $rand = rand(1, 10000);
+                                                        $nfile = $rand . "-" . $file;
+                                                    
+                                                        // Validasi file
+                                                        if (in_array($eks, $ekstensi)) {
+                                                            if ($ukuran < 2500000) {
+                                                                // Validasi foreign key kode
+                                                                $cekKode = mysqli_query($config, "SELECT kode FROM tbl_klasifikasi WHERE kode = '$nkode'");
+                                                                if (mysqli_num_rows($cekKode) == 0) {
+                                                                    $_SESSION['errForeign'] = 'ERROR! Kode atau Divisi tidak valid.';
+                                                                    echo '<script language="javascript">window.history.back();</script>';
+                                                                    die();
+                                                                }
+                                                    
+                                                                // Validasi foreign key divisi
+                                                                $cekDivisi = mysqli_query($config, "SELECT kode FROM tbl_divisi WHERE kode = '$divisi'");
+                                                                if (mysqli_num_rows($cekDivisi) == 0) {
+                                                                    $_SESSION['errForeign'] = 'ERROR! Kode atau Divisi tidak valid.';
+                                                                    echo '<script language="javascript">window.history.back();</script>';
+                                                                    die();
+                                                                }
+                                                    
+                                                                move_uploaded_file($_FILES['file']['tmp_name'], $target_dir . $nfile);
+                                                    
+                                                                $query = mysqli_query($config, "INSERT INTO tbl_surat_masuk (no_agenda, no_surat, asal_surat, isi, kode, indeks, tgl_surat, tgl_diterima, file, keterangan, id_user) VALUES ('$no_agenda', '$no_surat', '$asal_surat', '$isi', '$nkode', '$indeks', '$tgl_surat', NOW(), '$nfile', '$keterangan', '$id_user')");
+                                                    
+                                                                if ($query) {
                                                                     $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
                                                                     header("Location: ./admin.php?page=tsm");
                                                                     die();
@@ -119,18 +137,20 @@
                                                             echo '<script language="javascript">window.history.back();</script>';
                                                         }
                                                     } else {
-
-                                                        //jika form file kosong akan mengeksekusi script dibawah ini
-                                                        $query = mysqli_query($config, "INSERT INTO tbl_surat_masuk(no_agenda,no_surat,asal_surat,isi,kode,indeks,tgl_surat, tgl_diterima,file,keterangan,id_user)
-                                                            VALUES('$no_agenda','$no_surat','$asal_surat','$isi','$nkode','$indeks','$tgl_surat',NOW(),'','$keterangan','$id_user')");
-
-                                                        if($query == true){
-                                                            $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
-                                                            header("Location: ./admin.php?page=tsm");
-                                                            die();
-                                                        } else {
-                                                            $_SESSION['errQ'] = 'ERROR! Ada masalah dengan query';
+                                                        // Validasi foreign key kode
+                                                        $cekKode = mysqli_query($config, "SELECT kode FROM tbl_klasifikasi WHERE kode = '$nkode'");
+                                                        if (mysqli_num_rows($cekKode) == 0) {
+                                                            $_SESSION['errForeign'] = 'ERROR! Kode atau Divisi tidak valid.';
                                                             echo '<script language="javascript">window.history.back();</script>';
+                                                            die();
+                                                        }
+                                                    
+                                                        // Validasi foreign key divisi
+                                                        $cekDivisi = mysqli_query($config, "SELECT kode FROM tbl_divisi WHERE kode = '$divisi'");
+                                                        if (mysqli_num_rows($cekDivisi) == 0) {
+                                                            $_SESSION['errForeign'] = 'ERROR! Kode atau Divisi tidak valid.';
+                                                            echo '<script language="javascript">window.history.back();</script>';
+                                                            die();
                                                         }
                                                     }
                                                 }
@@ -143,6 +163,7 @@
                     }
                 }
             }
+        }
         } else {?>
 
             <!-- Row Start -->
@@ -187,6 +208,19 @@
                             </div>
                         </div>';
                     unset($_SESSION['errEmpty']);
+                }
+                if(isset($_SESSION['errForeign'])){
+                    $errForeign = $_SESSION['errForeign'];
+                    echo '<div id="alert-message" class="row">
+                            <div class="col m12">
+                                <div class="card red lighten-5">
+                                    <div class="card-content notif">
+                                        <span class="card-title red-text"><i class="material-icons md-36">clear</i> '.$errForeign.'</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>';
+                    unset($_SESSION['errForeign']);
                 }
             ?>
 
@@ -237,6 +271,19 @@
                                     }
                                 ?>
                             <label for="kode">Kode Klasifikasi</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix md-prefix">bookmark</i>
+                            <input id="divisi" type="text" class="validate" name="divisi" required>
+                                <?php
+                                    if(isset($_SESSION['divisi'])){
+                                        $divisi = $_SESSION['divisi'];
+                                        echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$divisi.'</div>';
+                                        unset($_SESSION['divisi']);
+                                }
+                                ?>
+                            
+                            <label for="divisi">Divisi</label>
                         </div>
                         <div class="input-field col s6">
                             <i class="material-icons prefix md-prefix">place</i>
