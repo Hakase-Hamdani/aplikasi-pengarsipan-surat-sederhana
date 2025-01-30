@@ -98,8 +98,8 @@ Website     : fauxnet.blogspot.com
                 case 'skc': //Laporan Pengarsipan Berdasarkan Klasifikasi Surat (surat join klasifikasi dengan count)
                     include "surat_klas_count.php";
                     break;
-                case 'ssc': //Laporan Jumlah Surat Per Staff (surat join staff dengan count)
-                    include "surat-staf-count.php";
+                case 'suc': //Laporan Jumlah Surat Per Staff (surat join staff dengan count)
+                    include "surat_user_count.php";
                     break;
                 case 'sdd': //Laporan Jumlah Surat Per Bidang/Divisi (surat join bidang dengan count)
                     include "surat-div-count.php";
