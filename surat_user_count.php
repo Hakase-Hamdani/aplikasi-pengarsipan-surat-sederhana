@@ -79,38 +79,28 @@
                     // UNTUK MENENTUKAN JOIN
                     //
 
-                    if($_REQUEST['JOIN'] == "1"){ //Hitung klasifikasi tak terpakai sebagai 0
+                    if($_REQUEST['JOIN'] == "1"){ //Hitung Masuk
                         $JOIN = "SELECT 
-                                    tk.kode AS KdKlasifikasi,
-                                    tk.nama AS KlasNama,
-                                    COUNT(tsk.id_surat) AS TtlSurat
-                                FROM 
-                                    tbl_klasifikasi tk
-                                LEFT JOIN 
-                                    tbl_surat_keluar tsk 
-                                    ON tk.kode = tsk.kode 
-                                    AND tsk.tgl_surat BETWEEN '$dari_tanggal' AND '$dari_tanggal'
-                                GROUP BY 
-                                    tk.kode, tk.nama
-                                ORDER BY 
-                                    TtlSurat DESC;";
-                        $IsHitung = "termasuk klasifikasi tidak terpakai";
-                    } else {  //Klasifikasi tidak terpakai tidak dihitung
+                                    u.id_user,
+                                    u.nama,
+                                    COUNT(s.id_surat) AS total_letters
+                                FROM tbl_user u
+                                LEFT JOIN tbl_surat_masuk s ON u.id_user = s.id_user
+                                WHERE s.tgl_surat BETWEEN '$dari_tanggal' AND '$sampai_tanggal'
+                                GROUP BY u.id_user, u.username
+                                ORDER BY total_letters DESC;";
+                        $IsHitung = "Masuk";
+                    } else {  //Hitung Keluar
                         $JOIN = "SELECT 
-                                    tk.kode AS KdKlasifikasi,
-                                    tk.nama AS KlasNama,
-                                    COUNT(tsk.id_surat) AS TtlSurat
-                                FROM 
-                                    tbl_klasifikasi tk
-                                INNER JOIN 
-                                    tbl_surat_keluar tsk ON tk.kode = tsk.kode
-                                WHERE 
-                                    tsk.tgl_surat BETWEEN '$dari_tanggal' AND '$sampai_tanggal'
-                                GROUP BY 
-                                    tk.kode, tk.nama
-                                ORDER BY 
-                                    TtlSurat DESC;";
-                        $IsHitung = "tidak termasuk klasifikasi tidak terpakai";
+                                    u.id_user,
+                                    u.nama,
+                                    COUNT(s.id_surat) AS total_letters
+                                FROM tbl_user u
+                                LEFT JOIN tbl_surat_keluar s ON u.id_user = s.id_user
+                                WHERE s.tgl_surat BETWEEN '$dari_tanggal' AND '$sampai_tanggal'
+                                GROUP BY u.id_user, u.username
+                                ORDER BY total_letters DESC;";
+                        $IsHitung = "Keluar";
                     }
                     
                     //
@@ -135,7 +125,7 @@
                                     <div class="nav-wrapper blue-grey darken-1">
                                         <div class="col 12">
                                             <ul class="left">
-                                                <li class="waves-effect waves-light"><a href="?page=skc" class="judul"><i class="material-icons">print</i> Report Jumlah Penggunaan Klasifikasi<a></li>
+                                                <li class="waves-effect waves-light"><a href="?page=suc" class="judul"><i class="material-icons">print</i> Report Jumlah Penggunaan Klasifikasi<a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -155,11 +145,11 @@
                         <!--Kode untuk menampikan dan mengisi dropdown dari database-->
                         
 
-                        <label for="JOIN">Hitung Klasifikasi Tidak Terpakai?</label>
+                        <label for="JOIN">Hitung Surat Masuk/Keluar?</label>
                         <select class="browser-default" name="JOIN" id="JOIN" required>
                                 <option value="">Pilih salah satu</option>
-                                <option value="1">Ya</option>
-                                <option value="2">Tidak</option>
+                                <option value="1">Masuk</option>
+                                <option value="2">Keluar</option>
                         
                         </select>
                     </div>
@@ -212,11 +202,11 @@
                             <div class="separator"></div>
                             
                             <!--GANTI YANG DIBAWAH UNTUK TAMPILAN JUDUL REPORT-->
-                            <h5 class="hid">Report Jumlah Penggunaan Klasifikasi</h5>
+                            <h5 class="hid">Report Jumlah Surat Per Staff</h5>
                         <div class="col s10">
 
                             <!--GANTI YANG DIBAWAH UNTUK TAMPILAN JUDUL REPORT-->
-                            <p class="warna agenda">Report Jumlah Penggunaan Klasifikasi dari tanggal <strong>'.indoDate($dari_tanggal).'</strong> sampai dengan tanggal <strong>'.indoDate($sampai_tanggal).'</strong> '. $IsHitung .'.</p>
+                            <p class="warna agenda">Report Jumlah <strong>Surat '. $IsHitung .'</strong> Per Staff dari tanggal <strong>'.indoDate($dari_tanggal).'</strong> sampai dengan tanggal <strong>'.indoDate($sampai_tanggal).'</strong>.</p>
                         </div>
                         <div class="col s2">
                             <button type="submit" onClick="window.print()" class="btn-large deep-orange waves-effect waves-light right">CETAK <i class="material-icons">print</i></button>
@@ -227,9 +217,8 @@
                             <thead class="blue lighten-4">
                                 <tr>
                                     <th width="10%">No.</th>
-                                    <th width="23%">Kode Klasifikasi</th>
-                                    <th width="33%">Nama Klasifikasi</th>
-                                    <th width="33%">Jumlah Surat</th>
+                                    <th width="45%">Nama Staff</th>
+                                    <th width="45%">Total Surat</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -241,9 +230,8 @@
                                  echo '
                                     <tr>
                                         <td>'.$i++.'</td>
-                                        <td>'.$row['KdKlasifikasi'].'</td>
-                                        <td>'.$row['KlasNama'].'</td>
-                                        <td>'.$row['TtlSurat'].'</td>';
+                                        <td>'.$row['nama'].'</td>
+                                        <td>'.$row['total_letters'].'</td>';
                                  echo '
                                 </tr>';
                                     }
@@ -265,7 +253,7 @@
                                 <div class="nav-wrapper blue-grey darken-1">
                                     <div class="col 12">
                                         <ul class="left">
-                                            <li class="waves-effect waves-light"><a href="?page=skc" class="judul"><i class="material-icons">print</i> Report Jumlah Penggunaan Klasifikasi<a></li>
+                                            <li class="waves-effect waves-light"><a href="?page=suc" class="judul"><i class="material-icons">print</i> Report Jumlah Penggunaan Klasifikasi<a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -285,11 +273,11 @@
                         <!--Kode untuk menampikan dan mengisi dropdown dari database-->
                         
 
-                        <label for="JOIN">Hitung Klasifikasi Tidak Terpakai?</label>
+                        <label for="JOIN">Hitung Surat Masuk/Keluar?</label>
                         <select class="browser-default" name="JOIN" id="JOIN" required>
                                 <option value="">Pilih salah satu</option>
-                                <option value="1">Ya</option>
-                                <option value="2">Tidak</option>
+                                <option value="1">Masuk</option>
+                                <option value="2">Keluar</option>
                         
                         </select>
                     </div>
