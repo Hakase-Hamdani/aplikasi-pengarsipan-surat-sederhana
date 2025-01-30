@@ -168,14 +168,13 @@
                                         <td>'.$row['tujuan'].'</td><td>'.$row['no_surat'].'<br/><hr/>'.indoDate($row['tgl_surat']).'</td>
                                         <td>';
 
-                                        if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['admin'] != 1){
-                                            echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
-                                        } else {
-                                          echo '<a class="btn small blue waves-effect waves-light" href="?page=tsk&act=edit&id_surat='.$row['id_surat'].'">
-                                                    <i class="material-icons">edit</i> EDIT</a>
+                                        //echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
+                                    
+                                        echo '<a class="btn small blue waves-effect waves-light" href="?page=tsk&act=edit&id_surat='.$row['id_surat'].'">
+                                                <i class="material-icons">edit</i> EDIT</a>
                                                 <a class="btn small deep-orange waves-effect waves-light" href="?page=tsk&act=del&id_surat='.$row['id_surat'].'">
-                                                    <i class="material-icons">delete</i> DEL</a>';
-                                        } echo '
+                                                <i class="material-icons">delete</i> DEL</a>';
+                                        echo  '
                                         </td>
                                     </tr>';
                                     }
@@ -274,14 +273,14 @@
                                     <td>'.$row['tujuan'].'</td><td>'.$row['no_surat'].'<br/><hr/>'.indoDate($row['tgl_surat']).'</td>
                                     <td>';
 
-                                    if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['admin'] != 1){
-                                        echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
-                                    } else {
-                                      echo '<a class="btn small blue waves-effect waves-light" href="?page=tsk&act=edit&id_surat='.$row['id_surat'].'">
-                                                <i class="material-icons">edit</i> EDIT</a>
+                                    
+                                    //echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
+                                    
+                                    echo '<a class="btn small blue waves-effect waves-light" href="?page=tsk&act=edit&id_surat='.$row['id_surat'].'">
+                                            <i class="material-icons">edit</i> EDIT</a>
                                             <a class="btn small deep-orange waves-effect waves-light" href="?page=tsk&act=del&id_surat='.$row['id_surat'].'">
-                                                <i class="material-icons">delete</i> DEL</a>';
-                                    } echo '
+                                            <i class="material-icons">delete</i> DEL</a>';
+                                    echo '
                                     </td>
                                 </tr>';
                                 }
