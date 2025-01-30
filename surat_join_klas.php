@@ -246,7 +246,7 @@
                                 </tr>';
                                     }
                                 } else {
-                                    echo '<tr><td colspan="9"><center><p class="add">Tidak ada agenda surat</p></center></td></tr>';
+                                    echo '<tr><td colspan="9"><center><p class="add">Tidak ada data untuk ditampilkan.</p></center></td></tr>';
                                 } echo '
                             </tbody></table>
                         </div>
