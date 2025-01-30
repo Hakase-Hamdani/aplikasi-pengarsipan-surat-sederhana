@@ -48,12 +48,12 @@
                                 echo '<script language="javascript">window.history.back();</script>';
                             } else {
 
-                                if(!preg_match("/^[a-zA-Z0-9., ]*$/", $nkode)){
+                                if (!preg_match("/^[a-zA-Z0-9.,\/\- ]*$/", $nkode)) {
                                     $_SESSION['kodek'] = 'Form Kode Klasifikasi hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan koma(,)';
                                     echo '<script language="javascript">window.history.back();</script>';
                                 } else {
 
-                                    if(!preg_match("/^[a-zA-Z0-9., ]*$/", $divisi)){
+                                    if (!preg_match("/^[a-zA-Z0-9.,\/\- ]*$/", $divisi)) {
                                         $_SESSION['divisi'] = 'Form Kode Klasifikasi hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan koma(,)';
                                         echo '<script language="javascript">window.history.back();</script>';
                                     } else {
