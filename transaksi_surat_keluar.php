@@ -144,7 +144,14 @@
                                 <tbody>';
 
                                 //script untuk mencari data
-                                $query = mysqli_query($config, "SELECT * FROM tbl_surat_keluar WHERE isi LIKE '%$cari%' ORDER by id_surat DESC LIMIT $curr, 15");
+                                if($_SESSION['admin'] == 1){
+                                    $sql = "SELECT * FROM tbl_surat_keluar ORDER BY no_agenda DESC LIMIT $curr, $limit";
+                                } else {
+                                    $id_user = $_SESSION['id_user'];
+                                    $sql = "SELECT * FROM tbl_surat_keluar WHERE id_user='$id_user' AND isi LIKE '%$cari%' ORDER BY no_agenda DESC LIMIT $curr, 15";
+                                }
+                                $query = mysqli_query($config, $sql);
+                                //$query = mysqli_query($config, "SELECT * FROM tbl_surat_keluar WHERE isi LIKE '%$cari%' ORDER BY no_agenda DESC LIMIT $curr, 15");
                                 if(mysqli_num_rows($query) > 0){
                                     $no = 1;
                                     while($row = mysqli_fetch_array($query)){
@@ -244,7 +251,13 @@
                             <tbody>';
 
                             //script untuk mencari data
-                            $query = mysqli_query($config, "SELECT * FROM tbl_surat_keluar ORDER by id_surat DESC LIMIT $curr, $limit");
+                            if($_SESSION['admin'] == 1){
+                                $sql = "SELECT * FROM tbl_surat_keluar ORDER BY no_agenda DESC LIMIT $curr, $limit";
+                            } else {
+                                $id_user = $_SESSION['id_user'];
+                                $sql = "SELECT * FROM tbl_surat_keluar WHERE id_user='$id_user' ORDER BY no_agenda DESC LIMIT $curr, $limit";
+                            }
+                            $query = mysqli_query($config, $sql);
                             if(mysqli_num_rows($query) > 0){
                                 $no = 1;
                                 while($row = mysqli_fetch_array($query)){
@@ -279,8 +292,13 @@
                         </div>
                     </div>
                     <!-- Row form END -->';
-
-                    $query = mysqli_query($config, "SELECT * FROM tbl_surat_keluar");
+                    if($_SESSION['admin'] == 1){
+                        $sql = "SELECT * FROM tbl_surat_keluar ORDER BY no_agenda DESC";
+                    } else {
+                        $id_user = $_SESSION['id_user'];
+                        $sql = "SELECT * FROM tbl_surat_keluar WHERE id_user='$id_user' ORDER BY no_agenda DESC";
+                    }
+                    $query = mysqli_query($config, $sql);
                     $cdata = mysqli_num_rows($query);
                     $cpg = ceil($cdata/$limit);
 
