@@ -6,7 +6,7 @@
         die();
     } else {
 
-        if($_SESSION['admin'] != 1 AND $_SESSION['admin'] != 3){
+        if(empty($_SESSION['admin'])){
             echo '<script language="javascript">
                     window.alert("ERROR! Anda tidak memiliki hak akses untuk membuka halaman ini");
                     window.location.href="./logout.php";
@@ -144,7 +144,14 @@
                                 <tbody>';
 
                                 //script untuk mencari data
-                                $query = mysqli_query($config, "SELECT * FROM tbl_surat_keluar WHERE isi LIKE '%$cari%' ORDER by id_surat DESC LIMIT $curr, 15");
+                                if($_SESSION['admin'] == 1){
+                                    $sql = "SELECT * FROM tbl_surat_keluar ORDER BY no_agenda DESC LIMIT $curr, $limit";
+                                } else {
+                                    $id_user = $_SESSION['id_user'];
+                                    $sql = "SELECT * FROM tbl_surat_keluar WHERE id_user='$id_user' AND isi LIKE '%$cari%' ORDER BY no_agenda DESC LIMIT $curr, 15";
+                                }
+                                $query = mysqli_query($config, $sql);
+                                //$query = mysqli_query($config, "SELECT * FROM tbl_surat_keluar WHERE isi LIKE '%$cari%' ORDER BY no_agenda DESC LIMIT $curr, 15");
                                 if(mysqli_num_rows($query) > 0){
                                     $no = 1;
                                     while($row = mysqli_fetch_array($query)){
@@ -161,14 +168,13 @@
                                         <td>'.$row['tujuan'].'</td><td>'.$row['no_surat'].'<br/><hr/>'.indoDate($row['tgl_surat']).'</td>
                                         <td>';
 
-                                        if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['admin'] != 1){
-                                            echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
-                                        } else {
-                                          echo '<a class="btn small blue waves-effect waves-light" href="?page=tsk&act=edit&id_surat='.$row['id_surat'].'">
-                                                    <i class="material-icons">edit</i> EDIT</a>
+                                        //echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
+                                    
+                                        echo '<a class="btn small blue waves-effect waves-light" href="?page=tsk&act=edit&id_surat='.$row['id_surat'].'">
+                                                <i class="material-icons">edit</i> EDIT</a>
                                                 <a class="btn small deep-orange waves-effect waves-light" href="?page=tsk&act=del&id_surat='.$row['id_surat'].'">
-                                                    <i class="material-icons">delete</i> DEL</a>';
-                                        } echo '
+                                                <i class="material-icons">delete</i> DEL</a>';
+                                        echo  '
                                         </td>
                                     </tr>';
                                     }
@@ -244,7 +250,13 @@
                             <tbody>';
 
                             //script untuk mencari data
-                            $query = mysqli_query($config, "SELECT * FROM tbl_surat_keluar ORDER by id_surat DESC LIMIT $curr, $limit");
+                            if($_SESSION['admin'] == 1){
+                                $sql = "SELECT * FROM tbl_surat_keluar ORDER BY no_agenda DESC LIMIT $curr, $limit";
+                            } else {
+                                $id_user = $_SESSION['id_user'];
+                                $sql = "SELECT * FROM tbl_surat_keluar WHERE id_user='$id_user' ORDER BY no_agenda DESC LIMIT $curr, $limit";
+                            }
+                            $query = mysqli_query($config, $sql);
                             if(mysqli_num_rows($query) > 0){
                                 $no = 1;
                                 while($row = mysqli_fetch_array($query)){
@@ -261,14 +273,14 @@
                                     <td>'.$row['tujuan'].'</td><td>'.$row['no_surat'].'<br/><hr/>'.indoDate($row['tgl_surat']).'</td>
                                     <td>';
 
-                                    if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['admin'] != 1){
-                                        echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
-                                    } else {
-                                      echo '<a class="btn small blue waves-effect waves-light" href="?page=tsk&act=edit&id_surat='.$row['id_surat'].'">
-                                                <i class="material-icons">edit</i> EDIT</a>
+                                    
+                                    //echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
+                                    
+                                    echo '<a class="btn small blue waves-effect waves-light" href="?page=tsk&act=edit&id_surat='.$row['id_surat'].'">
+                                            <i class="material-icons">edit</i> EDIT</a>
                                             <a class="btn small deep-orange waves-effect waves-light" href="?page=tsk&act=del&id_surat='.$row['id_surat'].'">
-                                                <i class="material-icons">delete</i> DEL</a>';
-                                    } echo '
+                                            <i class="material-icons">delete</i> DEL</a>';
+                                    echo '
                                     </td>
                                 </tr>';
                                 }
@@ -279,8 +291,13 @@
                         </div>
                     </div>
                     <!-- Row form END -->';
-
-                    $query = mysqli_query($config, "SELECT * FROM tbl_surat_keluar");
+                    if($_SESSION['admin'] == 1){
+                        $sql = "SELECT * FROM tbl_surat_keluar ORDER BY no_agenda DESC";
+                    } else {
+                        $id_user = $_SESSION['id_user'];
+                        $sql = "SELECT * FROM tbl_surat_keluar WHERE id_user='$id_user' ORDER BY no_agenda DESC";
+                    }
+                    $query = mysqli_query($config, $sql);
                     $cdata = mysqli_num_rows($query);
                     $cpg = ceil($cdata/$limit);
 

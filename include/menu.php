@@ -48,7 +48,7 @@
             <li><a href="./"><i class="material-icons middle">dashboard</i> Beranda</a></li>
             <li class="no-padding">
                 <?php
-                    if($_SESSION['admin'] == 1 || $_SESSION['admin'] == 3){ ?>
+                    if($_SESSION['admin'] == 1 || $_SESSION['admin'] == 2 || $_SESSION['admin'] == 3){ //FUNGSI DASAR BISA DIAKSES SEMUA USER ?>
                 <ul class="collapsible collapsible-accordion">
                     <li>
                         <a class="collapsible-header"><i class="material-icons">repeat</i> Transaksi Surat</a>
@@ -65,9 +65,11 @@
                 ?>
             </li>
             <li class="no-padding">
+            <?php
+                if($_SESSION['admin'] == 1){ //REPORT HANYA TERSEDIA BAGI USER?>
                 <ul class="collapsible collapsible-accordion">
                     <li>
-                        <a class="collapsible-header"><i class="material-icons">assignment</i> Buku Agenda</a>
+                        <a class="collapsible-header"><i class="material-icons">assignment</i> Report</a>
                         <div class="collapsible-body">
                             <ul>
                                 <li><a href="?page=asm">Surat Masuk</a></li>
@@ -76,6 +78,7 @@
                         </div>
                     </li>
                 </ul>
+                <?php } ?>
             </li>
             <li class="no-padding">
                 <ul class="collapsible collapsible-accordion">
@@ -90,8 +93,11 @@
                     </li>
                 </ul>
             </li>
-            <li><a href="?page=ref"><i class="material-icons middle">class</i> Referensi</a></li>
-            <li><a href="?page=div"><i class="material-icons middle">class</i> Divisi</a></li>
+            <?php
+                if($_SESSION['admin'] == 1){ //PENGATURAN INI HANYA TERSEDIA BAGI ADMIN?>
+                <li><a href="?page=ref"><i class="material-icons middle">class</i> Referensi</a></li>
+                <li><a href="?page=div"><i class="material-icons middle">class</i> Divisi</a></li>
+            <?php } ?>
             <li class="no-padding">
             <?php
                 if($_SESSION['admin'] == 1){ ?>
@@ -112,7 +118,7 @@
                 }
             ?>
             <?php
-                if($_SESSION['admin'] == 2){ ?>
+                if($_SESSION['admin'] == 2){ //PENGATURAN HANYA BISA DIAKSES OLEH ADMIN?>
                 <ul class="collapsible collapsible-accordion">
                     <li>
                         <a class="collapsible-header"><i class="material-icons">settings</i> Pengaturan</a>
@@ -137,7 +143,7 @@
             <li><div class="grs"></></li>
             <li><a href="./"><i class="material-icons"></i>&nbsp; Beranda</a></li>
             <?php
-                if($_SESSION['admin'] == 1 || $_SESSION['admin'] == 3){ ?>
+                if($_SESSION['admin'] == 1 || $_SESSION['admin'] == 2 || $_SESSION['admin'] == 3){ //FUNGSI DASAR BISA DIAKSES SEMUA USER?>
             <li><a class="dropdown-button" href="#!" data-activates="transaksi">Transaksi Surat <i class="material-icons md-18">arrow_drop_down</i></a></li>
                 <ul id='transaksi' class='dropdown-content'>
                     <li><a href="?page=tsm">Surat Masuk</a></li>
@@ -146,18 +152,26 @@
             <?php
                 }
             ?>
-            <li><a class="dropdown-button" href="#!" data-activates="agenda">Buku Agenda <i class="material-icons md-18">arrow_drop_down</i></a></li>
+            <?php
+                if($_SESSION['admin'] == 1){ //REPORT HANYA TERSEDIA BAGI USER ?>
+            <li><a class="dropdown-button" href="#!" data-activates="agenda">Report <i class="material-icons md-18">arrow_drop_down</i></a></li>
                 <ul id='agenda' class='dropdown-content'>
                     <li><a href="?page=asm">Surat Masuk</a></li>
                     <li><a href="?page=ask">Surat Keluar</a></li>
                 </ul>
+            <?php
+                }
+            ?>
             <li><a class="dropdown-button" href="#!" data-activates="agenda">Galeri File <i class="material-icons md-18">arrow_drop_down</i></a></li>
                 <ul id='agenda' class='dropdown-content'>
                     <li><a href="?page=gsm">Surat Masuk</a></li>
                     <li><a href="?page=gsk">Surat Keluar</a></li>
                 </ul>
-            <li><a href="?page=ref">Referensi</a></li>
-            <li><a href="?page=div">Divisi</a></li>
+            <?php
+                if($_SESSION['admin'] == 1){ //PENGATURAN INI HANYA TERSEDIA BAGI ADMIN?>
+                <li><a href="?page=ref">Referensi</a></li>
+                <li><a href="?page=div">Divisi</a></li>
+            <?php } ?>
             <?php
                 if($_SESSION['admin'] == 1){ ?>
             <li><a class="dropdown-button" href="#!" data-activates="pengaturan">Pengaturan <i class="material-icons md-18">arrow_drop_down</i></a></li>
@@ -172,20 +186,7 @@
                 }
             ?>
             <?php
-                if($_SESSION['admin'] == 2){ ?>
-            <li><a class="dropdown-button" href="#!" data-activates="report">Report <i class="material-icons md-18">arrow_drop_down</i></a></li>
-                <ul id='report' class='dropdown-content'>
-                    <li><a href="?page=skk">Surat Per Klasifikasi</a></li>
-                    <li><a href="?page=skc">Jumlah Klasifikasi Digunakan</a></li>
-                    <li><a href="?page=ssc">Jumlah Surat Per Staf</a></li>
-                    <li><a href="?page=sdd">Jumlah Surat Per Divisi</a></li>
-                    <li><a href="?page=dummy">Dummy</a></li>
-                </ul>
-            <?php
-                }
-            ?>
-            <?php
-                if($_SESSION['admin'] == 2){ ?>
+                if($_SESSION['admin'] == 1){ //PENGATURAN HANYA BISA DIAKSES OLEH ADMIN?>
             <li><a class="dropdown-button" href="#!" data-activates="pengaturan">Pengaturan <i class="material-icons md-18">arrow_drop_down</i></a></li>
                 <ul id='pengaturan' class='dropdown-content'>
                     <li><a href="?page=sett">Instansi</a></li>

@@ -7,7 +7,7 @@
         die();
     } else {
 
-        if($_SESSION['admin'] != 1){
+        if(empty($_SESSION['admin'])){
             echo '<script language="javascript">
                     window.alert("ERROR! Anda tidak memiliki hak akses untuk membuka halaman ini");
                     window.location.href="./logout.php";

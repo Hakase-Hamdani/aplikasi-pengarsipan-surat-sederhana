@@ -127,8 +127,8 @@ Website     : fauxnet.blogspot.com
                             if($_SESSION['admin'] == 1){
                                 echo "<strong>Super Admin</strong>. Anda memiliki akses penuh terhadap sistem.";
                             } elseif($_SESSION['admin'] == 2){
-                                echo "<strong>Administrator</strong>. Berikut adalah statistik data yang tersimpan dalam sistem.";
-                            } else {
+                                echo "<strong>Petugas Surat</strong>. Berikut adalah statistik data yang tersimpan dalam sistem.";
+                            } elseif($_SESSION['admin'] == 3){
                                 echo "<strong>Petugas Disposisi</strong>. Berikut adalah statistik data yang tersimpan dalam sistem.";
                             }?></p>
                     </div>

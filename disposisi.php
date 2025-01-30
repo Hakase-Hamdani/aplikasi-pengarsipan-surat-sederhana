@@ -40,7 +40,7 @@
                     while($row = mysqli_fetch_array($query)){
 
                     //if($_SESSION['id_user'] != $row['id_user'] AND $_SESSION['id_user'] != 1)
-                    if($_SESSION['admin'] != 3){
+                    if(empty($_SESSION['admin'])){
                         //var_dump($_SESSION['id_user']);
                         //die();
                         echo '<script language="javascript">
