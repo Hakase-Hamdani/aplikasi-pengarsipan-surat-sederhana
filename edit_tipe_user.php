@@ -33,7 +33,7 @@
                               </script>';
                     } else {
 
-                        if(!preg_match("/^[2-3]*$/", $admin)){
+                        if(!preg_match("/^[1-3]*$/", $admin)){
                             $_SESSION['tipeuser'] = 'Form Tipe User hanya boleh mengandung karakter angka 2 atau 3';
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
@@ -117,15 +117,18 @@
                                             <select class="browser-default" name="admin" id="admin" required>
                                                 <option value="<?php echo $row['admin']; ?>">
                                                     <?php
-                                                        if($row['admin'] == 2){
-                                                            echo 'Administrator';
+                                                        if($row['admin'] == 1){
+                                                            echo 'Super Admin';
+                                                        } elseif($row['admin'] == 2) {
+                                                            echo 'Petugas Surat';
                                                         } else {
-                                                            echo 'User Biasa';
+                                                            echo 'Petugas Disposisi';
                                                         }
                                                     ?>
                                                 </option>
-                                                <option value="3">User Biasa</option>
-                                                <option value="2">Administrator</option>
+                                                <option value="1">Super Admin</option>
+                                                <option value="2">Petugas Surat</option>
+                                                <option value="3">Petugas Disposisi</option>
                                             </select>
                                         </div>
                                             <?php

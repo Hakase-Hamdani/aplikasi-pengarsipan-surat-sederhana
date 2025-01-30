@@ -123,9 +123,9 @@
                                     if($row['admin'] == 1){
                                         $row['admin'] = 'Super Admin';
                                     } elseif($row['admin'] == 2){
-                                        $row['admin'] = 'Administrator';
+                                        $row['admin'] = 'Petugas Surat';
                                     } else {
-                                        $row['admin'] = 'User Biasa';
+                                        $row['admin'] = 'Petugas Disposisi';
                                     } echo '<td>'.$row['username'].'</td>
                                             <td>'.$row['nama'].'<br/>'.$row['nip'].'</td>
                                             <td>'.$row['admin'].'</td>
@@ -134,17 +134,13 @@
                                     if($_SESSION['username'] == $row['username']){
                                         echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
                                     } else {
-
-                                        if($row['id_user'] == 1){
-                                            echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
-                                        } else {
-                                          echo ' <a class="btn small blue waves-effect waves-light" href="?page=sett&sub=usr&act=edit&id_user='.$row['id_user'].'">
-                                                 <i class="material-icons">edit</i> EDIT</a>
-                                                 <a class="btn small deep-orange waves-effect waves-light" href="?page=sett&sub=usr&act=del&id_user='.$row['id_user'].'"><i class="material-icons">delete</i> DEL</a>';
+                                        echo ' <a class="btn small blue waves-effect waves-light" href="?page=sett&sub=usr&act=edit&id_user='.$row['id_user'].'">
+                                               <i class="material-icons">edit</i> EDIT</a>
+                                               <a class="btn small deep-orange waves-effect waves-light" href="?page=sett&sub=usr&act=del&id_user='.$row['id_user'].'"><i class="material-icons">delete</i> DEL</a>';
                                         }
                                     } echo '</td>
                                     </tr>';
-                                    }
+                                    
                                 } else {
                         echo '<tr><td colspan="5"><center><p class="add">Tidak ada data untuk ditampilkan</p></center></td></tr>';
                                 }
