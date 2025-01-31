@@ -252,7 +252,7 @@
                 </tbody>
             </table>
             <div id="lead">
-                <p>Kepala Sekolah</p>
+                <p>Pimpinan</p>
                 <div style="height: 50px;"></div>';
                 $query = mysqli_query($config, "SELECT kepsek, nip FROM tbl_instansi");
                 list($kepsek,$nip) = mysqli_fetch_array($query);

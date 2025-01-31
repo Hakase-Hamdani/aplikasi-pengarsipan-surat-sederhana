@@ -71,12 +71,12 @@
                                     } else {
 
                                         if(!preg_match("/^[a-zA-Z., ]*$/", $kepsek)){
-                                            $_SESSION['kepsek'] = 'Form Nama Kepala Sekolah hanya boleh mengandung karakter huruf, spasi, titik(.) dan koma(,)<br/><br/>';
+                                            $_SESSION['kepsek'] = 'Form Nama Pimpinan hanya boleh mengandung karakter huruf, spasi, titik(.) dan koma(,)<br/><br/>';
                                             echo '<script language="javascript">window.history.back();</script>';
                                         } else {
 
                                             if(!preg_match("/^[0-9 -]*$/", $nip)){
-                                                $_SESSION['nipkepsek'] = 'Form NIP Kepala Sekolah hanya boleh mengandung karakter angka, spasi, dan minus(-)<br/><br/>';
+                                                $_SESSION['nipkepsek'] = 'Form NIP Pimpinan hanya boleh mengandung karakter angka, spasi, dan minus(-)<br/><br/>';
                                                 echo '<script language="javascript">window.history.back();</script>';
                                             } else {
 
@@ -280,7 +280,7 @@
                                                     unset($_SESSION['kepsek']);
                                                 }
                                             ?>
-                                        <label for="kepsek">Nama Kepala Sekolah</label>
+                                        <label for="kepsek">Nama Pimpinan</label>
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons prefix md-prefix">place</i>
@@ -304,7 +304,7 @@
                                                     unset($_SESSION['nipkepsek']);
                                                 }
                                             ?>
-                                        <label for="nip">NIP Kepala Sekolah</label>
+                                        <label for="nip">NIP Pimpinan</label>
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons prefix md-prefix">language</i>
