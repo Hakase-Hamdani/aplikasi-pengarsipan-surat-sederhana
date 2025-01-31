@@ -31,6 +31,9 @@
                     case 'del':
                         include "hapus_surat_masuk.php";
                         break;
+                    case 'pil':
+                        include "pilih_disposisi.php";
+                        break;
                 }
             } else {
 
@@ -186,7 +189,6 @@
                                               <a class="btn small deep-orange waves-effect waves-light" href="?page=tsm&act=del&id_surat=' . $row['id_surat'] . '">
                                                 <i class="material-icons">delete</i> DEL</a>';
                                         } else {
-                                            // Admin level 3, not owner: Show only PRINT and DISP
                                             echo '<a class="btn small blue waves-effect waves-light" href="?page=tsm&act=edit&id_surat=' . $row['id_surat'] . '">
                                                      <i class="material-icons">edit</i> EDIT</a>
                                                   <a class="btn small deep-orange waves-effect waves-light" href="?page=tsm&act=del&id_surat=' . $row['id_surat'] . '">

@@ -180,6 +180,8 @@
                 <div class="separator"></div>';
 
                 $id_surat = mysqli_real_escape_string($config, $_REQUEST['id_surat']);
+                //$id_disposisi = mysqli_real_escape_string($config, $_REQUEST['id_disposisi']);
+                $id_disposisi = $_GET['id_disposisi'];
                 $query = mysqli_query($config, "SELECT * FROM tbl_surat_masuk WHERE id_surat='$id_surat'");
 
                 if(mysqli_num_rows($query) > 0){
@@ -222,7 +224,7 @@
                                 <td id="left" colspan="2">: </td>
                             </tr>
                             <tr>';
-                            $query3 = mysqli_query($config, "SELECT * FROM tbl_disposisi JOIN tbl_surat_masuk ON tbl_disposisi.id_surat = tbl_surat_masuk.id_surat WHERE tbl_disposisi.id_surat='$id_surat'");
+                            $query3 = mysqli_query($config, "SELECT * FROM tbl_disposisi JOIN tbl_surat_masuk ON tbl_disposisi.id_surat = tbl_surat_masuk.id_surat WHERE tbl_disposisi.id_surat='$id_surat' AND tbl_disposisi.id_disposisi = '$id_disposisi'");
 
                             if(mysqli_num_rows($query3) > 0){
                                 $no = 0;
