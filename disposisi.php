@@ -59,10 +59,13 @@
                                                 <div class="col m12">
                                                     <ul class="left">
                                                         <li class="waves-effect waves-light hide-on-small-only"><a href="#" class="judul"><i class="material-icons">description</i> Disposisi  Surat</a></li>
-                                                        <li class="waves-effect waves-light">
+                                                        ';
+                                                        if ($_SESSION['admin'] == 1 || $_SESSION['admin'] == 3){
+                                                        echo '<li class="waves-effect waves-light">
                                                             <a href="?page=tsm&act=disp&id_surat='.$row['id_surat'].'&sub=add"><i class="material-icons md-24">add_circle</i> Tambah Disposisi</a>
-                                                        </li>
-                                                        <li class="waves-effect waves-light hide-on-small-only"><a href="?page=tsm"><i class="material-icons">arrow_back</i> Kembali</a></li>
+                                                        </li>';
+                                                        }
+                                                        echo '<li class="waves-effect waves-light hide-on-small-only"><a href="?page=tsm"><i class="material-icons">arrow_back</i> Kembali</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -151,10 +154,11 @@
                                                     <td>'.$no.'</td>
                                                     <td>'.$row['tujuan'].'</td>
                                                     <td>'.$row['isi_disposisi'].'</td>
-                                                    <td>'.$row['sifat'].'<br/>'.indoDate($row['batas_waktu']).'</td>';
+                                                    <td>'.$row['sifat'].'<br/>'.indoDate($row['batas_waktu']).'</td>
+                                                    <td>';
 
                                                     if ($_SESSION['admin'] == 1 || $_SESSION['admin'] == 3){
-                                                        echo '<td><a class="btn small blue waves-effect waves-light" href="?page=tsm&act=disp&id_surat='.$id_surat.'&sub=edit&id_disposisi='.$row['id_disposisi'].'">
+                                                        echo '<a class="btn small blue waves-effect waves-light" href="?page=tsm&act=disp&id_surat='.$id_surat.'&sub=edit&id_disposisi='.$row['id_disposisi'].'">
                                                                 <i class="material-icons">edit</i> EDIT</a>
                                                             <a class="btn small deep-orange waves-effect waves-light" href="?page=tsm&act=disp&id_surat='.$id_surat.'&sub=del&id_disposisi='.$row['id_disposisi'].'"><i class="material-icons">delete</i> DEL</a>
                                                         ';
