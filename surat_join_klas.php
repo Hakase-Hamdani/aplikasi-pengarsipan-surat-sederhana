@@ -80,28 +80,20 @@
                     //
                     
                     $sql = "SELECT 
-                                sk.no_agenda,
-                                sk.no_surat,
-                                sk.tujuan,
-                                sk.isi,
-                                sk.tgl_surat,
-                                sk.tgl_catat,
-                                sk.keterangan,
-                                us.nama AS username,
-                                k.nama AS nama_klas
-                            FROM 
-                                tbl_surat_keluar sk
-                            INNER JOIN
-                                tbl_user us
-                            INNER JOIN 
-                                tbl_klasifikasi k 
-                            ON 
-                                sk.kode = k.kode
-                            WHERE 
-                                k.kode = '$klasifikasi' AND
-                            	sk.tgl_catat BETWEEN '$dari_tanggal' AND '$sampai_tanggal';";
-                    var_dump($sql);
-                    die();
+                                s.no_agenda ,
+                                s.no_surat,
+                                s.isi,
+                                s.tujuan,
+                                s.tgl_surat,
+                                k.kode AS classification_code,
+                                k.nama AS classification_name
+                            FROM tbl_surat_keluar s
+                            INNER JOIN tbl_klasifikasi k ON s.kode = k.kode
+                            WHERE s.tgl_surat BETWEEN '$dari_tanggal' AND '$sampai_tanggal'
+                            AND k.kode = '$klasifikasi'
+                            ORDER BY s.tgl_surat DESC";
+                    //var_dump($sql);
+                    //die();
                                
                 $query = mysqli_query($config, $sql);
 
@@ -221,13 +213,11 @@
                         <table class="bordered" id="tbl" width="100%">
                             <thead class="blue lighten-4">
                                 <tr>
-                                    <th width="5%">No</th>
+                                    <th width="5%">No. Agenda</th>
                                     <th width="5%">No. Surat</th>
-                                    <th width="10%">Tujuan</th>
-                                    <th width="25%">Isi</th>
-                                    <th width="20%">Tgl Surat<br/>Tgl Catat</th>
-                                    <th width="20%">Keterangan</th>
-                                    <th width="15%">Pengelola</th>
+                                    <th width="35%">Isi</th>
+                                    <th width="35%">Tujuan</th>
+                                    <th width="20%">Tgl Surat</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -239,11 +229,10 @@
                                     <tr>
                                         <td>'.$row['no_agenda'].'</td>
                                         <td>'.$row['no_surat'].'</td>
-                                        <td>'.$row['tujuan'].'</td>
                                         <td>'.$row['isi'].'</td>
-                                        <td>'.indoDate($row['tgl_surat']).'<br/>' .indoDate($row['tgl_catat']). '</td>
-                                        <td>'.$row['keterangan'].'</td>
-                                        <td>'.$row['username'].'</td>';
+                                        <td>'.$row['tujuan'].'</td>
+                                        <td>'.indoDate($row['tgl_surat']).'</td>
+                                        ';
                                  echo '
                                 </tr>';
                                     }
