@@ -17,7 +17,7 @@
                     color: #212121;
                 }
                 .disp {
-                    text-align: center;
+                    text-align: left;
                     margin: -.5rem 0;
                     width: 100%;
                 }
@@ -28,11 +28,11 @@
                     display: block
                 }
                 .logodisp {
-                    position: absolute;
-                    width: 80px;
-                    height: 80px;
-                    left: 50px;
-                    margin: 0 0 0 1.2rem;
+                    float: left;
+                    position: relative;
+                    width: 120px;
+                    height: 120px;
+                    margin: 0 0 0 1rem;
                 }
                 .up {
                     font-size: 17px!important;
@@ -46,8 +46,8 @@
                     margin-top: 5px;
                     font-weight: bold;
                 }
-                .status {
-                    font-size: 17px!important;
+                .notelp {
+                    font-size: 12px!important;
                     font-weight: normal;
                     margin-top: -1.5rem;
                 }
@@ -196,17 +196,17 @@
                             //Kode untuk menampilkan header report
                             //
 
-                            $query2 = mysqli_query($config, "SELECT institusi, nama, status, alamat, logo FROM tbl_instansi");
-                            list($institusi, $nama, $status, $alamat, $logo) = mysqli_fetch_array($query2);
+                            $query2 = mysqli_query($config, "SELECT institusi, nama, notelp, alamat, email, website, logo FROM tbl_instansi");
+                            list($institusi,$nama, $notelp, $alamat, $email, $website, $logo) = mysqli_fetch_array($query2);
                                 echo '<img class="logodisp" src="./upload/'.$logo.'"/>';
 
-                                echo '<h6 class="up">'.$institusi.'</h6>';
+                                echo '<br/><h5 class="nama" id="nama">'.$nama.'</h5><br/>';
 
-                                echo '<h5 class="nama" id="nama">'.$nama.'</h5><br/>';
+                                echo '<h6 class="notelp">'.$notelp.'</h6><br/>';
+                                echo '<h6 class="notelp">'.$email.'</h6><br/>';
+                                echo '<h6 class="notelp">'.$website.'</h6><br/>';
 
-                                echo '<h6 class="status">'.$status.'</h6>';
-
-                                echo '<span id="alamat">'.$alamat.'</span>
+                                echo '<h6 class="notelp">'.$alamat.'</h6><br/>
 
                             </div>
                             <div class="separator"></div>

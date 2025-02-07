@@ -29,15 +29,15 @@
                 height: 300px!important;
             }
             .disp {
-                text-align: center;
+                text-align: left;
                 padding: 1.5rem 0;
                 margin-bottom: .5rem;
             }
             .logodisp {
                 float: left;
                 position: relative;
-                width: 110px;
-                height: 110px;
+                width: 140px;
+                height: 140px;
                 margin: 0 0 0 1rem;
             }
             #lead {
@@ -66,7 +66,7 @@
                 line-height: 2.2rem;
                 font-size: 1.5rem;
             }
-            .status {
+            .notelp {
                 margin: 0;
                 font-size: 1.3rem;
                 margin-bottom: .5rem;
@@ -111,14 +111,14 @@
                     text-align: center;
                 }
                 .disp {
-                    text-align: center;
+                    text-align: left;
                     margin: -.5rem 0;
                 }
                 .logodisp {
                     float: left;
                     position: relative;
-                    width: 80px;
-                    height: 80px;
+                    width: 100px;
+                    height: 100px;
                     margin: .5rem 0 0 .5rem;
                 }
                 #lead {
@@ -141,10 +141,10 @@
                     font-size: 17px!important;
                     font-weight: normal;
                 }
-                .status {
-                    font-size: 17px!important;
+                .notelp {
+                    font-size: 12px!important;
                     font-weight: normal;
-                    margin-bottom: -.1rem;
+                    /*margin-bottom: -.1rem;*/
                 }
                 #alamat {
                     margin-top: -15px;
@@ -167,13 +167,14 @@
         <!-- Container START -->
             <div id="colres">
                 <div class="disp">';
-                    $query2 = mysqli_query($config, "SELECT institusi, nama, status, alamat, logo FROM tbl_instansi");
-                    list($institusi, $nama, $status, $alamat, $logo) = mysqli_fetch_array($query2);
+                $query2 = mysqli_query($config, "SELECT institusi, nama, notelp, alamat, email, website, logo FROM tbl_instansi");
+                list($institusi,$nama, $notelp, $alamat, $email, $website, $logo) = mysqli_fetch_array($query2);
                         echo '<img class="logodisp" src="./upload/'.$logo.'"/>';
-                        echo '<h6 class="up">'.$institusi.'</h6>';
                         echo '<h5 class="up" id="nama">'.$nama.'</h5><br/>';
-                        echo '<h6 class="status">'.$status.'</h6>';
-                        echo '<span id="alamat">'.$alamat.'</span>';
+                        echo '<h6 class="notelp">'.$notelp.'</h6>';
+                        echo '<h6 class="notelp">'.$email.'</h6>';
+                        echo '<h6 class="notelp">'.$website.'</h6>';
+                        echo '<h6 class="notelp">'.$alamat.'</h6>';
 
                     echo '
                 </div>
