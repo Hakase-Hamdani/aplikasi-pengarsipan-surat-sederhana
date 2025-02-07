@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 31, 2025 at 03:46 PM
+-- Generation Time: Feb 07, 2025 at 03:05 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -176,9 +176,8 @@ INSERT INTO `tbl_divisi` (`kode`, `nama`, `uraian`, `id_user`) VALUES
 
 CREATE TABLE `tbl_instansi` (
   `id_instansi` tinyint(1) NOT NULL,
-  `institusi` varchar(150) NOT NULL,
   `nama` varchar(150) NOT NULL,
-  `status` varchar(150) NOT NULL,
+  `notelp` varchar(150) NOT NULL,
   `alamat` varchar(150) NOT NULL,
   `kepala` varchar(50) NOT NULL,
   `nip` varchar(25) NOT NULL,
@@ -192,8 +191,8 @@ CREATE TABLE `tbl_instansi` (
 -- Dumping data for table `tbl_instansi`
 --
 
-INSERT INTO `tbl_instansi` (`id_instansi`, `institusi`, `nama`, `status`, `alamat`, `kepala`, `nip`, `website`, `email`, `logo`, `id_user`) VALUES
-(1, 'Universitas Andalas', 'Rory Adamov', 'Terminated', '5820 Guice Avenue, Springfield, Illinois, United States, 62723', 'Rory Adamov', '889-70-3665', 'https://gmpg.org', 'rory.adamov@gmail.com', '/in/primis/morati.bin', 1);
+INSERT INTO `tbl_instansi` (`id_instansi`, `nama`, `notelp`, `alamat`, `kepala`, `nip`, `website`, `email`, `logo`, `id_user`) VALUES
+(1, 'Bawaslu Kota Banjarmasin', '083131928987', '5820 Guice Avenue, Springfield, Illinois, United States, 62723', 'Muhammad Fachrizanoor, S.H.', '889-70-3665', 'https://gmpg.org', 'rory.adamov@gmail.com', 'g1.png', 4);
 
 -- --------------------------------------------------------
 
@@ -333,7 +332,7 @@ CREATE TABLE `tbl_sett` (
 --
 
 INSERT INTO `tbl_sett` (`id_sett`, `id_user`, `surat_masuk`, `surat_keluar`, `referensi`) VALUES
-(1, 8, 20, 100, 30),
+(1, 4, 5, 5, 5),
 (2, 2, 19, 5, 41),
 (3, 3, 35, 13, 12),
 (4, 4, 27, 48, 48),
@@ -453,7 +452,6 @@ INSERT INTO `tbl_surat_keluar` (`id_surat`, `kode`, `divisi`, `no_agenda`, `tuju
 (81, 'NY.pk-P59', 'KYY-5395', 81, 'ITT Technical Institute Maitland', '7518-ORP-960905', 'Cum sua comparat, magna afficitur voluptate.', '2024-03-26', '2024-10-19', '/quo/modo/efficiatur/concludaturque/qua.mdf', 'Eveniunt inprobis, fugiendam inprobitatem putamus, sed multo etiam magis, quorum ille iudicium.', 7),
 (82, 'ZA.hv-H63', 'KYY-5395', 82, 'Université Cadi Ayyad', '8656-PFL-625287', 'Instituendarum voluntates fieri propter voluptatem; quod vero securi percussit filium, privavisse se.', '2024-08-04', '2024-04-03', '/fortunam/intervenire/sapienti/maximasque/ab/modis.cfg', 'Tua praesertim, qui studiose antiqua persequeris, claris et fortibus viris commemorandis eorumque factis.', 6),
 (83, 'IJ.vn-D31', 'VSD-3182', 71, '', 'LN8133/94/79', 'Rebus non delectet eos sermo patrius, cum idem fabellas Latinas.', '2024-05-22', '2024-06-24', '/tum/triarius/leniter/arridens/tu/atque.zip', 'Varias reprehensiones incurreret. Nam quibusdam, et iis servire, qui vel utrisque litteris.', 1),
-(84, 'AT.pq-P72', 'VSD-3182', 256, '', 'XQ6036/63/33', 'Tolerabiles sint, feramus, si minus, animo aequo e vita, cum ea non placeat.', '2024-08-12', '2025-01-04', '683-Snapshot_2025-01-25_13-05-46.png', 'Pronuntiaret eum non talem videri fuisse in imperio.', 1),
 (85, 'RE.br-N78', 'CAD-3764', 85, 'Zagreb School of Economics and Management', '0472-NNM-531681', 'Corporis. Nam corpore nihil nisi praesens et quod adest sentire possumus.', '2024-08-06', '2024-12-31', '/torquatus/ad.yml', 'Studiose antiqua persequeris, claris et fortibus viris commemorandis.', 6),
 (86, 'CW.lp-O34', 'TGW-4384', 86, 'National Institute of Industrial Engineering', '2885-QSY-082585', 'Depravata desiderat. Et quem ad modum sit affectus, et firmitatem.', '2024-03-18', '2024-07-07', '/animi/e.gz', 'Exquisitis rationibus confirmare, tantum satis esse admonere.', 6),
 (87, 'TP.rt-N22', 'CAD-3764', 87, 'Universitas Sanata Dharma', '2538-PUM-591442', 'Ingenia transferrem. Sed id neque feci adhuc nec mihi illud dixeris.', '2024-12-05', '2024-09-02', '/sunt/vituperandae/conformavit.html', 'Sunt vituperandae, maledicta, contumeliae, tum iracundiae.', 4),
@@ -464,12 +462,10 @@ INSERT INTO `tbl_surat_keluar` (`id_surat`, `kode`, `divisi`, `no_agenda`, `tuju
 (92, 'XC.zb-K71', 'TPI-5271', 92, 'Universidad Don Bosco', '8141-WYP-851472', 'Quamquam a te ipso id quidem licebit iis existimare, qui legerint.', '2024-09-24', '2024-06-27', '/regione/ferrentur/et/ut/causa.sig', 'Hic tenetur a sapiente delectus, ut aut voluptates omittantur maiorum.', 5),
 (93, 'MC.da-A47', 'KYY-5395', 93, 'Arkansas State University, Mountain Home', '5203-EKM-005696', 'Ita dicit, omnium rerum, quas ad beate vivendum se ipsa esse contentam. Sed possunt.', '2024-03-04', '2025-01-15', '/necessariae/nec/opera/vellem.png', 'Sententia tale debet esse, ut ad id omnia referri oporteat, ipsum autem nusquam. Hoc.', 9),
 (94, 'HP.zw-X63', 'KYY-5395', 94, 'Islamic Azad University, Boukan', '5624-CLY-315602', 'Ii voluptatem maximam adipiscuntur praetermittenda voluptate. Idem etiam dolorem.', '2024-07-17', '2024-10-12', '/corporis/voluptatibus/et/doloribus//liberae.psm1', 'Damna, tum in dedecora incurrunt, saepe etiam videmus, et perspicuum est omnis.', 7),
-(95, 'IJ.vn-D31', 'CAD-3764', 95, 'Medical Academy in Lublin', '7882-STN-002250', 'Lucilius, recusabo, quo minus omnes.', '2024-11-07', '2024-08-04', '/utilior/aut/ad/bene/beateque/eventurum.html', 'Ne ipsos quidem Graecos est cur verear, ne ad eam non possim accommodare.', 4),
 (96, 'GZ.oi-B13', 'KYY-5395', 96, ' Dedan Kimathi University of Technology', '5406-VPX-176334', 'Vero Epicurus, quod exiguam dixit fortunam intervenire sapienti.', '2024-11-16', '2024-05-23', '/abhorreant/molestiae.odf', 'Se, ex quo efficiantur ea, quae dicta sunt ab iis quos.', 8),
 (97, 'FW.pz-Q63', 'VSD-3182', 97, 'Universidad Hispanoamericana', '8509-LVW-621929', 'Bonae valetudinis causa probamus, et gubernatoris ars, quia bene navigandi rationem habet, utilitate, non.', '2024-08-11', '2024-12-26', '/instituendarum/voluntates/fieri/expetendam.md', 'Deserere ullam officii partem, ad ea, quae corrigere vult.', 5),
 (98, 'BI.fs-W09', 'CAD-3764', 98, 'Universitas Negeri Malang', '5111-GAZ-433271', 'Manu, quae manus significet illum in hae esse rogatiuncula delectatum: \'Numquidnam manus tua.', '2024-07-28', '2024-06-20', '/et/quem/ad/modum/illa.html', 'Diligamus, idcirco et hoc ipsum efficitur in amicitia.', 4),
-(99, 'XW.mv-P83', 'VSD-3182', 99, 'Universidad Católica Nuestra Senora de la Asunción', '7021-KNU-266557', 'Successionem efficit voluptatis. Itaque non placuit Epicuro medium esse.', '2024-07-12', '2024-03-16', '/affectus/eum/omnino.bmp', 'Rationibus confirmare, tantum satis esse admonere. Interesse.', 9),
-(100, 'CH.va-M23', 'CAD-3764', 100, 'National Changhua University of Education', '3884-YGU-387724', 'Iudicari. Ea quid percipit aut quid.', '2024-09-19', '2024-08-12', '/eruditi/videntur/plurimum.bash', 'Ut meminerit maximos morte finiri.', 10);
+(99, 'XW.mv-P83', 'VSD-3182', 99, 'Universidad Católica Nuestra Senora de la Asunción', '7021-KNU-266557', 'Successionem efficit voluptatis. Itaque non placuit Epicuro medium esse.', '2024-07-12', '2024-03-16', '/affectus/eum/omnino.bmp', 'Rationibus confirmare, tantum satis esse admonere. Interesse.', 9);
 
 -- --------------------------------------------------------
 
