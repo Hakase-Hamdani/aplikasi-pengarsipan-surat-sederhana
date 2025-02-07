@@ -180,7 +180,7 @@ CREATE TABLE `tbl_instansi` (
   `nama` varchar(150) NOT NULL,
   `status` varchar(150) NOT NULL,
   `alamat` varchar(150) NOT NULL,
-  `kepsek` varchar(50) NOT NULL,
+  `kepala` varchar(50) NOT NULL,
   `nip` varchar(25) NOT NULL,
   `website` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
@@ -192,7 +192,7 @@ CREATE TABLE `tbl_instansi` (
 -- Dumping data for table `tbl_instansi`
 --
 
-INSERT INTO `tbl_instansi` (`id_instansi`, `institusi`, `nama`, `status`, `alamat`, `kepsek`, `nip`, `website`, `email`, `logo`, `id_user`) VALUES
+INSERT INTO `tbl_instansi` (`id_instansi`, `institusi`, `nama`, `status`, `alamat`, `kepala`, `nip`, `website`, `email`, `logo`, `id_user`) VALUES
 (1, 'Universitas Andalas', 'Rory Adamov', 'Terminated', '5820 Guice Avenue, Springfield, Illinois, United States, 62723', 'Rory Adamov', '889-70-3665', 'https://gmpg.org', 'rory.adamov@gmail.com', '/in/primis/morati.bin', 1);
 
 -- --------------------------------------------------------

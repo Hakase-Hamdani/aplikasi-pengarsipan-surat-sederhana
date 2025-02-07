@@ -256,10 +256,10 @@
             <div id="lead">
                 <p>Pimpinan</p>
                 <div style="height: 50px;"></div>';
-                $query = mysqli_query($config, "SELECT kepsek, nip FROM tbl_instansi");
-                list($kepsek,$nip) = mysqli_fetch_array($query);
-                if(!empty($kepsek)){
-                    echo '<p class="lead">'.$kepsek.'</p>';
+                $query = mysqli_query($config, "SELECT kepala, nip FROM tbl_instansi");
+                list($kepala,$nip) = mysqli_fetch_array($query);
+                if(!empty($kepala)){
+                    echo '<p class="lead">'.$kepala.'</p>';
                 } else {
                     echo '<p class="lead">H. Riza Fachri, S.Kom.</p>';
                 }

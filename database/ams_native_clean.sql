@@ -81,7 +81,7 @@ CREATE TABLE `tbl_instansi` (
   `nama` varchar(150) NOT NULL,
   `status` varchar(150) NOT NULL,
   `alamat` varchar(150) NOT NULL,
-  `kepsek` varchar(50) NOT NULL,
+  `kepala` varchar(50) NOT NULL,
   `nip` varchar(25) NOT NULL,
   `website` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE `tbl_instansi` (
 -- Dumping data for table `tbl_instansi`
 --
 
-INSERT INTO `tbl_instansi` (`id_instansi`, `institusi`, `nama`, `status`, `alamat`, `kepsek`, `nip`, `website`, `email`, `logo`, `id_user`) VALUES
+INSERT INTO `tbl_instansi` (`id_instansi`, `institusi`, `nama`, `status`, `alamat`, `kepala`, `nip`, `website`, `email`, `logo`, `id_user`) VALUES
 (3, 'Transport Authority', 'Metro Rail Services', 'Operational', '789 Downtown Road', 'Ms. Davis', '654321987', 'www.metrail.com', 'support@metrail.com', 'logo.png', 3);
 
 -- --------------------------------------------------------
