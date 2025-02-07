@@ -7,7 +7,7 @@
     } else {
 
         $kode = mysqli_real_escape_string($config, $_REQUEST['kode']);
-        $query = mysqli_query($config, "SELECT * FROM tbl_klasifikasi WHERE kode='$kode'");
+        $query = mysqli_query($config, "SELECT * FROM tbl_divisi WHERE kode='$kode'");
 
     	if(mysqli_num_rows($query) > 0){
             $no = 1;
@@ -77,7 +77,7 @@
         	if(isset($_REQUEST['submit'])){
         		$kode = $_REQUEST['kode'];
 
-                $query = mysqli_query($config, "DELETE FROM tbl_klasifikasi WHERE kode='$kode'");
+                $query = mysqli_query($config, "DELETE FROM tbl_divisi WHERE kode='$kode'");
 
             	if($query == true){
                     $_SESSION['succDel'] = 'SUKSES! Data berhasil dihapus<br/>';

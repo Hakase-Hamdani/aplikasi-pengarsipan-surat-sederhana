@@ -7,13 +7,6 @@
         die();
     } else {
 
-        if($_REQUEST['id_user'] == 1){
-            echo '<script language="javascript">
-                    window.alert("ERROR! Super Admin tidak boleh diedit");
-                    window.location.href="./admin.php?page=sett&sub=usr";
-                  </script>';
-        } else {
-
             if($_REQUEST['id_user'] == $_SESSION['id_user']){
                 echo '<script language="javascript">
                         window.alert("ERROR! Anda tidak diperbolehkan mengedit tipe akun Anda sendiri. Hubungi super admin untuk mengeditnya");
@@ -163,5 +156,4 @@
                 }
             }
         }
-    }
 ?>

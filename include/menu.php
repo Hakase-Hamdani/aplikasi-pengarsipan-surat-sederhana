@@ -5,7 +5,7 @@
 
 <nav class="blue-grey darken-1">
     <div class="nav-wrapper">
-        <a href="./" class="brand-logo center hide-on-large-only"><i class="material-icons md-36">school</i> AMS</a>
+        <a href="./" class="brand-logo center hide-on-large-only"><i class="material-icons md-36"></i> AMAS</a>
         <ul id="slide-out" class="side-nav" data-simplebar-direction="vertical">
             <li class="no-padding">
                 <div class="logo-side center blue-grey darken-3">
@@ -84,7 +84,7 @@
                 </ul>
                 <?php } ?>
             </li>
-            <li class="no-padding">
+            <!--li class="no-padding">
                 <ul class="collapsible collapsible-accordion">
                     <li>
                         <a class="collapsible-header"><i class="material-icons">image</i> Galeri File</a>
@@ -96,7 +96,7 @@
                         </div>
                     </li>
                 </ul>
-            </li>
+            </li-->
             <?php
                 if($_SESSION['admin'] == 1){ //PENGATURAN INI HANYA TERSEDIA BAGI ADMIN?>
                 <li><a href="?page=ref"><i class="material-icons middle">class</i> Referensi</a></li>
@@ -119,29 +119,13 @@
             <?php
                 }
             ?>
-            <?php
-                if($_SESSION['admin'] == 2){ //PENGATURAN HANYA BISA DIAKSES OLEH ADMIN?>
-                <ul class="collapsible collapsible-accordion">
-                    <li>
-                        <a class="collapsible-header"><i class="material-icons">settings</i> Pengaturan</a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="?page=sett">Instansi</a></li>
-                                <li><a href="?page=sett&sub=usr">User</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            <?php
-                }
-            ?>
             </li>
         </ul>
         <!-- Menu on medium and small screen END -->
 
         <!-- Menu on large screen START -->
         <ul class="center hide-on-med-and-down" id="nv">
-            <li><a href="./" class="ams hide-on-med-and-down"><i class="material-icons md-36">school</i> AMS</a></li>
+            <li><a href="./" class="AMAS hide-on-med-and-down"><i class="material-icons md-36"></i> AMAS</a></li>
             <li><div class="grs"></></li>
             <li><a href="./"><i class="material-icons"></i>&nbsp; Beranda</a></li>
             <?php
@@ -168,26 +152,16 @@
             <?php
                 }
             ?>
-            <li><a class="dropdown-button" href="#!" data-activates="agenda">Galeri File <i class="material-icons md-18">arrow_drop_down</i></a></li>
+            <!--li><a class="dropdown-button" href="#!" data-activates="agenda">Galeri File <i class="material-icons md-18">arrow_drop_down</i></a></li>
                 <ul id='agenda' class='dropdown-content'>
                     <li><a href="?page=gsm">Surat Masuk</a></li>
                     <li><a href="?page=gsk">Surat Keluar</a></li>
-                </ul>
+                </ul-->
             <?php
                 if($_SESSION['admin'] == 1){ //PENGATURAN INI HANYA TERSEDIA BAGI ADMIN?>
                 <li><a href="?page=ref">Referensi</a></li>
                 <li><a href="?page=div">Divisi</a></li>
             <?php } ?>
-            <?php
-                if($_SESSION['admin'] == 1){ ?>
-            <li><a class="dropdown-button" href="#!" data-activates="pengaturan">Pengaturan <i class="material-icons md-18">arrow_drop_down</i></a></li>
-                <ul id='pengaturan' class='dropdown-content'>
-                    <li><a href="?page=sett">Instansi</a></li>
-                    <li><a href="?page=sett&sub=usr">User</a></li>
-                </ul>
-            <?php
-                }
-            ?>
             <?php
                 if($_SESSION['admin'] == 1){ //PENGATURAN HANYA BISA DIAKSES OLEH ADMIN?>
             <li><a class="dropdown-button" href="#!" data-activates="pengaturan">Pengaturan <i class="material-icons md-18">arrow_drop_down</i></a></li>

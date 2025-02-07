@@ -197,7 +197,7 @@ Website     : fauxnet.blogspot.com
             </a>
 
         <?php
-            if($_SESSION['id_user'] == 1 || $_SESSION['admin'] == 2){?>
+            if($_SESSION['admin'] == 1){?>
                 <a href="?page=sett&sub=usr">
                     <div class="col s12 m4">
                         <div class="card blue accent-2">
