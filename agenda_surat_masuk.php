@@ -121,8 +121,8 @@
 
                     <div class="row agenda">
                     <div class="disp hidd">';
-                    $query2 = mysqli_query($config, "SELECT institusi, nama, notelp, alamat, email, website, logo FROM tbl_instansi");
-                    list($institusi,$nama, $notelp, $alamat, $email, $website, $logo) = mysqli_fetch_array($query2);
+                    $query2 = mysqli_query($config, "SELECT nama, notelp, alamat, email, website, logo FROM tbl_instansi");
+                    list($nama, $notelp, $alamat, $email, $website, $logo) = mysqli_fetch_array($query2);
                         echo '<img class="logodisp" src="./upload/'.$logo.'"/>';
 
                         echo '<br/><h5 class="nama" id="nama">'.$nama.'</h5><br/>';

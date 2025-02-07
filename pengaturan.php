@@ -31,7 +31,7 @@
                 if(isset($_REQUEST['submit'])){
 
                     //validasi form kosong
-                    if ($_REQUEST['institusi'] == "" || $_REQUEST['nama'] == "" || $_REQUEST['notelp'] == "" || $_REQUEST['alamat'] == "" || $_REQUEST['kepala'] == "" || $_REQUEST['nip'] == ""
+                    if ($_REQUEST['nama'] == "" || $_REQUEST['notelp'] == "" || $_REQUEST['alamat'] == "" || $_REQUEST['kepala'] == "" || $_REQUEST['nip'] == ""
                         || $_REQUEST['website'] == "" || $_REQUEST['email'] == ""){
                         $_SESSION['errEmpty'] = 'ERROR! Semua form wajib diisi';
                         header("Location: ././admin.php?page=sett");
@@ -39,7 +39,6 @@
                     } else {
 
                         $id_instansi = "1";
-                        $institusi = $_REQUEST['institusi'];
                         $nama = $_REQUEST['nama'];
                         $notelp = $_REQUEST['notelp'];
                         $alamat = $_REQUEST['alamat'];
@@ -54,11 +53,6 @@
                             $_SESSION['namains'] = 'Form Nama Instansi hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan minus(-)';
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
-
-                            if(!preg_match("/^[a-zA-Z0-9. -]*$/", $institusi)){
-                                $_SESSION['institusi'] = 'Form Nama Yayasan hanya boleh mengandung karakter huruf, angka, spasi, titik(.) dan minus(-)';
-                                echo '<script language="javascript">window.history.back();</script>';
-                            } else {
 
                                 if(!preg_match("/^[a-zA-Z0-9.,:\/<> -\"]*$/", $notelp)){
                                     $_SESSION['notelp'] = 'Form notelp hanya boleh mengandung karakter huruf, angka, spasi, titik(.), koma(,), titik dua(:), petik dua(""), garis miring(/) dan minus(-)';
@@ -120,7 +114,7 @@
 
                                                                     move_uploaded_file($_FILES['logo']['tmp_name'], $target_dir.$nlogo);
 
-                                                                    $query = mysqli_query($config, "UPDATE tbl_instansi SET institusi='$institusi',nama='$nama',notelp='$notelp',alamat='$alamat',kepala='$kepala',nip='$nip',website='$website',email='$email',logo='$nlogo',id_user='$id_user' WHERE id_instansi='$id_instansi'");
+                                                                    $query = mysqli_query($config, "UPDATE tbl_instansi SET nama='$nama',notelp='$notelp',alamat='$alamat',kepala='$kepala',nip='$nip',website='$website',email='$email',logo='$nlogo',id_user='$id_user' WHERE id_instansi='$id_instansi'");
 
                                                                     if($query == true){
                                                                         $_SESSION['succEdit'] = 'SUKSES! Data instansi berhasil diupdate';
@@ -141,7 +135,7 @@
                                                         } else {
 
                                                             //jika form logo kosong akan mengeksekusi script dibawah ini
-                                                            $query = mysqli_query($config, "UPDATE tbl_instansi SET institusi='$institusi',nama='$nama',notelp='$notelp',alamat='$alamat',kepala='$kepala',nip='$nip',website='$website',email='$email',id_user='$id_user' WHERE id_instansi='$id_instansi'");
+                                                            $query = mysqli_query($config, "UPDATE tbl_instansi SET nama='$nama',notelp='$notelp',alamat='$alamat',kepala='$kepala',nip='$nip',website='$website',email='$email',id_user='$id_user' WHERE id_instansi='$id_instansi'");
 
                                                             if($query == true){
                                                                 $_SESSION['succEdit'] = 'SUKSES! Data instansi berhasil diupdate';
@@ -160,7 +154,7 @@
                                 }
                             }
                         }
-                    }
+                    
                 } else {
 
                     $query = mysqli_query($config, "SELECT * FROM tbl_instansi");
@@ -245,18 +239,6 @@
                                                 }
                                             ?>
                                         <label for="nama">Nama Instansi</label>
-                                    </div>
-                                    <div class="input-field col s6">
-                                        <i class="material-icons prefix md-prefix">work</i>
-                                        <input id="institusi" type="text" class="validate" name="institusi" value="<?php echo $row['institusi']; ?>" required>
-                                            <?php
-                                                if(isset($_SESSION['institusi'])){
-                                                    $institusi = $_SESSION['institusi'];
-                                                    echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">'.$institusi.'</div>';
-                                                    unset($_SESSION['institusi']);
-                                                }
-                                            ?>
-                                        <label for="institusi">Nama Yayasan</label>
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons prefix md-prefix">assistant_photo</i>
