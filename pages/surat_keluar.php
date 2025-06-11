@@ -7,15 +7,15 @@ $user_id = $_SESSION['user_id'];
 $user_level = $_SESSION['admin'];
 
 try {
-    $query = 'SELECT sk.id_surat, sk.no_agenda, sk.kode, sk.divisi, d.nama AS divisi_nama, 
+    $query = "SELECT sk.id_surat, sk.no_agenda, sk.kode, sk.divisi, d.nama AS divisi_nama, 
                      sk.isi, sk.file, sk.tujuan, sk.no_surat, sk.tgl_surat
               FROM tbl_surat_keluar sk
-              LEFT JOIN tbl_divisi d ON sk.divisi = d.kode';
+              LEFT JOIN tbl_divisi d ON sk.divisi = d.kode";
     if ($user_level < 3) {
-        $query .= ' WHERE sk.id_user = :user_id';
+        $query .= " WHERE sk.id_user = :user_id";
     }
-    $query .= ' ORDER BY sk.id_surat DESC';
-
+    $query .= " ORDER BY sk.id_surat DESC";
+    
     $stmt = $pdo->prepare($query);
     if ($user_level < 3) {
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
@@ -23,38 +23,18 @@ try {
     $stmt->execute();
     $letters = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    $error = 'Error fetching letters: ' . $e->getMessage();
+    $error = "Error fetching letters: " . $e->getMessage();
 }
 ?>
-<style>
-.dt-search {
-            display: none !important;
-        }
-
-</style>
 
         <h2>Manage Surat Keluar</h2>
         <?php if (isset($error)): ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
         
-        <!-- Search Bar -->
+        <!-- Tambah Data Button -->
         <div class="mb-3">
-            <input type="text" id="searchInput" class="form-control" placeholder="Search letters...">
-        </div>
-        
-        <!-- Tambah Data and Limit Box -->
-        <div class="d-flex justify-content-between mb-3">
             <a href="surat_keluar_form.php" class="btn btn-primary">Tambah Data</a>
-            <div>
-                <label for="lengthSelect" class="form-label me-2">Show:</label>
-                <select id="lengthSelect" class="form-select d-inline-block w-auto">
-                    <option value="10" selected>10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
-            </div>
         </div>
         
         <!-- DataTable -->
@@ -107,29 +87,13 @@ try {
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.min.js"></script>
-    <style>
-        /* Hide DataTables default search */
-        div.dataTables_filter {
-            display: none !important;
-        }
-    </style>
     <script>
         $(document).ready(function() {
-            const table = $('#lettersTable').DataTable({
+            $('#lettersTable').DataTable({
                 pageLength: 10,
                 lengthMenu: [10, 25, 50, 100],
                 order: [[0, 'desc']],
                 searching: true
-            });
-
-            // Sync custom search input
-            $('#searchInput').on('keyup', function() {
-                table.search(this.value).draw();
-            });
-
-            // Sync limit box
-            $('#lengthSelect').on('change', function() {
-                table.page.len(this.value).draw();
             });
         });
     </script>
