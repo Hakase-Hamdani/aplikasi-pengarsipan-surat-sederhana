@@ -26,15 +26,35 @@ try {
     $error = "Error fetching letters: " . $e->getMessage();
 }
 ?>
+<style>
+.dt-search {
+            display: none !important;
+        }
+
+</style>
 
         <h2>Manage Surat Keluar</h2>
         <?php if (isset($error)): ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
         
-        <!-- Tambah Data Button -->
+        <!-- Search Bar -->
         <div class="mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search letters...">
+        </div>
+        
+        <!-- Tambah Data and Limit Box -->
+        <div class="d-flex justify-content-between mb-3">
             <a href="surat_keluar_form.php" class="btn btn-primary">Tambah Data</a>
+            <div>
+                <label for="lengthSelect" class="form-label me-2">Show:</label>
+                <select id="lengthSelect" class="form-select d-inline-block w-auto">
+                    <option value="10" selected>10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
         </div>
         
         <!-- DataTable -->
@@ -59,7 +79,7 @@ try {
                         <td>
                             <?php echo htmlspecialchars(substr($letter['isi'], 0, 100)) . (strlen($letter['isi']) > 100 ? '...' : ''); ?><br>
                             <?php if ($letter['file']): ?>
-                                <a href="../uploads/<?php echo htmlspecialchars($letter['file']); ?>" target="_blank">View File</a>
+                                <a href="../Uploads/<?php echo htmlspecialchars($letter['file']); ?>" target="_blank">View File</a>
                             <?php else: ?>
                                 No File
                             <?php endif; ?>
@@ -87,13 +107,29 @@ try {
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.min.js"></script>
+    <style>
+        /* Hide DataTables default search */
+        div.dataTables_filter {
+            display: none !important;
+        }
+    </style>
     <script>
         $(document).ready(function() {
-            $('#lettersTable').DataTable({
+            const table = $('#lettersTable').DataTable({
                 pageLength: 10,
                 lengthMenu: [10, 25, 50, 100],
                 order: [[0, 'desc']],
                 searching: true
+            });
+
+            // Sync custom search input
+            $('#searchInput').on('keyup', function() {
+                table.search(this.value).draw();
+            });
+
+            // Sync limit box
+            $('#lengthSelect').on('change', function() {
+                table.page.len(this.value).draw();
             });
         });
     </script>
