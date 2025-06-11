@@ -20,81 +20,128 @@ $user_level = $user['admin'] == 3 ? 'Super Admin' : ($user['admin'] == 2 ? 'Mana
     <title>AMS Native</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .dropdown-submenu {
-            position: relative;
-        }
-        .dropdown-submenu .dropdown-menu {
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
             top: 0;
-            left: 100%;
-            margin-top: -1px;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 20px;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
         }
-        .dropdown-submenu:hover > .dropdown-menu {
+        .sidebar-hidden {
+            transform: translateX(-250px);
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+            position: relative;
+            z-index: 500;
+        }
+        .sidebar-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 900;
+            display: none;
+        }
+        .sidebar-backdrop.active {
             display: block;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-250px);
+            }
+            .sidebar-active {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .toggle-btn {
+                display: block !important; /* Force visibility */
+                background-color: #007bff;
+                border: 2px solid #ffffff; /* Debug border */
+            }
+        }
+        .sidebar .nav-link {
+            color: #ffffff;
+            padding: 10px 20px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #495057;
+        }
+        .sidebar .nav-header {
+            color: #adb5bd;
+            padding: 10px 20px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+        .toggle-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1100;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../pages/<?php echo $user['admin'] == 3 ? 'super_admin_dashboard' : ($user['admin'] == 2 ? 'manager_dashboard' : 'user_dashboard'); ?>.php">AMS Native</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <?php if ($user['admin'] >= 1): ?>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="manajemenSurat" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Manajemen Surat
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="manajemenSurat">
-                                <li class="dropdown-submenu">
-                                    <a class="dropdown-item dropdown-toggle" href="../pages/surat_masuk.php">Surat Masuk</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="../pages/referensi.php?context=surat_masuk">Referensi</a></li>
-                                        <?php if ($user['admin'] >= 2): ?>
-                                            <li><a class="dropdown-item" href="../pages/disposisi.php">Disposisi</a></li>
-                                        <?php endif; ?>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a class="dropdown-item dropdown-toggle" href="../pages/surat_keluar.php">Surat Keluar</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="../pages/referensi.php?context=surat_keluar">Referensi</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    <?php endif; ?>
-                    <?php if ($user['admin'] == 3): ?>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Admin Menu
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="adminMenu">
-                                <li class="dropdown-submenu">
-                                    <a class="dropdown-item dropdown-toggle" href="../pages/klasifikasi.php">Klasifikasi</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="../pages/referensi.php?context=klasifikasi">Referensi</a></li>
-                                    </ul>
-                                </li>
-                                <li><a class="dropdown-item" href="../pages/divisi.php">Divisi</a></li>
-                                <li><a class="dropdown-item" href="../pages/instansi.php">Instansi</a></li>
-                                <li><a class="dropdown-item" href="../pages/users.php">Users</a></li>
-                            </ul>
-                        </li>
-                    <?php endif; ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../pages/user_profile.php">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../includes/logout.php">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container mt-4">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h4 class="text-white text-center mb-4">AMS Native</h4>
+        <ul class="nav flex-column">
+            <?php if ($user['admin'] >= 1): ?>
+                <li class="nav-header">Manajemen Surat</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../pages/surat_masuk.php">> Surat Masuk</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../pages/surat_keluar.php">> Surat Keluar</a>
+                </li>
+            <?php endif; ?>
+            <?php if ($user['admin'] == 3): ?>
+                <li class="nav-header">Admin Menu</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../pages/klasifikasi.php">> Klasifikasi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../pages/divisi.php">> Divisi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../pages/instansi.php">> Instansi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../pages/users.php">> Users</a>
+                </li>
+            <?php endif; ?>
+            <li class="nav-header">User</li>
+            <li class="nav-item">
+                <a class="nav-link" href="../pages/user_profile.php">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../includes/logout.php">Logout</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Backdrop for Mobile -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- Toggle Button for Mobile -->
+    <button class="btn btn-primary toggle-btn" id="toggleSidebar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Main Content -->
+    <div class="main-content">
         <div class="card mb-4">
             <div class="card-body">
                 <h5 class="card-title">User Information</h5>
@@ -107,16 +154,20 @@ $user_level = $user['admin'] == 3 ? 'Super Admin' : ($user['admin'] == 2 ? 'Mana
         </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Enable nested dropdowns
-        document.querySelectorAll('.dropdown-submenu .dropdown-toggle').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                let submenu = this.nextElementSibling;
-                if (submenu.classList.contains('dropdown-menu')) {
-                    submenu.classList.toggle('show');
-                }
-            });
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        const toggleBtn = document.getElementById('toggleSidebar');
+
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('sidebar-active');
+            backdrop.classList.toggle('active');
+            console.log('Toggle button clicked'); // Debug
+        });
+
+        backdrop.addEventListener('click', function() {
+            sidebar.classList.remove('sidebar-active');
+            backdrop.classList.remove('active');
+            console.log('Backdrop clicked'); // Debug
         });
     </script>
 </body>

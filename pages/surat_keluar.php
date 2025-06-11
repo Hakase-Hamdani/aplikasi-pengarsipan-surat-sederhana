@@ -5,7 +5,9 @@ requireLevel(1);
 
         <h2>Manage Surat Keluar</h2>
         <p>This page will allow you to manage outgoing letters (tbl_surat_keluar). Functionality to be implemented.</p>
+        <div class="mt-3">
+            <a href="referensi.php?context=surat_keluar" class="btn btn-secondary">Referensi (Display Limit)</a>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
